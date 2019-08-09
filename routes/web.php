@@ -75,7 +75,12 @@ Route::get('ajaxresponse/{id}','AppointmentController@AjaxResponse');
 
 Route::post('ajaxset-appointment','AppointmentController@AjaxSetAppointment');
 
+Route::post('cancel-appointment','AppointmentController@CancelAppointment');
+
+
 Route::get('doctor-leaves','AdminController@DoctorLeaves');
+
+Route::get('test-digital-pad','AdminController@TestDigital');
 
 Route::get('/admin-logout','AdminController@AdminLogout');
 

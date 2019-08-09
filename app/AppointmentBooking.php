@@ -21,7 +21,7 @@ class AppointmentBooking extends Model
                             'str_startdate',
                             'str_enddate',
                             'examination_color',
-                            'is_cancel'    	
+                            'is_cancel'     	
     					];
     					
 }

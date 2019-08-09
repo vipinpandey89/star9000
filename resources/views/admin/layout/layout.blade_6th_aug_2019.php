@@ -1,4 +1,4 @@
-
+ 
 <!DOCTYPE HTML>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -33,13 +33,13 @@
 	<!-- time picker here -->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css">
 
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+
 	<!-- time picker here -->
 
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.js"></script>
-	
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
 
 
 	<script src="{{URL::asset('administrator/js/amcharts.js')}}"></script>	
@@ -51,6 +51,8 @@
 	<script src="{{URL::asset('administrator/js/css3clock.js')}}"></script>
 
 	<script src="{{URL::asset('administrator/js/skycons.js')}}"></script>
+
+	<script src="{{URL::asset('administrator/js/jquery.easydropdown.js')}}"></script>
 
 </head> 
 <body>
@@ -359,10 +361,9 @@
 								toggle = !toggle;
 							});
 						</script>
-
 						<!--js -->
-						<!-- <link rel="stylesheet" href="{{URL::asset('administrator/css/vroom.css')}}">
-						<script type="text/javascript" src="{{URL::asset('administrator/js/vroom.js')}}"></script> -->
+						<link rel="stylesheet" href="{{URL::asset('administrator/css/vroom.css')}}">
+						<script type="text/javascript" src="{{URL::asset('administrator/js/vroom.js')}}"></script>
 						<script type="text/javascript" src="{{URL::asset('administrator/js/TweenLite.min.js')}}"></script>
 						<script type="text/javascript" src="{{URl::asset('administrator/js/CSSPlugin.min.js')}}"></script>
 						<script src="{{URL::asset('administrator/js/jquery.nicescroll.js')}}"></script>
@@ -373,11 +374,7 @@
 						<script src="{{URL::asset('administrator/js/bootstrap.min.js')}}"></script>
 						
 						<script src="{{URL::asset('administrator/bootstrap-colorpicker.js')}}"></script>
-
 						<script type="text/javascript" src="{{URL::asset('administrator/js/moment.min.js')}}" ></script>
 						<script type="text/javascript" src="{{URL::asset('administrator/js/fullcalendar.min.js')}}" ></script>
-						<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
-						<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
-						
 					</body>
 					</html>

@@ -604,7 +604,7 @@ class AdminController extends Controller
 
     	$userProfile= User::where(['id'=>$id])->first();
 
-        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$id' order by p.weekday_num"); 
+        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$id' order by p.weekday_num"); 
       
     	$examination = Examination::all();   
     	return view('admin.edit-doctor',['examination'=>$examination,'userProfile'=>$userProfile,'doctorDetail'=>$doctorDetail]);

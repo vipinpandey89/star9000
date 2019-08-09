@@ -48,9 +48,6 @@ return [
     'Editsecretary' =>'Modifica segretaria',
     'selectctexamination' =>'Seleziona tipologia visita',
     'ProfileExamination' => 'Profilo Visite',
-    'Patient Name' => 'Nome paziente',
-    'Patient Email' => 'Email paziente',
-    'Patient Phone Number' => 'Numero di telefono del paziente',
 
 
    

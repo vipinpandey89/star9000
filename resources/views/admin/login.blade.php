@@ -4,7 +4,7 @@
 
 <head>
 
-	<title>Augment an Admin Panel Category Flat Bootstrap Responsive Web Template | Login :: w3layouts</title>
+	<title>Star9000</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -50,7 +50,7 @@
 
 		<div class="error-top">
 
-			<h2 class="inner-tittle page">Star 900</h2>
+			<h2 class="inner-tittle page">Star 9000</h2>
 
 
 

@@ -94,13 +94,11 @@
 						</div>
 
 
-							<?php $examId = '';?>
+							
 							<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
 								<label for="" class="col-sm-2 control-label">{{ __('menu.WeekDays') }}</label>
 								<div class="col-sm-8">
 									@foreach($doctorDetail as $detail)
-									<?php if(!empty($detail->examination_id)) { $examId=$detail->examination_id; }  
-									?>
 									<div class="col-sm-12">
 										<div class="col-sm-2">	
 											<input  type="checkbox"  id="{{$detail->weekday_num}}" readonly="" name="weekday_num[{{$detail->weekday_num}}]" class="weekday_num"  value="{{$detail->weekday_num}}" <?php echo($detail->weekday_num==$detail->weekdays_id)?'checked':'';?> placeholder="{{ __('menu.Week Days') }}">	
@@ -110,7 +108,7 @@
 											<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
 												<label for="" class="col-sm-2 control-label">{{ __('menu.StartTime') }}</label>
 												<div class="input-group bootstrap-timepicker timepicker">
-													<input id="timepicker1" value="<?php echo !empty($detail->start_time)?$detail->start_time:'';?>" type="text" name="startDate[{{$detail->weekday_num}}]" class="form-control1 input-small timecall" readonly="" style="margin-bottom: 0px;">
+													<input id="timepicker1" type="text" name="startDate[{{$detail->weekday_num}}]" class="form-control1 input-small timecall" readonly="" style="margin-bottom: 0px;">
 													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 												</div>
 											</div>
@@ -119,7 +117,7 @@
 										<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
 											<label for="" class="col-sm-2 control-label">{{ __('menu.EndTime') }}</label>
 											<div class="input-group bootstrap-timepicker timepicker">
-												<input id="timepicker2" value="<?php echo !empty($detail->end_time)?$detail->end_time:'';?>" type="text" name="enddate[{{$detail->weekday_num}}]" class="form-control1 input-small timecall"  readonly="" style="margin-bottom: 0px;">
+												<input id="timepicker2" type="text" name="enddate[{{$detail->weekday_num}}]" class="form-control1 input-small timecall"  readonly="" style="margin-bottom: 0px;">
 												<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 											</div>
 										</div>
@@ -136,6 +134,7 @@
 
 								</div>
 							</div>
+
 					<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
 									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.Examination') }}</label>
 									<div class="col-sm-8">
@@ -143,7 +142,7 @@
 
 											<option value=" ">{{ __('menu.selectctexamination') }}</option>
 												@foreach($examination as $item)
-													<option value="{{$item->id}}" <?php echo ($examId==$item->id)?'selected':'';?>>{{$item->title}}</option>
+													<option value="{{$item->id}}" <?php echo($doctorDetail[0]->examination_id==$item->id)?'selected':'';?>>{{$item->title}}</option>
 												@endforeach											
 
 										</select>
