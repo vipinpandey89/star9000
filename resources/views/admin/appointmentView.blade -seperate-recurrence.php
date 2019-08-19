@@ -21,6 +21,11 @@
 	@endif
 	<div class="graph-visual tables-main">	
 
+		<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#recurrence-appointment" style="margin-bottom: 11px;">
+			 Appuntamento di ricorrenza
+		</button>
+
+
 		<div id='calendar'></div>
 		<div style='clear:both'></div>
 		<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -116,41 +121,126 @@
 
 						<input type="hidden" name="selected_date" id="selecte_date">
 
-						<div id="recurrence_box" class="form-group">
-							<label for="">{{ __('menu.Recurrence') }}</label>
-							<input id="recurrence-cust" value="1" type="checkbox" name="recurrence" style="margin-bottom: 0px;">
-						</div>
-
-						<div id="recurrence-section" style="display: none;">
-							<div class="form-group">
-								<label for="">{{ __('menu.Recurrence End Date') }} <span style="color: red">*</span></label>
-								<input required="required" type="text" id="recurrence_end" name="recurrence_end"  class="form-control"  style="margin-bottom: 0px;">
-							</div>
-							<div class="form-group">
-								<label for="">{{ __('menu.Recurrence Type') }} <span style="color: red">*</span></label>
-								<select name="recurrence_type" id="recurrence_type"  class="form-control" required="required"  style="height: 48px!important">
-									<option value="">Selezionare</option>
-									<option value="daily">Quotidiana</option>
-									<option value="weekly">settimanalmente</option>
-									<option value="monthly">Mensile</option>
-									<option value="yearly">Annuale</option>
-								</select>
-							</div>
-						</div>
-
 						{!! csrf_field() !!}	
 
 						<button type="button" id="savebutton" class="btn btn-default" name="add">Inserisci</button> 
-						<button type="button" style="display: none;" id="delete-appointment" class="btn btn-default" name="add">Annulla appuntamento</button>
-						
-						<button type="button" style="display: none;" id="delete-recurrence-appointment" class="btn btn-default" name="add">Elimina appuntamento di ricorrenza</button>
+						<button type="button" style="display: none;" id="delete-appointment" class="btn btn-default" name="add">Annulla appuntamento</button> 
 					</form>
 				</div>					
 			</div>
 		</div>
 	</div>
 	<!-- end here-->
-	
+	<!-- here we are recurrence appointment-->
+	<div id="recurrence-appointment" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Appuntamento di ricorrenza</h4>
+				</div>
+				<div class="modal-body">
+					<form  id='recurrence-appointment-form' method="post" enctype="multipart/form-data"> 			
+						<div class="form-group ">
+							<label for="title">Tipo di esame <span style="color: red">*</span></label> 
+							<select name="rec_examination_id" id="rec_examination_id"  class="form-control" required="required"  style="height: 48px!important">
+								<option value="">{{ __('menu.selectctexamination') }}</option>
+								@foreach($examination as $item)
+								<option value="{{$item->id}}">{{$item->title}}</option>
+								@endforeach									
+							</select>	
+
+						</div>
+						<div class="form-group ">
+							<label for="title">{{ __('menu.Available rooms') }} <span style="color: red">*</span></label> 
+							<select name="rec_rooms" id="rec_rooms"  class="form-control" required="required"  style="height: 48px!important">
+							</select>	
+						</div>
+						<div class="form-group ">
+							<label for="title">Dottore <span style="color: red">*</span></label> 
+							<select name="rec_doctro" id="rec_doctro"  class="form-control" required="required"  style="height: 48px!important">
+							</select>
+						</div>
+						<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
+							<label for="">{{ __('menu.StartTime') }} <span style="color: red">*</span></label>
+							<div class="input-group bootstrap-timepicker timepicker">
+								<input id="rec_timepicker1" type="text" name="rec_starteTime" class="form-control1 input-small timecall" readonly="" style="margin-bottom: 0px;">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							</div>
+						</div>	
+
+						<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
+							<label for="">{{ __('menu.EndTime') }} <span style="color: red">*</span></label>
+							<div class="input-group bootstrap-timepicker timepicker">
+								<input id="rec_timepicker2" type="text" name="rec_endtime" class="form-control1 input-small timecall"  readonly="" style="margin-bottom: 0px;">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Name') }} <span style="color: red">*</span></label>
+							<input id="rec-patient-name" type="text" name="rec_patient_name" class="form-control"  maxlength="30" required="required" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Email') }} <span style="color: red">*</span></label>
+							<input id="rec-patient-email" type="email" name="rec_patient_email" class="form-control"  required="required" style="margin-bottom: 0px;">
+							
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Phone Number') }} <span style="color: red">*</span></label>
+							<input id="rec-patient-phone" required="required" type="number" name="rec_patient_phone" class="form-control"  style="margin-bottom: 0px;">
+							
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Recurrence Start Date') }} <span style="color: red">*</span></label>
+							<input required="required" type="text" id="recurrence_start" name="recurrence_start" class="form-control"  style="margin-bottom: 0px;">
+							
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Recurrence End Date') }} <span style="color: red">*</span></label>
+							<input required="required" type="text" id="recurrence_end" name="recurrence_end" class="form-control"  style="margin-bottom: 0px;">
+							
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Recurrence Type') }} <span style="color: red">*</span></label>
+							<select name="recurrence_type" id="recurrence_type"  class="form-control" required="required"  style="height: 48px!important">
+								<option value="">Selezionare</option>
+								<option value="daily">Quotidiana</option>
+								<option value="weekly">settimanalmente</option>
+								<option value="monthly">Mensile</option>
+								<option value="yearly">Annuale</option>
+							</select>
+						</div>
+						<div id="monthly-section" style="display: none;">
+							<div class="form-group">
+								<label for="">{{ __('menu.Select Day of Month') }} <span style="color: red">*</span></label>
+								<input required="required" type="text" id="recurrence_monthly_date" name="recurrence_monthly_date" class="form-control"  style="margin-bottom: 0px;">
+							</div>
+						</div>
+						<div id="yearly-section" style="display: none;">
+							<div class="form-group">
+								<label for="">{{ __('menu.Select Date') }} <span style="color: red">*</span></label>
+								<input required="required" type="text" id="recurrence_yearly_date" name="recurrence_yearly_date" class="form-control"  style="margin-bottom: 0px;">
+							</div>
+						</div>
+						<?php $weekDays = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun'); ?>
+						<div id="weekly-section" style="display: none;">
+							<div class="form-group">
+								<label for="">{{ __('menu.Recurrence Day') }} <span style="color: red">*</span></label>
+								@foreach($weekDays as $day)
+									<input type="checkbox" value="{{$day}}" name="day[]"> {{$day}}
+								@endforeach
+							</div>
+						</div>
+						{!! csrf_field() !!}	
+
+						<button type="button" id="save-recurrence-appointment" class="btn btn-default" name="add">Inserisci</button> 
+					</form>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end here -->
 </div>
 <script>
 	$(document).ready(function() {
@@ -190,8 +280,7 @@
 			prev: 'fa-chevron-left',
 			next: 'fa-chevron-right',
 			prevYear: 'fa-angle-double-left',
-			nextYear: 'fa-angle-double-right',
-			editable: false,
+			nextYear: 'fa-angle-double-right', 
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
 			    	if(view.name=='month'){
@@ -246,25 +335,17 @@
 			    	$('#pat_id').val(event.patient_id);
 			    	$('#custom-app-title').html('Annulla appuntamento');
 			    	$('#savebutton').html('Aggiornare');
-			    	$('#recurrence_box').hide();
 			    	if(event.is_cancel != 1){
 			    		if (moment().format('YYYY-MM-DD') === event.start.format('YYYY-MM-DD') || event.start.isAfter(moment())) {
 			    			$('#savebutton').show();
 			    			$('#delete-appointment').show();
-			    			if(event.recurrence != ''){
-			    				$('#delete-recurrence-appointment').show();
-			    			}else{
-			    				$('#delete-recurrence-appointment').hide();
-			    			}
 			    		}else{
 			    			$('#savebutton').hide();
 			    			$('#delete-appointment').hide();
-			    			$('#delete-recurrence-appointment').hide();
 			    		}
 			    	} else{
 			    		$('#savebutton').hide();
 			    		$('#delete-appointment').hide();
-			    		$('#delete-recurrence-appointment').hide();
 			    	}
 
 			  		$('#myModal').show();
@@ -297,13 +378,7 @@
 			$('#custom-app-title').html('appuntamento');
 			$('#savebutton').html('Inserisci');
 			$('#delete-appointment').hide();
-			$('#delete-recurrence-appointment').hide();
-			$('#recurrence_box').show();
 			$('#myModal').show();
-			var startDateRecurrence = new Date($('#selecte_date').val());
-			$('#recurrence_end').datepicker({
-				minDate:startDateRecurrence
-			});
 
 		}		
 		
@@ -325,22 +400,17 @@
 
 		$('.close_appointment').click(function(){ 
 			$('#myModal').hide();
-			$('#recurrence-section').hide();
 		});
 		$('#timepicker1,#timepicker2').timepicker().on('changeTime.timepicker', function(e) {
 			var id= $('#examination_id').val();
 			if(id !== ''){
-				var startDateRecurrence = new Date($('#selecte_date').val());
-			$('#recurrence_end').datepicker({
-				minDate:startDateRecurrence
-			});
 			var selecte_date= $('#selecte_date').val();
 
 			var starttime= $('#timepicker1').val();
 			var endTime= $('#timepicker2').val();
 
 			var SelectDateTime = selecte_date+' '+starttime;
-			var roomSelected = $('#rooms').val();
+
 			$.ajax({
 				method: 'GET',
 				url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
@@ -375,9 +445,6 @@
 			           	}));
 		           });
 		           	// end here doctor detail//
-		           	if(roomSelected != '') {
-		           		$('#rooms').val(roomSelected);
-		           	}
 		           }
       	 	});
 			}
@@ -473,34 +540,6 @@
 				});
 			}
 		});
-		$('#delete-recurrence-appointment').click(function(){
-			var appointmentId = $('#app_id').val();
-			if(appointmentId != '') {
-				$.confirm({
-	    			title: 'Annulla appuntamento',
-	    			content: 'sei sicuro?',
-	    			buttons: {
-	    				Yes: function () {
-							$.ajax({
-								type:"POST",
-								url:"{{url('admin/cancel-recurrence-appointment')}}",
-								data:{appid:appointmentId,"_token": "{{ csrf_token() }}",},
-								success: function(response){
-									console.log(response);
-									if(response=='success')
-									{
-										location.reload();
-									}
-								}
-							});
-						},
-						cancel: function() {
-
-						}
-					}
-				});
-			}
-		});
 		$("#myForm").validate({
 			rules: {
 				examination_id: "required",
@@ -515,9 +554,7 @@
 					required: true,
 					maxlength: 10,
 					minlength: 10
-				},
-				recurrence_end:"required",
-				recurrence_type:"required"
+				}
 			},
 			messages: {
 				examination_id: "Seleziona il tipo di esame.",
@@ -532,9 +569,7 @@
 					required: "Inserisci il numero di telefono del paziente.",
 					maxlength: "Inserire un numero di telefono paziente valido.",
 					minlength: "Inserire un numero di telefono paziente valido."
-				},
-				recurrence_end:"Inserisci la data di fine della ricorrenza.",
-				recurrence_type:"Seleziona il tipo di ricorrenza."
+				}
 			}
 		});
 
@@ -564,16 +599,50 @@
 				$('#error').html("<div class='alert alert-danger'><strong>Error!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
 			}
 		});
-		
-		$('#recurrence-cust').click(function(){
-			if($(this).is(':checked')) {
-				$('#recurrence-section').show();
-				
-			} else {
-				$('#recurrence-section').hide();
+		$('#recurrence_type').change(function(){
+			switch($(this).val()) {
+				case 'weekly':
+					$('#weekly-section').show();
+					$('#monthly-section').hide();
+					$('#yearly-section').hide();
+					break;
+				case 'monthly':
+					$('#weekly-section').hide();
+					$('#monthly-section').show();
+					$('#yearly-section').hide();
+					break;
+				case 'yearly':
+					$('#weekly-section').hide();
+					$('#monthly-section').hide();
+					$('#yearly-section').show();
+					break;
+				default:
+					$('#weekly-section').hide();
+					$('#monthly-section').hide();
+					$('#yearly-section').hide();
+					break;
 			}
 		});
-		
+		$("#recurrence_start").datepicker({
+            dateFormat: "dd-mm-yy",
+            minDate: 0,
+            onSelect: function (date) {
+                var dt2 = $('#recurrence_end');
+                var minDate = $(this).datepicker('getDate');
+                dt2.datepicker('option', 'minDate', minDate);
+            }
+        });
+        $('#recurrence_end').datepicker({
+            dateFormat: "dd-mm-yy"
+        });
+        $('#recurrence_yearly_date').datepicker({
+        	dateFormat: "dd-MM",
+        	changeMonth: true,
+      		changeYear: false
+        });
+        $('#recurrence_monthly_date').datepicker({
+        	dateFormat: "dd",
+        });
 	});
 	function checkStartEndTime(startTime, endTime)
 	{

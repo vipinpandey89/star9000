@@ -11,6 +11,7 @@ class Patient extends Model
 
           public $fillable = [
         					'appointment_id',
+                            'recurrence_id',
         					'email',
                             'name',
                             'phone',

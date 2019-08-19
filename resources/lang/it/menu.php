@@ -51,10 +51,12 @@ return [
     'Patient Name' => 'Nome paziente',
     'Patient Email' => 'Email paziente',
     'Patient Phone Number' => 'Numero di telefono del paziente',
-
-
-   
-
-
+    'Recurrence' => 'ricorrenza',
+    'Recurrence Start Date' => 'Data inizio ricorrenza',
+    'Recurrence End Date' => 'Data di fine della ricorrenza',
+    'Recurrence Type' => 'Tipo di ricorrenza',
+    'Select Day of Month' => 'Seleziona il giorno del mese',
+    'Recurrence Day' => 'Ricorrenza',
+    'Select Date' => 'Seleziona la data'
     
 ];
