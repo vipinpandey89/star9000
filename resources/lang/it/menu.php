@@ -57,6 +57,17 @@ return [
     'Recurrence Type' => 'Tipo di ricorrenza',
     'Select Day of Month' => 'Seleziona il giorno del mese',
     'Recurrence Day' => 'Ricorrenza',
-    'Select Date' => 'Seleziona la data'
-    
+    'Select Date' => 'Seleziona la data',
+    'UserProfile' => 'Profilo utente',
+    'Appointments' => 'appuntamenti',
+    'Patient Description' => 'Descrizione del paziente',
+    'Patient' => 'Paziente',
+    'Manage Patient' => 'Gestire il paziente',
+    'From Date' => 'Dalla data',
+    'To Date' => 'Ad oggi',
+    'Select Doctor' => 'Seleziona dottore',
+    'Select Exam Type' => 'Seleziona il tipo di esame',
+    'Select room' => 'Seleziona la stanza',
+    'Filter' => 'Filtro',
+    'Clear Filter' => 'Filtro pulito'
 ];

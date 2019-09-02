@@ -12,6 +12,8 @@ class AppointmentBooking extends Model
           public $fillable = [
         					'doctro_name',
         					'examination_id',
+                            'room_id',
+                            'patient_id',
                             'starteTime',
                             'endtime',
                             'start_date',
@@ -21,7 +23,8 @@ class AppointmentBooking extends Model
                             'str_startdate',
                             'str_enddate',
                             'examination_color',
-                            'is_cancel'     	
+                            'is_cancel',
+                            'recurrence'    	
     					];
     					
 }

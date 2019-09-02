@@ -70,10 +70,13 @@ Route::match(['get','post'],'modifica-medico/{id}','AdminController@EditDoctor')
 Route::match(['get','post'],'profilo-visite','AdminController@SetExamination');
 
 Route::get('responsedata','AppointmentController@ResponseData');
+Route::get('doctorresponsedata','DoctorAppointmentController@ResponseData');
+Route::get('doctor-appointments','DoctorAppointmentController@List');
 
 Route::get('ajaxresponse/{id}','AppointmentController@AjaxResponse');
 
 Route::post('ajaxset-appointment','AppointmentController@AjaxSetAppointment');
+Route::post('create-patient','AppointmentController@CreatePatient');
 
 Route::post('cancel-appointment','AppointmentController@CancelAppointment');
 
@@ -84,5 +87,8 @@ Route::get('doctor-leaves','AdminController@DoctorLeaves');
 Route::get('test-digital-pad','AdminController@TestDigital');
 
 Route::get('/admin-logout','AdminController@AdminLogout');
+Route::get('patient','PatientController@index');
+Route::match(['get','post'],'add-patient','PatientController@AddPatient');
+Route::match(['get','post'],'edit-patient/{id}','PatientController@EditPatient');
 
 });

@@ -707,8 +707,8 @@ class AdminController extends Controller
                            // ->leftjoin('doctors', 'doctors.weekdays_id', '=', 'weekdays.weekday_num')                     
                            // ->select('weekdays.*', 'doctors.weekdays_id as doctorweeks','doctors.examination_id')
                            // ->orderby('weekdays.weekday_num','ASC')                     
-                           // ->get(); 
-        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$userId' order by p.weekday_num");      
+                           // ->get();  
+        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$userId' order by p.weekday_num");      
 
     	$examination = Examination::all();  
 

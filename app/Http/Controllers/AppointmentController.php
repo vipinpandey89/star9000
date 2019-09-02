@@ -25,34 +25,55 @@ class AppointmentController extends Controller
         $examination = Examination::all();
 
         $Doctor = User::where(['role_type'=>'3'])->get();
-
-
+        $patients = Patient::all();
+        $rooms = Room::all();
+        $patientsData = [];
+        foreach ($patients as $data) {
+            $patientsData[]=[
+                'name' => $data['name'].(!empty($data['email'])?' - ('.$data['email'].')':''),
+                'email' => $data['email'],
+                'id' => $data['id']
+            ];
+        }
         $AppointmentUser  = DB::table('appointement_booking')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')                     
                             ->select('appointement_booking.*', 'users.name','users.phone','users.email')                     
                             ->get();
-  
-        //echo '<pre>';print_r($AppointmentUser);die;
-
-
-        return view('admin.appointmentView',['examination'=>$examination,'Doctor'=>$Doctor,'appointmentuser'=>$AppointmentUser]);
+        return view('admin.appointmentView',['examination'=>$examination,'Doctor'=>$Doctor,'appointmentuser'=>$AppointmentUser,'patientsData'=>$patientsData, 'rooms'=>$rooms]);
      }
 
     public function ResponseData()
     {
-        $result= AppointmentBooking::all();
+        $filterbydoctor = Input::get('filterbydoctor');
+        $filterexamtype = Input::get('filterexamtype');
+        $filterroom = Input::get('filterroom');
+        $tenDaysBack = date('Y-m-d', strtotime('-10 days', time()));
+        $appoint = DB::table('appointement_booking')
+                     ->select('*')
+                     ->where('start_date', '>=', $tenDaysBack);
+        if(isset($filterbydoctor) && !empty($filterbydoctor)) {
+            $appoint->where('doctro_name', '=', $filterbydoctor);
+        }
+        if(isset($filterexamtype) && !empty($filterexamtype)) {
+            $appoint->where('examination_id', '=', $filterexamtype);
+        }
+        if(isset($filterroom) && !empty($filterroom)) {
+            $appoint->where('room_id', '=', $filterroom);
+        }
+        $result = $appoint->get();
         $data =[];
         foreach($result as $row)
         {
             $DoctorDetail = User::where(['id'=>$row->doctro_name])->first();
             $recurrence = '';
-            if(empty($row->recurrence)) {
-                $patientWhere = ['appointment_id'=>$row->id];
-            }else{
-                $patientWhere = ['recurrence_id'=>$row->recurrence];
-                $recurrence = $row->recurrence;
-            }
+            $patientWhere = ['id'=>$row->patient_id];
+            $recurrence = $row->recurrence;
+            
             $patient = Patient::where($patientWhere)->first();
+            $emaildat='';
+            if(!empty($patient->email)){
+                $emaildat='- ('.(isset($patient->email)?$patient->email:'').')';
+            }
             $data[] = array(
                               'id'   => $row->id,
                               'title'   => (($row->is_cancel == 1)?$DoctorDetail->name.'- Annullato':$DoctorDetail->name),
@@ -66,7 +87,7 @@ class AppointmentController extends Controller
                               'room_id' => $row->room_id,
                               'doctor_id' => $row->doctro_name,
                               'patient_name' => (isset($patient->name)?$patient->name:''),
-                              'patient_email' => (isset($patient->email)?$patient->email:''),
+                              'patient_email' => $patient->name.$emaildat,
                               'patient_phone' => (isset($patient->phone)?$patient->phone:''),
                               'patient_id' => (isset($patient->id)?$patient->id:''),
                               'is_cancel' => $row->is_cancel,
@@ -121,9 +142,8 @@ class AppointmentController extends Controller
 
         $endDate =             $date.' '.$endtime;
         $roomID =               Input::get('rooms');
-        $patientName =          Input::get('patient_name');
         $patientEmail =         Input::get('patient_email');
-        $patientPhone =         Input::get('patient_phone');
+        $patientId =            Input::get('patient_id');
 
         if(empty(Input::get('appointment_id'))) {
             $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date > '" . date('Y-m-d h:i:s',strtotime($startDate)) . "') AND (start_date < '" . date('Y-m-d h:i:s',strtotime($endDate)) . "'))");
@@ -140,8 +160,7 @@ class AppointmentController extends Controller
                 $recurrenceData['examination_color'] = $GetroomColor->room_color;
                 $recurrenceData['room_id'] = $roomID;
                 $recurrenceData['patient_email'] = $patientEmail;
-                $recurrenceData['patient_name'] = $patientName;
-                $recurrenceData['patient_phone'] = $patientPhone;
+                $recurrenceData['patient_id'] = $patientId;
                 $recurrenceData['patient_added_updated_by'] = $user->id;
 
                 $recurrenceData['recurrence_start'] = $date;
@@ -168,22 +187,10 @@ class AppointmentController extends Controller
                 $AppointmentBooking->str_enddate         =     strtotime($endDate);
                 $AppointmentBooking->examination_color   =     $GetroomColor->room_color;
                 $AppointmentBooking->room_id   =     $roomID;
+                $AppointmentBooking->patient_id   =     $patientId;
 
                 if($AppointmentBooking->save()) {
-                    if(empty(Input::get('appointment_id'))) {
-                        $patient = new Patient();
-                        $patient->appointment_id         =     $AppointmentBooking->id;
-                        $request->session()->flash('success', "L'appuntamento è stato creato correttamente.");
-                    } else {
-                        $patient = Patient::find(Input::get('pat_id'));
-                        $request->session()->flash('success', "L'appuntamento è stato aggiornato con successo.");
-                    }
-                    $patient->email                  =     $patientEmail;
-                    $patient->name                   =     $patientName;
-                    $patient->phone                  =     $patientPhone;
-                    $patient->added_by               =     $user->id;
-                    $patient->updated_by             =     $user->id;
-                    $patient->save();
+                    $request->session()->flash('success', "L'appuntamento è stato aggiornato con successo.");
                 }
                 return  'success';  
             }
@@ -193,6 +200,24 @@ class AppointmentController extends Controller
             return  'error';
         }               
 
+    }
+
+    public function CreatePatient() {
+        $user = auth()->user();
+        $patientName =          Input::get('pat_name');
+        $patientEmail =         Input::get('pat_email');
+        $patientPhone =         Input::get('pat_phone_num');
+        $patientDesc =         Input::get('pat_phone_num');
+        $patient = new Patient();
+        $patient->email                  =     $patientEmail;
+        $patient->name                   =     $patientName;
+        $patient->phone                  =     $patientPhone;
+        $patient->added_by               =     $user->id;
+        $patient->updated_by             =     $user->id;
+        if($patient->save()) {
+            echo $patient->id;
+        }
+        exit;
     }
 
     public function checkRecurrenceAppointment($appointmentData) {
@@ -283,18 +308,10 @@ class AppointmentController extends Controller
                     $AppointmentBooking->examination_color   =     $appointmentData['examination_color'];
                     $AppointmentBooking->room_id   =     $appointmentData['room_id'];
                     $AppointmentBooking->recurrence   =     $recurrenceId;
+                    $AppointmentBooking->patient_id   =     $appointmentData['patient_id'];
                     $AppointmentBooking->save();
                 }
-            } 
-            $patient = new Patient();
-            $patient->appointment_id         =     0;
-            $patient->recurrence_id          =     $recurrenceId;
-            $patient->email                  =     $appointmentData['patient_email'];
-            $patient->name                   =     $appointmentData['patient_name'];
-            $patient->phone                  =     $appointmentData['patient_phone'];
-            $patient->added_by               =     $appointmentData['patient_added_updated_by'];
-            $patient->updated_by             =     $appointmentData['patient_added_updated_by'];
-            $patient->save();
+            }
             $request->session()->flash('success', "L'appuntamento di ricorrenza è stato creato correttamente.");
             echo  'success'; 
         }

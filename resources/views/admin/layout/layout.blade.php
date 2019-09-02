@@ -8,7 +8,7 @@
 	<meta name="keywords" content="Augment Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-
+	<script src="{{URL::asset('administrator/js/jquery-1.10.2.min.js')}}"></script>
 	<link href="{{URL::asset('administrator/css/jquery-confirm.min.css')}}" rel='stylesheet' type='text/css' />
 
 	<link href="{{URL::asset('administrator/css/bootstrap.min.css')}}" rel='stylesheet' type='text/css' />
@@ -26,9 +26,9 @@
 	<link href='//fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" href="{{URL('administrator/css/icon-font.min.css')}}" type='text/css' />
+	<link rel="stylesheet" href="{{URL('administrator/css/easy-autocomplete.min.css')}}" type='text/css' />
 
-
-	<script src="{{URL::asset('administrator/js/jquery-1.10.2.min.js')}}"></script>
+	
 
 	<!-- time picker here -->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css">
@@ -40,18 +40,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.js"></script>
 	
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
-
-
-	<script src="{{URL::asset('administrator/js/amcharts.js')}}"></script>	
-	<script src="{{URL::asset('administrator/js/serial.js')}}"></script>	
-	<script src="{{URL::asset('administrator/js/light.js')}}"></script>	
-	<script src="{{URL::asset('administrator/js/radar.js')}}"></script>	
-	<link href="{{URL::asset('administrator/css/fabochart.css')}}" rel='stylesheet' type='text/css' />
+	
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="{{URL::asset('administrator/js/css3clock.js')}}"></script>
-
-	<script src="{{URL::asset('administrator/js/skycons.js')}}"></script>
-
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index')
+		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+	@endif
 </head> 
 <body>
 	<div class="page-container">
@@ -162,14 +156,16 @@
 
 										<li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 
-										<!--<li><a href="{{url('admin/doctor-leaves')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>Leaves</span></a></li>-->
+										<li><a href="{{url('admin/patient')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.Manage Patient') }}</span></a></li>
+
 								@elseif( Auth::user()->role_type=='2')
 
 								       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 
 								       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
 								@else		
-										<li><a href="{{url('admin/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.ProfileExamination') }}</span></a></li>
+										<li><a href="{{url('admin/doctor-appointments')}}"><i class="fa fa-table" aria-hidden="true"></i><span>{{ __('menu.Appointments') }}</span></a></li>
+										<li><a href="{{url('admin/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.UserProfile') }}</span></a></li>
 								@endif
 							 </ul>
 						 </div>
@@ -198,10 +194,7 @@
 						</script>
 
 						<!--js -->
-						<!-- <link rel="stylesheet" href="{{URL::asset('administrator/css/vroom.css')}}">
-						<script type="text/javascript" src="{{URL::asset('administrator/js/vroom.js')}}"></script> -->
-						<script type="text/javascript" src="{{URL::asset('administrator/js/TweenLite.min.js')}}"></script>
-						<script type="text/javascript" src="{{URl::asset('administrator/js/CSSPlugin.min.js')}}"></script>
+						
 						<script src="{{URL::asset('administrator/js/jquery.nicescroll.js')}}"></script>
 						<script src="{{URl::asset('administrator/js/scripts.js')}}"></script>
 						<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.min.js')}}" ></script>
@@ -215,6 +208,13 @@
 						<script type="text/javascript" src="{{URL::asset('administrator/js/fullcalendar.min.js')}}" ></script>
 						<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
 						<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
-						
+						<script src="{{URL::asset('administrator/js/jquery.easy-autocomplete.min.js')}}"></script>
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index')
+							<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
+						@endif
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient' || Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient')
+							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
+						@endif
 					</body>
 					</html>

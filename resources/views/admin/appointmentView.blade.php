@@ -19,6 +19,74 @@
 		<strong>{{Session::get('success') }}</strong>
 	</div>
 	@endif
+	<div class="row">
+		<form method="get" action="{{url('admin/calendario')}}">
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<input type="text" id="filter-from-date" class="form-control1" name="fromdate" placeholder="{{ __('menu.From Date') }}">
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<input type="text" id="filter-to-date" class="form-control1" name="todate" placeholder="{{ __('menu.To Date') }}">
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<select id="filter-doctor" class="form-control1" name="filter_doctor">
+							<option value="">{{ __('menu.Select Doctor') }}</option>
+							@foreach($Doctor as $doc)
+								<option value="{{$doc->id}}">{{$doc->name}}</option>
+							@endforeach	
+						</select>
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<select id="filter-examtype" class="form-control1" name="filter_examtype">
+							<option value="">{{ __('menu.Select Exam Type') }}</option>
+							@foreach($examination as $item)
+							<option value="{{$item->id}}">{{$item->title}}</option>
+							@endforeach	
+						</select>
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<select id="filter-room" class="form-control1" name="filter_room">
+							<option value="">{{ __('menu.Select room') }}</option>
+							@foreach($rooms as $room)
+								<option value="{{$room->id}}">{{$room->room_name}}</option>
+							@endforeach	
+						</select>
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<button type="button" id="filter-button" class="btn btn-default"> {{ __('menu.Filter') }}</button>
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<button type="button" id="clear-filter-button" class="btn btn-default"> {{ __('menu.Clear Filter') }}</button> 
+					</div>									
+				</div>
+			</div>
+		</form>
+	</div>
 	<div class="graph-visual tables-main">	
 
 		<div id='calendar'></div>
@@ -36,8 +104,43 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="patientModal" class="modal" role="dialog" style="overflow-y: scroll;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close close_appointment"  data-dismiss="modal">&times;</button>
+					<h4 id="custom-app-title-pat" class="modal-title">Crea nuovo paziente</h4>
+					<span id="error-pat"></span>
+				</div>
+				<div class="modal-body">
+					<form  id='patientForm' method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Name') }} <span style="color: red">*</span></label>
+							<input id="pat-name" type="text" name="pat_name" class="form-control" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Email') }} </label>
+							<input id="pat-email" type="text" name="pat_email" class="form-control" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Phone Number') }} </label>
+							<input id="pat-phone-number" type="text" name="pat_phone_num" class="form-control" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Description') }} <span style="color: red">*</span></label>
+							<textarea class="form-control" name="pat_desc"></textarea>
+						</div>
+						{!! csrf_field() !!}	
+
+						<button type="button" id="savepatientbutton" class="btn btn-default" name="add">Crea paziente</button> 
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- here create a model for -->
-	<div id="myModal" class="modal" role="dialog">
+	<div id="myModal" class="modal" role="dialog" style="overflow-y: scroll;">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -98,19 +201,10 @@
 								<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 							</div>
 						</div>
-
+						<input type="hidden" id="patient-id" name="patient_id">
 						<div class="form-group">
-							<label for="">{{ __('menu.Patient Name') }} <span style="color: red">*</span></label>
-							<input id="patient-name" type="text" name="patient_name" class="form-control"  maxlength="30" required="required" style="margin-bottom: 0px;">
-						</div>
-						<div class="form-group">
-							<label for="">{{ __('menu.Patient Email') }} <span style="color: red">*</span></label>
-							<input id="patient-email" type="email" name="patient_email" class="form-control"  required="required" style="margin-bottom: 0px;">
-							
-						</div>
-						<div class="form-group">
-							<label for="">{{ __('menu.Patient Phone Number') }} <span style="color: red">*</span></label>
-							<input id="patient-phone" required="required" type="number" name="patient_phone" class="form-control"  style="margin-bottom: 0px;">
+							<label for="">{{ __('menu.Patient') }} <span style="color: red">*</span></label>
+							<input id="patient-info" type="text" name="patient" class="form-control"  required="required" style="margin-bottom: 0px;">
 							
 						</div>
 
@@ -152,12 +246,20 @@
 	<!-- end here-->
 	
 </div>
+<?php
+$patientEmail=[];
+foreach($patientsData as $dat){
+	$patientEmail[]=$dat['email'];
+}
+?>
 <script>
 	$(document).ready(function() {
+		patientEmail='<?php echo json_encode($patientEmail)?>';
 		$('.timecall').timepicker({
 			showMeridian: false  ,
 			minuteStep: 10
 		});
+		availableTags = JSON.parse('<?php echo json_encode($patientsData) ?>');
 		$('#calendar').fullCalendar({
 			header:{
 				left:'prev,next today',
@@ -177,7 +279,6 @@
 				day: 'giorno',
 
 			},
-			//defaultView: 'agendaDay',
 			slotDuration: '00:10:00',
 			slotLabelInterval: 10,
 			slotLabelFormat: 'H:mm',
@@ -191,7 +292,8 @@
 			next: 'fa-chevron-right',
 			prevYear: 'fa-angle-double-left',
 			nextYear: 'fa-angle-double-right',
-			editable: false,
+			minTime:'07:00:00',
+			maxTime:'19:00:00',
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
 			    	if(view.name=='month'){
@@ -202,13 +304,16 @@
 			    		view.calendar.gotoDate(date);
 			    		view.calendar.changeView('agendaDay');
 			    	}
+			    	if(view.name=='agenda') {
+			    		view.calendar.gotoDate(date);
+			    		view.calendar.changeView('agendaDay');
+			    	}
 			    	if(view.name=='agendaDay'){
 			    		$.confirm({
 			    			title: ' ',
 			    			content: 'Inserisci un nuovo appuntamento ',
 			    			buttons: {
 			    				Yes: function () {
-									//createEvent('Available', date, calculateEndDate(date, parseInt(txtDuration), hoursOrDays));
 									searchDoctorAvailability(date);
 								},
 								cancel: function () {
@@ -220,7 +325,10 @@
 			    	}
 		    	}
 		    },
-		    events: "{{ url('/admin/responsedata') }}",
+		    events: function(start, end, timezone, callback) {
+		    	renderAppointment(callback);
+		    },
+		    //events: "{{ url('/admin/responsedata') }}",
 		    selectable:true,
 		    selectHelper:true,
 		    selectAllow: function(select) {
@@ -239,11 +347,10 @@
 						$('#rooms').val(event.room_id);
 						$('#doctors').val(event.doctor_id);
 					}, 3000);
-					$('#patient-name').val(event.patient_name);
-					$('#patient-email').val(event.patient_email);
-					$('#patient-phone').val(event.patient_phone);
+					$('#patient-info').val(event.patient_email);
 			    	$('#app_id').val(event.id);
 			    	$('#pat_id').val(event.patient_id);
+			    	$('#patient_id').val(event.patient_id);
 			    	$('#custom-app-title').html('Annulla appuntamento');
 			    	$('#savebutton').html('Aggiornare');
 			    	$('#recurrence_box').hide();
@@ -268,6 +375,39 @@
 			    	}
 
 			  		$('#myModal').show();
+			  		$( "#patient-info" ).easyAutocomplete({
+						data:availableTags,
+						getValue: "name",
+						list: {
+							match: {
+								enabled: true
+							},
+							onLoadEvent: function() {
+								if($( "#patient-info" ).val().length >= 8) {
+									var elementCount = $("#eac-container-patient-info").find('li').length;
+									if (elementCount <= 0) {
+				                        $.confirm({
+							    			title: ' ',
+							    			content: 'vuoi creare un nuovo paziente? ',
+							    			buttons: {
+							    				Yes: function () {
+													showPatientPopup();
+												},
+												cancel: function () {
+													
+												},
+											}
+										});
+				                    }
+								}
+							},
+							onSelectItemEvent: function() {
+								var value = $("#patient-info").getSelectedItemData().id;
+								$('#patient-id').val(value);
+							}
+						},
+						placeholder: "Choose Patient"
+					});
 		  	},
 		  	select: function(startDate, endDate, jsEvent, view, resource) {
 		  		$('#myForm')[0].reset();
@@ -286,14 +426,13 @@
 		{
 			$('#error').html('');
 			$('#selecte_date').val('');
-			$('#patient-name').val('');
-			$('#patient-email').val('');
-			$('#patient-phone').val('');
+			$('#patient-info').val('');
 			$('#savebutton').show();
 			var date = SelectDateTime.format('Y')+'-'+SelectDateTime.format('M')+'-'+SelectDateTime.format('D');
 			$('#selecte_date').val(date);
 			$('#app_id').val('');
 			$('#pat_id').val('');
+			$('#patient-id').val('');
 			$('#custom-app-title').html('appuntamento');
 			$('#savebutton').html('Inserisci');
 			$('#delete-appointment').hide();
@@ -304,8 +443,46 @@
 			$('#recurrence_end').datepicker({
 				minDate:startDateRecurrence
 			});
+			
+			$( "#patient-info" ).easyAutocomplete({
+				data:availableTags,
+				getValue: "name",
+				list: {
+					match: {
+						enabled: true
+					},
+					onLoadEvent: function() {
+						if($( "#patient-info" ).val().length >= 8) {
+							var elementCount = $("#eac-container-patient-info").find('li').length;
+							if (elementCount <= 0) {
+		                        $.confirm({
+					    			title: ' ',
+					    			content: 'vuoi creare un nuovo paziente? ',
+					    			buttons: {
+					    				Yes: function () {
+											showPatientPopup();
+										},
+										cancel: function () {
+											
+										},
+									}
+								});
+		                    }
+						}
+					},
+					onSelectItemEvent: function() {
+						var value = $("#patient-info").getSelectedItemData().id;
+						$('#patient-id').val(value);
+					}
+				},
+				placeholder: "Choose Patient"
+			});
+		}
 
-		}		
+		function showPatientPopup() {
+			$('#myModal').hide();
+			$('#patientModal').show();
+		}
 		
 		function createEvent(text, start, end) {
 			var calendario = $('#calendar');
@@ -324,7 +501,7 @@
 		}
 
 		$('.close_appointment').click(function(){ 
-			$('#myModal').hide();
+			$('.modal').hide();
 			$('#recurrence-section').hide();
 		});
 		$('#timepicker1,#timepicker2').timepicker().on('changeTime.timepicker', function(e) {
@@ -348,7 +525,6 @@
 				cache: false,
 				success: function(html){		   		
 					var decodeData=  JSON.parse(html);
-					//console.log(decodeData);
 			   		$('#rooms').empty();
 			   		$('#rooms').append('<option value="">Select Rooms</option>');
 		            // here is for rooms section //       
@@ -399,11 +575,7 @@
 				data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime},
 				cache: false,
 				success: function(html){		   		
-
-
 					var decodeData=  JSON.parse(html);
-					//console.log(decodeData);
-		   	
 		   		$('#rooms').empty();
 		   		$('#rooms').append('<option value="">Select Rooms</option>');
             // here is for rooms section //       
@@ -445,6 +617,20 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
+		$('#filter-from-date').datepicker({
+			dateFormat: "yy-mm-dd", 
+	        onSelect: function(date){            
+	            var date1 = $('#filter-from-date').datepicker('getDate');           
+	            var date = new Date( Date.parse( date1 ) ); 
+	            date.setDate( date.getDate() + 1 );        
+	            var newDate = date.toDateString(); 
+	            newDate = new Date( Date.parse( newDate ) );                      
+	            $('#filter-to-date').datepicker("option","minDate",newDate);            
+	        }
+		});
+		$('#filter-to-date').datepicker({
+			dateFormat: "yy-mm-dd"
+		});
 		$('#delete-appointment').click(function(){
 			var appointmentId = $('#app_id').val();
 			if(appointmentId != '') {
@@ -506,16 +692,7 @@
 				examination_id: "required",
 				rooms: "required",
 				doctro: "required",
-				patient_name: "required",
-				patient_email: {
-					required: true,
-					email: true
-				},
-				patient_phone: {
-					required: true,
-					maxlength: 10,
-					minlength: 10
-				},
+				patient: "required",
 				recurrence_end:"required",
 				recurrence_type:"required"
 			},
@@ -523,18 +700,74 @@
 				examination_id: "Seleziona il tipo di esame.",
 				rooms: "Si prega di selezionare la stanza.",
 				doctro: "Per favore, seleziona un dottore.",
-				patient_name: "Inserisci il nome del paziente.",
-				patient_email: {
-					required: "Inserisci l'e-mail del paziente.",
+				patient: "Seleziona il paziente.",
+				recurrence_end:"Inserisci la data di fine della ricorrenza.",
+				recurrence_type:"Seleziona il tipo di ricorrenza."
+			}
+		});
+
+		$('#patientForm').validate({
+			rules: {
+				pat_name: "required",
+				pat_email: {
+					email: true
+				},
+				pat_phone_num: {
+					maxlength: 10,
+					minlength: 10
+				},
+				pat_desc:"required"
+			},
+			messages: {
+				pat_name: "Inserisci il nome del paziente.",
+				pat_email: {
 					email: "Inserisci un indirizzo email valido per il paziente."
 				},
-				patient_phone: {
-					required: "Inserisci il numero di telefono del paziente.",
+				pat_phone_num: {
 					maxlength: "Inserire un numero di telefono paziente valido.",
 					minlength: "Inserire un numero di telefono paziente valido."
 				},
-				recurrence_end:"Inserisci la data di fine della ricorrenza.",
-				recurrence_type:"Seleziona il tipo di ricorrenza."
+				pat_desc:"Inserisci la descrizione del paziente."
+			}
+		});
+
+		$('#savepatientbutton').click(function() {
+			$('#error-pat').html('');
+			var patEmail = $('#pat-email').val();
+			var patName = $('#pat-name').val();
+			var emailError=1;
+			if(patEmail != '') {
+				if(patientEmail.indexOf(patEmail) != -1){
+					$('#error-pat').html('<div class="alert alert-danger"><strong>Error!</strong>Il paziente esiste già.</div>');
+					emailError=2;
+				}else{
+					emailError=1;
+				}
+				patName = patName+' - ('+patEmail+')';
+			}
+			if(emailError==1){
+				if($("#patientForm").valid()) {
+					$.ajax({
+						type:"POST",
+						url:"{{url('admin/create-patient')}}",
+						data:$("#patientForm").serialize(),
+						success: function(response){
+							if(response != '')
+							{
+								$('#myModal').show();
+								$('#patientModal').hide();
+								$('#patient-info').val(patName);
+								$('#patient-id').val(response);
+								availableTags.push({"name":patName,"email":patEmail,"id":response});
+								$('#error').html('<div class="alert alert-success">Il paziente è stato creato con successo.</div>');
+							} else {
+								$('#error-pat').html('<div class="alert alert-danger"><strong>Error!</strong>si è verificato un errore, riprova più tardi.</div>');
+							}
+						}
+					});
+				} else {
+					$("#patientForm").submit()
+				}
 			}
 		});
 
@@ -542,23 +775,27 @@
 			var startTime=$('#timepicker1').val();
 			var endTime=$('#timepicker2').val();
 			if(checkStartEndTime(startTime, endTime)){
-				if($("#myForm").valid()){
-					$.ajax({
-						type:"POST",
-						url:"{{url('admin/ajaxset-appointment')}}",
-						data:$("#myForm").serialize(),
-						success: function(response){
-							console.log(response);
-							if(response=='success')
-							{
-								location.reload();
-							}else{
-								$('#error').html('<div class="alert alert-danger"><strong>Error!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
+				var patId=$('#patient-id').val();
+				if(patId != ''){
+					if($("#myForm").valid()){
+						$.ajax({
+							type:"POST",
+							url:"{{url('admin/ajaxset-appointment')}}",
+							data:$("#myForm").serialize(),
+							success: function(response){
+								if(response=='success')
+								{
+									location.reload();
+								}else{
+									$('#error').html('<div class="alert alert-danger"><strong>Error!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
+								}
 							}
-						}
-					});
-				}else{
-					$("#myForm").submit();
+						});
+					}else{
+						$("#myForm").submit();
+					}
+				} else {
+					$('#error').html("<div class='alert alert-danger'><strong>Error!</strong>Paziente non valido.</div>");
 				}
 			} else {
 				$('#error').html("<div class='alert alert-danger'><strong>Error!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
@@ -573,7 +810,26 @@
 				$('#recurrence-section').hide();
 			}
 		});
-		
+		$('#filter-button').click(function(){
+			var filterfromDate = $('#filter-from-date').val();
+			var filtertoDate = $('#filter-to-date').val();
+			if(filterfromDate != '' && filtertoDate != '') {
+				$('#calendar').fullCalendar('changeView', 'agenda');
+				$('#calendar').fullCalendar('option', 'visibleRange', {
+				  start: new Date( Date.parse(filterfromDate)),
+				  end: new Date( Date.parse(filtertoDate))
+				});
+			}
+			var filterbydoctorssecond = $('#filter-doctor').val();
+			var filterexamtypesecond = $('#filter-examtype').val();
+			var filterroomsecond = $('#filter-room').val();
+			if((filterbydoctorssecond != '') || (filterexamtypesecond != '') || (filterroomsecond != '')){
+				$('#calendar').fullCalendar('refetchEvents');
+			}
+		});
+		$('#clear-filter-button').click(function(){
+			location.reload();
+		});
 	});
 	function checkStartEndTime(startTime, endTime)
 	{
@@ -601,6 +857,20 @@
 		} else{
 			return true;
 		}
+	}
+	function renderAppointment(callback) {
+		var filterbydoctor = $('#filter-doctor').val();
+		var filterexamtype = $('#filter-examtype').val();
+		var filterroom = $('#filter-room').val();
+		$.ajax({
+			type:"GET",
+			dataType:"json",
+			data:{filterbydoctor:filterbydoctor,filterexamtype:filterexamtype,filterroom:filterroom},
+			url:"{{url('/admin/responsedata')}}",
+			success: function(response){
+				callback(response);
+			}
+		});
 	}
 </script>
 @endsection							
