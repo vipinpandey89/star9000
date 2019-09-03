@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	if($('#myTable').length) {
 		$('#myTable').DataTable({
-			paging: false,
 			"columnDefs": [ {
 			"targets": 7,
 			"orderable": false
@@ -10,7 +9,6 @@ $(document).ready(function(){
 	}
 	if($('#appointmentTable').length) {
 		$('#appointmentTable').DataTable({
-			paging: false,
 			"columnDefs": [ {
 			"targets": 6,
 			"orderable": false
@@ -29,24 +27,26 @@ $(document).ready(function(){
 	});
 	$('#add-patient-form').validate({
 		rules: {
-			name: "required",
+			surname: "required",
 			phone: {
 				maxlength:10,
 				minlength:10
 			},
 			email:{
 				email: true
-			}
+			},
+			dob: "required"
 		},
 		messages: {
-			name: "Inserisci il nome del paziente.",
+			surname: "Per favore, inserisci il cognome.",
 			phone: {
 				maxlength:"Si prega di inserire il numero di telefono valido.",
 				minlength:"Si prega di inserire il numero di telefono valido"
 			},
 			email:{
 				email: "Si prega di inserire un indirizzo email valido"
-			}
+			},
+			dob: "Si prega di inserire la data di nascita."
 		}
 	});
 	if($('#add-relative').length) {

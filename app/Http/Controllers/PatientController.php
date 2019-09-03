@@ -37,6 +37,7 @@ class PatientController extends Controller
             $patient->name  =  Input::get('name');
             $patient->phone  =  Input::get('phone');
             $patient->dob  =  Input::get('dob');
+            $patient->description  =  Input::get('description');
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if($patient->save()){
@@ -73,6 +74,7 @@ class PatientController extends Controller
             $patient->name  =  Input::get('name');
             $patient->phone  =  Input::get('phone');
             $patient->dob  =  Input::get('dob');
+            $patient->description  =  Input::get('description');
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if(!empty(Input::get('relative'))) {

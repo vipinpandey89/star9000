@@ -21,5 +21,6 @@ return [
     'Date' => 'Data',
     'Start Time' => 'Orario di inizio',
     'End Time' => 'Fine del tempo',
-    'Prescription' => 'Prescrizione'
+    'Prescription' => 'Prescrizione',
+    'Description' => 'Descrizione'
 ];

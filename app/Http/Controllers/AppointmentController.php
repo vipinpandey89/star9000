@@ -30,7 +30,7 @@ class AppointmentController extends Controller
         $patientsData = [];
         foreach ($patients as $data) {
             $patientsData[]=[
-                'name' => $data['name'].(!empty($data['email'])?' - ('.$data['email'].')':''),
+                'surname' => $data['surname'].(!empty($data['email'])?' - ('.$data['email'].')':''),
                 'email' => $data['email'],
                 'id' => $data['id']
             ];
@@ -87,7 +87,7 @@ class AppointmentController extends Controller
                               'room_id' => $row->room_id,
                               'doctor_id' => $row->doctro_name,
                               'patient_name' => (isset($patient->name)?$patient->name:''),
-                              'patient_email' => $patient->name.$emaildat,
+                              'patient_email' => $patient->surname.$emaildat,
                               'patient_phone' => (isset($patient->phone)?$patient->phone:''),
                               'patient_id' => (isset($patient->id)?$patient->id:''),
                               'is_cancel' => $row->is_cancel,
@@ -204,6 +204,8 @@ class AppointmentController extends Controller
 
     public function CreatePatient() {
         $user = auth()->user();
+        $patientSurname =          Input::get('surname');
+        $patientDob =          Input::get('pat_dob');
         $patientName =          Input::get('pat_name');
         $patientEmail =         Input::get('pat_email');
         $patientPhone =         Input::get('pat_phone_num');
@@ -212,6 +214,9 @@ class AppointmentController extends Controller
         $patient->email                  =     $patientEmail;
         $patient->name                   =     $patientName;
         $patient->phone                  =     $patientPhone;
+        $patient->surname                =     $patientSurname;
+        $patient->dob                    =     $patientDob;
+        $patient->description            =     $patientDesc;
         $patient->added_by               =     $user->id;
         $patient->updated_by             =     $user->id;
         if($patient->save()) {

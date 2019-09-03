@@ -69,5 +69,7 @@ return [
     'Select Exam Type' => 'Seleziona il tipo di esame',
     'Select room' => 'Seleziona la stanza',
     'Filter' => 'Filtro',
-    'Clear Filter' => 'Filtro pulito'
+    'Clear Filter' => 'Filtro pulito',
+    'Patient Surname' => 'Cognome del paziente',
+    'Date of Birth' => 'Data di nascita'
 ];

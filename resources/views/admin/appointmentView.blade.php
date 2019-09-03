@@ -116,7 +116,11 @@
 				<div class="modal-body">
 					<form  id='patientForm' method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="">{{ __('menu.Patient Name') }} <span style="color: red">*</span></label>
+							<label for="">{{ __('menu.Patient Surname') }} <span style="color: red">*</span></label>
+							<input id="pat-surname" type="text" name="surname" class="form-control" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Name') }} </label>
 							<input id="pat-name" type="text" name="pat_name" class="form-control" style="margin-bottom: 0px;">
 						</div>
 						<div class="form-group">
@@ -125,10 +129,14 @@
 						</div>
 						<div class="form-group">
 							<label for="">{{ __('menu.Patient Phone Number') }} </label>
-							<input id="pat-phone-number" type="text" name="pat_phone_num" class="form-control" style="margin-bottom: 0px;">
+							<input id="pat-phone-number" type="number" name="pat_phone_num" class="form-control" style="margin-bottom: 0px;">
 						</div>
 						<div class="form-group">
-							<label for="">{{ __('menu.Patient Description') }} <span style="color: red">*</span></label>
+							<label for="">{{ __('menu.Date of Birth') }}  <span style="color: red">*</span></label>
+							<input id="pat-dob" type="text" name="pat_dob" class="form-control" style="margin-bottom: 0px;">
+						</div>
+						<div class="form-group">
+							<label for="">{{ __('menu.Patient Description') }}</label>
 							<textarea class="form-control" name="pat_desc"></textarea>
 						</div>
 						{!! csrf_field() !!}	
@@ -375,9 +383,19 @@ foreach($patientsData as $dat){
 			    	}
 
 			  		$('#myModal').show();
+			  		$('#pat-dob').datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: "-100:+0",
+						maxDate:0,
+						dateFormat:'yy-mm-dd'
+					});
+					$('#pat-dob').keydown(function(){
+						return false;
+					});
 			  		$( "#patient-info" ).easyAutocomplete({
 						data:availableTags,
-						getValue: "name",
+						getValue: "surname",
 						list: {
 							match: {
 								enabled: true
@@ -443,10 +461,19 @@ foreach($patientsData as $dat){
 			$('#recurrence_end').datepicker({
 				minDate:startDateRecurrence
 			});
-			
+			$('#pat-dob').datepicker({
+				changeMonth: true,
+				changeYear: true,
+				yearRange: "-100:+0",
+				maxDate:0,
+				dateFormat:'yy-mm-dd'
+			});
+			$('#pat-dob').keydown(function(){
+				return false;
+			});
 			$( "#patient-info" ).easyAutocomplete({
 				data:availableTags,
-				getValue: "name",
+				getValue: "surname",
 				list: {
 					match: {
 						enabled: true
@@ -708,7 +735,7 @@ foreach($patientsData as $dat){
 
 		$('#patientForm').validate({
 			rules: {
-				pat_name: "required",
+				surname: "required",
 				pat_email: {
 					email: true
 				},
@@ -716,10 +743,10 @@ foreach($patientsData as $dat){
 					maxlength: 10,
 					minlength: 10
 				},
-				pat_desc:"required"
+				pat_dob:"required"
 			},
 			messages: {
-				pat_name: "Inserisci il nome del paziente.",
+				surname: "Inserisci il cognome del paziente.",
 				pat_email: {
 					email: "Inserisci un indirizzo email valido per il paziente."
 				},
@@ -727,14 +754,14 @@ foreach($patientsData as $dat){
 					maxlength: "Inserire un numero di telefono paziente valido.",
 					minlength: "Inserire un numero di telefono paziente valido."
 				},
-				pat_desc:"Inserisci la descrizione del paziente."
+				pat_dob:"Inserisci la data di nascita del paziente."
 			}
 		});
 
 		$('#savepatientbutton').click(function() {
 			$('#error-pat').html('');
 			var patEmail = $('#pat-email').val();
-			var patName = $('#pat-name').val();
+			var patSurname = $('#pat-surname').val();
 			var emailError=1;
 			if(patEmail != '') {
 				if(patientEmail.indexOf(patEmail) != -1){
@@ -743,7 +770,7 @@ foreach($patientsData as $dat){
 				}else{
 					emailError=1;
 				}
-				patName = patName+' - ('+patEmail+')';
+				patSurname = patSurname+' - ('+patEmail+')';
 			}
 			if(emailError==1){
 				if($("#patientForm").valid()) {
@@ -756,9 +783,9 @@ foreach($patientsData as $dat){
 							{
 								$('#myModal').show();
 								$('#patientModal').hide();
-								$('#patient-info').val(patName);
+								$('#patient-info').val(patSurname);
 								$('#patient-id').val(response);
-								availableTags.push({"name":patName,"email":patEmail,"id":response});
+								availableTags.push({"surname":patSurname,"email":patEmail,"id":response});
 								$('#error').html('<div class="alert alert-success">Il paziente è stato creato con successo.</div>');
 							} else {
 								$('#error-pat').html('<div class="alert alert-danger"><strong>Error!</strong>si è verificato un errore, riprova più tardi.</div>');

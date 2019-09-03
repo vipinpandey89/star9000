@@ -73,6 +73,17 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Description') }}</label>
+										<div class="col-sm-8">
+											<textarea id="description" class="form-control" name="description" placeholder="{{ __('patient.Description') }}">
+											</textarea>
+										</div>									
+									</div>
+								</div>
+							</div>
 							
 							{!! csrf_field() !!}								
 
