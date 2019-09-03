@@ -73,10 +73,74 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-lg-10">
+									<span>{{ __('patient.Relative Information') }}</span>
+									<div class="float-right"><i title="{{ __('patient.Add Relative') }}" id="add-relative" class="fa fa-plus-circle" aria-hidden="true"></i></div><br>
+								</div>
+							</div>
+							<div id="relative-section">
+								<?php 
+								$relativeData = [];
+								if(!empty($patientData->relative_info)) {
+									$relativeData = json_decode($patientData->relative_info);
+								}
+								$count=0; ?>
+								@foreach($relativeData as $relative)
+									<div class="patinfo row">
+										<div class="col-lg-3 " >
+											<input value="{{$relative->fullname}}" class="form-control1" type="text" name="relative[{{$count}}][fullname]" placeholder="Nome e cognome">
+										</div>
+										<div class="col-lg-3" >
+											<input value="{{$relative->relation}}" class="form-control1" type="text" name="relative[{{$count}}][relation]" placeholder="Relazione">
+										</div>
+										<div class="col-lg-3" >
+											<input value="{{$relative->contactno}}" class="form-control1" type="number" name="relative[{{$count}}][contactno]" placeholder="Numero di contatto">
+										</div>
+										<div class="col-lg-3" >
+											<i class="remove-relative fa fa-times" aria-hidden="true"></i>
+										</div>
+									</div>
+									<?php $count++; ?>
+								@endforeach
+							</div>
 							{!! csrf_field() !!}								
 
 							<div class="col-sm-offset-2"> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
 						</form>
+						<div class="row">
+							<div class="col-lg-10">
+								<span>{{ __('patient.Appointment History') }}</span><br>
+							</div>
+						</div>
+						<div class="row">
+							<table id="appointmentTable" class="table table-bordered">
+								<thead> 
+							 		<tr>
+							 		 	<th>{{ __('patient.Doctor Name') }}</th>	 		 
+							 		  	<th>{{ __('patient.Examination') }}</th>
+							 		  	<th>{{ __('patient.Room') }}</th>
+							 		  	<th>{{ __('patient.Date') }}</th>
+							 		  	<th>{{ __('patient.Start Time') }}</th>
+							 		  	<th>{{ __('patient.End Time') }}</th>
+							 		   	<th>{{ __('patient.Prescription') }}</th>
+							 		</tr>
+							 	</thead> 
+							 	<tbody>
+							 		@foreach($appointments as $appnt)
+							 	  	<tr>
+							 	  		<td>{{ !empty($appnt->name)?$appnt->name:'NA' }}</td>
+							 	  		<td>{{ !empty($appnt->title)?$appnt->title:'NA' }}</td>
+							 	  		<td>{{ !empty($appnt->room_name)?$appnt->room_name:'NA' }}</td>
+							 	  		<td>{{ date('Y-m-d', strtotime($appnt->start_date)) }}</td>
+							 	  		<td>{{ !empty($appnt->starteTime)?$appnt->starteTime:'NA'}}</td>
+							 	  		<td>{{ !empty($appnt->endtime)?$appnt->endtime:'NA'}}</td>
+							 	  		<td>View</td>
+							 	  	</tr>
+							 	  	@endforeach
+							 	</tbody>
+						 	</table>
+						</div>
 					</div>
 				</div>
 			</div>

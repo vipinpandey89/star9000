@@ -50,6 +50,14 @@ class PatientController extends Controller
     {
         $user = auth()->user();
         $patientData = Patient::where(['id'=>$id])->first();
+        
+        $appointments  = DB::table('appointement_booking')
+                            ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
+                            ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
+                            ->join('room', 'appointement_booking.room_id', '=', 'room.id')                     
+                            ->select('appointement_booking.*', 'users.name','examination.title','room.room_name')                     
+                            ->where('patient_id', '=', $id)->get();
+        
         if($request->method() == 'POST') {
             if(!empty(Input::get('email'))) {
                 $patientData = Patient::where(['email'=>Input::get('email')])->first();
@@ -67,10 +75,13 @@ class PatientController extends Controller
             $patient->dob  =  Input::get('dob');
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
+            if(!empty(Input::get('relative'))) {
+                $patient->relative_info             =     json_encode(Input::get('relative'));
+            }
             if($patient->save()){
                 return redirect('/admin/patient')->with('success',"il paziente è stato aggiornato con successo."); 
             }
         }
-    	return view('admin.editPatient', ['patientData' => $patientData]);
+    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments]);
     }
 }

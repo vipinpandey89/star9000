@@ -43,7 +43,7 @@
 	
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="{{URL::asset('administrator/js/css3clock.js')}}"></script>
-	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index')
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	@endif
 </head> 
@@ -209,11 +209,11 @@
 						<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
 						<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 						<script src="{{URL::asset('administrator/js/jquery.easy-autocomplete.min.js')}}"></script>
-						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index')
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 							<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 						@endif
-						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient' || Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient')
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 						@endif
 					</body>

@@ -207,7 +207,7 @@ class AppointmentController extends Controller
         $patientName =          Input::get('pat_name');
         $patientEmail =         Input::get('pat_email');
         $patientPhone =         Input::get('pat_phone_num');
-        $patientDesc =         Input::get('pat_phone_num');
+        $patientDesc =         Input::get('pat_desc');
         $patient = new Patient();
         $patient->email                  =     $patientEmail;
         $patient->name                   =     $patientName;

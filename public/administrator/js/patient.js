@@ -3,6 +3,15 @@ $(document).ready(function(){
 		$('#myTable').DataTable({
 			paging: false,
 			"columnDefs": [ {
+			"targets": 7,
+			"orderable": false
+			} ]
+		});
+	}
+	if($('#appointmentTable').length) {
+		$('#appointmentTable').DataTable({
+			paging: false,
+			"columnDefs": [ {
 			"targets": 6,
 			"orderable": false
 			} ]
@@ -40,4 +49,17 @@ $(document).ready(function(){
 			}
 		}
 	});
+	if($('#add-relative').length) {
+		var counter = $('.patinfo').length;
+		$('#add-relative').click(function(){
+			if($('.patinfo').length < 5) {
+				var relativeHtml = '<div class="patinfo row"><div class="col-lg-3 " ><input class="form-control1" type="text" name="relative['+counter+'][fullname]" placeholder="Nome e cognome"></div><div class="col-lg-3" ><input class="form-control1" type="text" name="relative['+counter+'][relation]" placeholder="Relazione"></div><div class="col-lg-3" ><input class="form-control1" type="number" name="relative['+counter+'][contactno]" placeholder="Numero di contatto"></div> <div class="col-lg-3" ><i class="remove-relative fa fa-times" aria-hidden="true"></i></div></div>';
+				$('#relative-section').append(relativeHtml);
+				counter++;
+			}
+		});
+		$( "body" ).on( "click", ".remove-relative", function() {
+			$(this).parent().parent().remove();
+		});
+	}
 });

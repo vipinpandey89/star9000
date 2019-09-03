@@ -73,6 +73,7 @@
 									</div>
 								</div>
 							</div>
+							
 							{!! csrf_field() !!}								
 
 							<div class="col-sm-offset-2"> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
