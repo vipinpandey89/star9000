@@ -71,5 +71,7 @@ return [
     'Filter' => 'Filtro',
     'Clear Filter' => 'Filtro pulito',
     'Patient Surname' => 'Cognome del paziente',
-    'Date of Birth' => 'Data di nascita'
+    'Date of Birth' => 'Data di nascita',
+    'Patient Section' => 'Sezione paziente',
+    'Privacy' => 'vita privata'
 ];

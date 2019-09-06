@@ -22,5 +22,11 @@ return [
     'Start Time' => 'Orario di inizio',
     'End Time' => 'Fine del tempo',
     'Prescription' => 'Prescrizione',
-    'Description' => 'Descrizione'
+    'Description' => 'Descrizione',
+    'Privacy' => 'vita privata',
+    'Convention' => 'Convenzione',
+    'Card Number' => 'Numero di carta',
+    'Number' => 'Numero',
+    'Minor Patient' => 'Paziente minore',
+    'Print' => 'Stampare'
 ];

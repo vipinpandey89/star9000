@@ -90,5 +90,9 @@ Route::get('/admin-logout','AdminController@AdminLogout');
 Route::get('patient','PatientController@index');
 Route::match(['get','post'],'add-patient','PatientController@AddPatient');
 Route::match(['get','post'],'edit-patient/{id}','PatientController@EditPatient');
+Route::match(['get'],'eye-visit-list','PatientController@EyeVisitList');
+Route::get('/privacydoc','PatientController@Privacydoc');
+Route::post('/saveprivacy','PatientController@SavePrivacy');
+Route::match(['get','post'],'privacy','PrivacyController@index');
 
 });

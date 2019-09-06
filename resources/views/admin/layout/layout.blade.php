@@ -46,6 +46,9 @@
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	@endif
+	<script type="text/javascript">
+		var base_url = '<?php echo url('/') ?>';
+	</script>
 </head> 
 <body>
 	<div class="page-container">
@@ -156,7 +159,9 @@
 
 										<li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 
-										<li><a href="{{url('admin/patient')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.Manage Patient') }}</span></a></li>
+										<li><a href="{{url('admin/patient')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.Patient Section') }}</span></a></li>
+
+										<li><a href="{{url('admin/privacy')}}"><i class="" aria-hidden="true"></i><span>{{ __('menu.Privacy') }}</span></a></li>
 
 								@elseif( Auth::user()->role_type=='2')
 

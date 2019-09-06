@@ -62,4 +62,61 @@ $(document).ready(function(){
 			$(this).parent().parent().remove();
 		});
 	}
+
+	if($('#privacy-button').length) {
+		$('#privacy-form').validate({
+			rules: {
+				'privacy[convention]': "required",
+				'privacy[card_number]': "required"
+			},
+			messages: {
+				'privacy[convention]': "Per favore, inserisci la convenzione.",
+				'privacy[card_number]': "Inserisci il numero della carta."
+			}
+		});
+		$('#privacy-button').on('click', function(e){
+			if($('#privacy-form').valid()){
+				//if($('#alreadyagree').val() != 1) {
+		  		$('#myModal').modal('show');
+		  		//}
+		  	} else {
+		  		$('#privacy-form').submit();
+		  	}
+		});
+		$('#disagree-button').on('click', function(e){
+		  $('#myModal').modal('hide');
+		});
+		$('#agree-button').on('click', function(e){
+			$('#myModal').modal('hide');
+		  	$.ajax({
+				type:"POST",
+				data:$('#privacy-form').serialize(),
+				url: base_url+'/admin/saveprivacy',
+				success: function(response){
+					if(response == 'success'){
+						$('#succ-mssg').html('<div class="alert alert-success">Successo</div>');
+						 setTimeout(function(){ $('#succ-mssg').html(''); }, 3000);
+					}
+				}
+			});
+		});
+
+		$('#check-minor-patient').click(function(){
+			if($(this).prop("checked") == true){
+                $('.minor_patient').show();
+            } else {
+            	$('.minor_patient').hide();
+            }
+		});
+
+		$('#print-privacy').on('click', function(){
+			var newWin=window.open('','Print-Window');
+
+  			newWin.document.open();
+
+  			newWin.document.write('<html><body onload="window.print()">'+$('#to-print').html()+'</body></html>');
+
+  			newWin.document.close();
+		});
+	}
 });

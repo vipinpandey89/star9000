@@ -290,7 +290,7 @@ foreach($patientsData as $dat){
 			slotDuration: '00:10:00',
 			slotLabelInterval: 10,
 			slotLabelFormat: 'H:mm',
-			editable: true,
+			editable: false,
 			axisFormat: 'HH:mm',
 			timeFormat: 'HH:mm',
 			theme: true,    
@@ -336,7 +336,14 @@ foreach($patientsData as $dat){
 		    events: function(start, end, timezone, callback) {
 		    	renderAppointment(callback);
 		    },
-		    //events: "{{ url('/admin/responsedata') }}",
+		    eventRender: function(event, element) {
+		    	element.tooltip({
+		    		title:event.description,
+		    		html:true,
+		    		container:'body'
+		    	});
+		        //element.attr('title', event.description);
+		    },
 		    selectable:true,
 		    selectHelper:true,
 		    selectAllow: function(select) {

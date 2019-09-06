@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Patient;
 use App\User;
+use App\Privacy;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -75,6 +76,9 @@ class PatientController extends Controller
             $patient->phone  =  Input::get('phone');
             $patient->dob  =  Input::get('dob');
             $patient->description  =  Input::get('description');
+            if(!empty(Input::get('minor_patient'))) {
+                $patient->minor_patient  =  Input::get('minor_patient');
+            }
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if(!empty(Input::get('relative'))) {
@@ -84,6 +88,22 @@ class PatientController extends Controller
                 return redirect('/admin/patient')->with('success',"il paziente è stato aggiornato con successo."); 
             }
         }
-    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments]);
+        $privacy = Privacy::where(['id'=>1])->first();
+    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy]);
     }
+
+    public function EyeVisit(Request $request,$id) {
+        $eyedata = [];
+        return view('admin.eyeVisit', ['eyedata' => $eyedata]);
+    }
+
+    public function SavePrivacy(Request $request) {
+        $patient = Patient::find(Input::get('pat_id'));
+        $patient->privacy  =  json_encode(Input::get('privacy'));
+        if($patient->save()){
+            echo 'success';
+        }
+        exit;
+    }
+
 }

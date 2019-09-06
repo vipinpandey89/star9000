@@ -16,6 +16,28 @@
 				<strong>{{Session::get('error') }}</strong>
 			</div>
 		@endif
+		<div id="myModal" class="modal fade">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title">vita privata</h4>
+
+		            </div>
+		            
+		            <div class="modal-body">
+		            	<div id="to-print">
+		                <?php  echo $privacy->description; ?>
+		            	</div>
+		                <div class=""> 
+		                	<button type="button" id="agree-button" class="btn btn-default">Essere d'accordo</button>
+		                	<button type="button" id="disagree-button" class="btn btn-default">disaccordo</button>
+		                	 <button class="pull-right btn btn-default" id="print-privacy">{{ __('patient.Print') }}</button>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 		<div class="set-1">
 			<div class="graph-2 general">
 				<h3 class="inner-tittle two"></h3>
@@ -85,12 +107,24 @@
 								</div>
 							</div>
 							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">
+											<input {{ $patientData->minor_patient == 1?'checked':'' }} value ="1" type="checkbox" name="minor_patient" id="check-minor-patient">
+										</label>
+										<div class="col-sm-8" style="margin-top: 15px;">
+											{{ __('patient.Minor Patient') }}
+										</div>									
+									</div>
+								</div>
+							</div>
+							<div class="row minor_patient" style="{{ $patientData->minor_patient == 1?'':'display: none;' }}">
 								<div class="col-lg-10">
 									<span>{{ __('patient.Relative Information') }}</span>
 									<div class="float-right"><i title="{{ __('patient.Add Relative') }}" id="add-relative" class="fa fa-plus-circle" aria-hidden="true"></i></div><br>
 								</div>
 							</div>
-							<div id="relative-section">
+							<div id="relative-section" class="minor_patient" style="{{ $patientData->minor_patient == 1?'':'display: none;' }}">
 								<?php 
 								$relativeData = [];
 								if(!empty($patientData->relative_info)) {
@@ -115,9 +149,49 @@
 									<?php $count++; ?>
 								@endforeach
 							</div>
+
+
 							{!! csrf_field() !!}								
 
-							<div class="col-sm-offset-2"> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
+							<div class=""> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
+						</form>
+						<form id="privacy-form">
+							<?php
+							$privacyData = [];
+							$pri=0;
+							if(!empty($patientData->privacy)) {
+								$privacyData = json_decode($patientData->privacy);
+								$pri =1; 
+							}
+							?>
+							<input type="hidden" id="alreadyagree" value="{{ $pri }}"/>
+							<input type="hidden" name="pat_id" value="{{ $patientData->id }}">
+							<div class="row">
+								<div class="col-lg-10">
+									<span>{{ __('patient.Privacy') }}</span>
+								</div>
+								<span id="succ-mssg"></span>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Convention') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ isset($privacyData->convention)?$privacyData->convention:'' }}" id="convention" type="text" class="form-control1" name="privacy[convention]" placeholder="{{ __('patient.Convention') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Number') }}</label>
+										<div class="col-sm-8">
+											<input type="text" value="{{ isset($privacyData->card_number)?$privacyData->card_number:'' }}" class="form-control1" name="privacy[card_number]" placeholder="{{ __('patient.Card Number') }}">
+										</div>									
+									</div>
+								</div>
+							</div>
+							{!! csrf_field() !!}
+							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Confermare</button></div>
 						</form>
 						<div class="row">
 							<div class="col-lg-10">

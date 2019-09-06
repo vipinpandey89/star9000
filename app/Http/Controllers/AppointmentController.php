@@ -44,6 +44,17 @@ class AppointmentController extends Controller
 
     public function ResponseData()
     {
+        $examinationEvent = Examination::all();
+        $roomsEvent = Room::all();
+        $exams = [];
+        $rooms = [];
+        
+        array_map(function($item) use (&$exams) {
+            $exams[$item['id']] = $item['title']; // object to array
+        }, $examinationEvent->toArray());
+        array_map(function($item) use (&$rooms) {
+            $rooms[$item['id']] = $item['room_name']; // object to array
+        }, $roomsEvent->toArray());
         $filterbydoctor = Input::get('filterbydoctor');
         $filterexamtype = Input::get('filterexamtype');
         $filterroom = Input::get('filterroom');
@@ -74,6 +85,10 @@ class AppointmentController extends Controller
             if(!empty($patient->email)){
                 $emaildat='- ('.(isset($patient->email)?$patient->email:'').')';
             }
+            $eventDescription = "<div>Nome del dottore : ".$DoctorDetail->name."</div>";
+            $eventDescription .= "<div>Nome paziente : ".$patient->surname." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
+            $eventDescription .= "<div>Inizio : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
+            $eventDescription .= "<div>Tipo di esame : ".$exams[$row->examination_id].", Camera : ".$rooms[$row->room_id]."</div>";
             $data[] = array(
                               'id'   => $row->id,
                               'title'   => (($row->is_cancel == 1)?$DoctorDetail->name.'- Annullato':$DoctorDetail->name),
@@ -83,7 +98,6 @@ class AppointmentController extends Controller
                               'examination_id' => $row->examination_id,
                               'starttime' => $row->starteTime,
                               'endtime' => $row->endtime,
-                              'endtime' => $row->endtime,
                               'room_id' => $row->room_id,
                               'doctor_id' => $row->doctro_name,
                               'patient_name' => (isset($patient->name)?$patient->name:''),
@@ -91,7 +105,8 @@ class AppointmentController extends Controller
                               'patient_phone' => (isset($patient->phone)?$patient->phone:''),
                               'patient_id' => (isset($patient->id)?$patient->id:''),
                               'is_cancel' => $row->is_cancel,
-                              'recurrence' => $recurrence
+                              'recurrence' => $recurrence,
+                              'description' => $eventDescription
                          );
         }
 
