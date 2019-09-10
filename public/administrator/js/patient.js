@@ -12,6 +12,10 @@ $(document).ready(function(){
 			"columnDefs": [ {
 			"targets": 6,
 			"orderable": false
+			},
+			{
+			"targets": 7,
+			"orderable": false
 			} ]
 		});
 	}

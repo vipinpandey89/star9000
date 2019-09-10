@@ -151,17 +151,22 @@
 								@if($userData->role_type=='1')			
 										<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> <span>{{ __('menu.Addsecretary') }}</span></a></li>
 
-										<li><a href="{{url('admin/visite')}}"><i class="lnr lnr-user"></i> <span>{{ __('menu.Examination') }} </span></a></li>
+										<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> <span>{{ __('menu.Examination') }} </span></a></li>
 
 										<li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
 
-										<li><a href="{{url('admin/assegna-stanza')}}"><i class="fa fa-table"></i> <span>{{ __('menu.Rooms') }}</span></a></li>
+										<li><a href="{{url('admin/assegna-stanza')}}"><i class="fa fa-hospital-o"></i> <span>{{ __('menu.Rooms') }}</span></a></li>
 
 										<li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
+										<li>
+											<a href="javascript:void(0);"><i class="fa fa-wheelchair" aria-hidden="true"></i><span>{{ __('menu.Patient') }}</span></a>
+											<ul>
+												<li><a href="{{url('admin/patient')}}"><span>{{ __('menu.Patient Section') }}</span></a></li>
+												<li><a href="{{url('admin/privacy')}}"><span>{{ __('menu.Privacy') }}</span></a></li>
+												<li><a href="{{url('admin/managepatient')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
+											</ul>
+										</li>
 
-										<li><a href="{{url('admin/patient')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.Patient Section') }}</span></a></li>
-
-										<li><a href="{{url('admin/privacy')}}"><i class="" aria-hidden="true"></i><span>{{ __('menu.Privacy') }}</span></a></li>
 
 								@elseif( Auth::user()->role_type=='2')
 
@@ -220,6 +225,9 @@
 						@endif
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
+						@endif
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient')
+							<script type="text/javascript" src="{{URL::asset('administrator/js/managepatient.js')}}" ></script>
 						@endif
 					</body>
 					</html>

@@ -28,5 +28,21 @@ return [
     'Card Number' => 'Numero di carta',
     'Number' => 'Numero',
     'Minor Patient' => 'Paziente minore',
-    'Print' => 'Stampare'
+    'Print' => 'Stampare',
+    'Eye Visit' => "Visita dell'occhio",
+    "Patient's Eye Visit" => "Visita dell'occhio del paziente",
+    "Doctor Name" => "Nome del medico",
+    "Doctor Email" => "Dottore Email",
+    'History' => "Anamnesi",
+    'Reason to visit'=> "Motivo visita",
+    "Note" => "Note",
+    "orthoptic val"=> "val ortottica",
+    "Allergies" => "Allergie",
+    'Insurance' => 'Assicurazione',
+    'Type of Visit' => 'Tipo di visita',
+    'Visus nat' => 'Visus nat',
+    'Corr' => 'Corr',
+    'Sf' => 'Sf',
+    'Cil' => 'Cil',
+    'X' => 'X'
 ];

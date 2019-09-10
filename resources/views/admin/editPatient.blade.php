@@ -208,6 +208,7 @@
 							 		  	<th>{{ __('patient.Date') }}</th>
 							 		  	<th>{{ __('patient.Start Time') }}</th>
 							 		  	<th>{{ __('patient.End Time') }}</th>
+							 		  	<th>{{ __('patient.Eye Visit') }}</th>
 							 		   	<th>{{ __('patient.Prescription') }}</th>
 							 		</tr>
 							 	</thead> 
@@ -220,6 +221,9 @@
 							 	  		<td>{{ date('Y-m-d', strtotime($appnt->start_date)) }}</td>
 							 	  		<td>{{ !empty($appnt->starteTime)?$appnt->starteTime:'NA'}}</td>
 							 	  		<td>{{ !empty($appnt->endtime)?$appnt->endtime:'NA'}}</td>
+							 	  		<td>
+										  <a href="{{url('admin/eyevisit/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										</td>
 							 	  		<td>View</td>
 							 	  	</tr>
 							 	  	@endforeach

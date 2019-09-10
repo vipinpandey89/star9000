@@ -12,7 +12,7 @@ use App\Privacy;
 use DateTime;
 use DatePeriod;
 use DateInterval;
-
+use App\AppointmentBooking;
 
 class PatientController extends Controller
 {
@@ -58,7 +58,8 @@ class PatientController extends Controller
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                     
                             ->select('appointement_booking.*', 'users.name','examination.title','room.room_name')                     
-                            ->where('patient_id', '=', $id)->get();
+                            ->where('patient_id', '=', $id)
+                            ->orderBy('appointement_booking.start_date','DESC')->get();
         
         if($request->method() == 'POST') {
             if(!empty(Input::get('email'))) {
@@ -92,11 +93,6 @@ class PatientController extends Controller
     	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy]);
     }
 
-    public function EyeVisit(Request $request,$id) {
-        $eyedata = [];
-        return view('admin.eyeVisit', ['eyedata' => $eyedata]);
-    }
-
     public function SavePrivacy(Request $request) {
         $patient = Patient::find(Input::get('pat_id'));
         $patient->privacy  =  json_encode(Input::get('privacy'));
@@ -106,4 +102,23 @@ class PatientController extends Controller
         exit;
     }
 
+    public function eyevisit(Request $request, $appid) {
+        $appointmentData  = DB::table('appointement_booking')
+                            ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')                     
+                            ->select('appointement_booking.*', 'users.name','users.phone','users.email')                     
+                            ->where('appointement_booking.id', '=', $appid)->first();
+        if($request->method() == 'POST') {
+            $patient = Patient::find(Input::get('pat_id'));
+            $patient->eye_visit  =  json_encode(Input::get('eye_visit'));
+            if($patient->save()){
+                return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati dell'occhio sono stati aggiornati correttamente."); 
+            }
+        }
+        return view('admin.eyeVisit', ['appointmentData' => $appointmentData]);
+    }
+
+    public function managepatient() {
+        $patients = [];
+        return view('admin.patientManagement', ['patients' => $patients]);
+    }
 }
