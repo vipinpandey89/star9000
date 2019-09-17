@@ -95,4 +95,8 @@ Route::post('/saveprivacy','PatientController@SavePrivacy');
 Route::match(['get','post'],'privacy','PrivacyController@index');
 Route::match(['get','post'],'/eyevisit/{id}','PatientController@eyevisit');
 Route::get('/managepatient','PatientController@managepatient');
+Route::get('/dailypatientupdate','PatientController@dailypatientupdate');
+Route::get('/getpatient/{id}','PatientController@getpatient');
+Route::get('/savecomment', 'PatientController@savecomment');
+
 });

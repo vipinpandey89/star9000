@@ -46,6 +46,9 @@
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	@endif
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient')
+		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
+	@endif
 	<script type="text/javascript">
 		var base_url = '<?php echo url('/') ?>';
 	</script>
@@ -159,7 +162,7 @@
 
 										<li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 										<li>
-											<a href="javascript:void(0);"><i class="fa fa-wheelchair" aria-hidden="true"></i><span>{{ __('menu.Patient') }}</span></a>
+											<a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.Patient') }}</span></a>
 											<ul>
 												<li><a href="{{url('admin/patient')}}"><span>{{ __('menu.Patient Section') }}</span></a></li>
 												<li><a href="{{url('admin/privacy')}}"><span>{{ __('menu.Privacy') }}</span></a></li>

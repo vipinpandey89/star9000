@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use App\Patient;
 use App\User;
 use App\Privacy;
+use App\Patienthistory;
+use App\Comment;
+use App\Managepatient;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -118,7 +121,95 @@ class PatientController extends Controller
     }
 
     public function managepatient() {
-        $patients = [];
-        return view('admin.patientManagement', ['patients' => $patients]);
+        $user = auth()->user();
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        $patientsOfTheDay = DB::table('appointement_booking')
+                            ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*')                     
+                            ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
+        $patientFirst = [];
+        if(empty($existingPat)){
+            foreach ($patientsOfTheDay as $pat) {
+                $patientFirst[] =[
+                    'id'=>$pat->id,
+                    'updated_by'=>$user->id,
+                    'update_date'=>date('Y-m-d H:i:s', time())
+                ];
+            }
+        }
+        return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst]);
+    }
+
+    public function dailypatientupdate() {
+        $user = auth()->user();
+        if(!empty(Input::get('section_type'))) {
+            if(!empty(Input::get('patients'))){
+                $patvalue=json_encode(Input::get('patients'));
+            } else {
+                $patvalue=null;
+            }
+            $managePatientData[Input::get('section_type')]  =  $patvalue;
+            
+            $managePatientData['manage_date'] = date('Y-m-d',time());
+            $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
+            if(isset($mage->id)){
+                Managepatient::where('id', $mage->id)->update($managePatientData);
+                echo 'success';
+            } else {
+                $mage->save();
+                echo 'success';
+            }
+            if(!empty(Input::get('appid'))) {
+                $sectionArray=[
+                    'first' => 'Pazienti del giorno',
+                    'second' => 'Check In',
+                    'third' => 'Ambulatorio',
+                    'fourth' => 'Esami',
+                    'fifth' => 'Check Out'
+                ];
+                $message = '<strong>'.$user->name."</strong> spostato nella sezione <strong>".$sectionArray[Input::get('section_type')]."</strong>";
+                $patientHistory = new Patienthistory();
+                $patientHistory->appointment_id  =  Input::get('appid');
+                $patientHistory->message  =  $message;
+                $patientHistory->save();
+            }
+        }
+        exit;
+    }
+
+    public function getpatient(Request $request, $appid) {
+        $comments= DB::table('comments')
+                    ->join('users', 'comments.commented_by', '=', 'users.id')
+                    ->select('users.name as commentname','comments.*')
+                    ->where('comments.appointment_id','=',$appid)
+                    ->get();
+
+        $patientshistory = Patienthistory::where(['appointment_id'=>$appid])->orderBy('id', 'ASC')->get();
+                    
+        $appointment = DB::table('appointement_booking')
+                            ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')
+                            ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
+                            ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
+                            ->join('room', 'appointement_booking.room_id', '=', 'room.id')                  
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.name as doctorname','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
+                            ->where('appointement_booking.id', '=', $appid)->first();
+        return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory]);
+    }
+
+    public function savecomment(Request $request){
+        $user = auth()->user();
+        $comment = new Comment();
+        $comment->appointment_id  =  Input::get('appid');
+        $comment->commented_by  =  $user->id;
+        $comment->comment     =  Input::get('comment');
+        if($comment->save()) {
+            $message = '<strong>'.$user->name."</strong> commento aggiunto.";
+            $patientHistory = new Patienthistory();
+            $patientHistory->appointment_id  =  Input::get('appid');
+            $patientHistory->message  =  $message;
+            $patientHistory->save();
+            echo $user->name.' on '.date('F jS, Y', time());
+        }
+        exit;
     }
 }

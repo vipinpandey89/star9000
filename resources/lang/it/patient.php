@@ -44,5 +44,15 @@ return [
     'Corr' => 'Corr',
     'Sf' => 'Sf',
     'Cil' => 'Cil',
-    'X' => 'X'
+    'X' => 'X',
+    'Patients of the day' => 'Pazienti del giorno',
+    'Check In' => 'Check In',
+    'Surgery' => 'Ambulatorio',
+    'Exams' => 'Esami',
+    'Check Out' => 'Check Out',
+    'Detail' => 'Dettaglio',
+    'Cancel' => 'Annulla',
+    'Comment' => 'Commento',
+    'History' => 'Storia',
+    'Submit' => 'Sottoscrivi'
 ];
