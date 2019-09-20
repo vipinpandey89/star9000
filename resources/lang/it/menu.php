@@ -73,5 +73,6 @@ return [
     'Patient Surname' => 'Cognome del paziente',
     'Date of Birth' => 'Data di nascita',
     'Patient Section' => 'Sezione paziente',
-    'Privacy' => 'vita privata'
+    'Privacy' => 'vita privata',
+    'Date' => 'Data'
 ];

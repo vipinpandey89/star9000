@@ -274,6 +274,7 @@ foreach($patientsData as $dat){
 				center:'title',
 				right:'month,agendaWeek,agendaDay'
 			},
+			defaultView:'agendaWeek',
 			monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
 			monthNamesShort: ['genn','febbr','mar','apr','magg','giugno','luglio','ag','sett','ott','nov','dic'],
 			dayNames: ['Domenica', 'Lunedi', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
@@ -365,7 +366,7 @@ foreach($patientsData as $dat){
 					$('#patient-info').val(event.patient_email);
 			    	$('#app_id').val(event.id);
 			    	$('#pat_id').val(event.patient_id);
-			    	$('#patient_id').val(event.patient_id);
+			    	$('#patient-id').val(event.patient_id);
 			    	$('#custom-app-title').html('Annulla appuntamento');
 			    	$('#savebutton').html('Aggiornare');
 			    	$('#recurrence_box').hide();

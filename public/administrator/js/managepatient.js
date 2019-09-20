@@ -123,8 +123,9 @@ $(function() {
 
     $('#waiting-jobs-list').find('.color-pick').show();
     $('.color-pick').colorpicker().on('changeColor', function(e) {
-        //$(this).parent().parent().parent().style.backgroundColor = e.color.toString('rgba');
-        
+        $(this).parent().parent().parent().css('background-color',e.color.toString('rgba'));
+        $(this).parent().parent().parent().parent().attr('color',e.color.toString('rgba'));
+        savepatient('waiting-jobs-list', 'third');
     });
 });
 
@@ -134,7 +135,8 @@ function savepatient(divid, sectiontype, appid=null) {
         patArray.push({
             id: $(this).attr('patient-id'),
             updated_by: $(this).attr('updated-by'),
-            update_date: $(this).attr('update-date')  
+            update_date: $(this).attr('update-date'),
+            color: $(this).attr('color')
         });
     });
     $.ajax({

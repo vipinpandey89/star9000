@@ -16,6 +16,8 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\AppointmentBooking;
+use App\Examination;
+use App\AppointmentMedicine;
 
 class PatientController extends Controller
 {
@@ -122,6 +124,7 @@ class PatientController extends Controller
 
     public function managepatient() {
         $user = auth()->user();
+        $examination = Examination::all();
         $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
         $patientsOfTheDay = DB::table('appointement_booking')
                             ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
@@ -133,11 +136,12 @@ class PatientController extends Controller
                 $patientFirst[] =[
                     'id'=>$pat->id,
                     'updated_by'=>$user->id,
-                    'update_date'=>date('Y-m-d H:i:s', time())
+                    'update_date'=>date('Y-m-d H:i:s', time()),
+                    'color'=>''
                 ];
             }
         }
-        return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst]);
+        return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination]);
     }
 
     public function dailypatientupdate() {
@@ -183,9 +187,9 @@ class PatientController extends Controller
                     ->select('users.name as commentname','comments.*')
                     ->where('comments.appointment_id','=',$appid)
                     ->get();
-
+        
         $patientshistory = Patienthistory::where(['appointment_id'=>$appid])->orderBy('id', 'ASC')->get();
-                    
+        $medicines = AppointmentMedicine::where(['appointment_id'=>$appid])->first();     
         $appointment = DB::table('appointement_booking')
                             ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
@@ -193,7 +197,7 @@ class PatientController extends Controller
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                  
                             ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.name as doctorname','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
-        return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory]);
+        return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory,'medicines'=>$medicines]);
     }
 
     public function savecomment(Request $request){
@@ -209,6 +213,19 @@ class PatientController extends Controller
             $patientHistory->message  =  $message;
             $patientHistory->save();
             echo $user->name.' on '.date('F jS, Y', time());
+        }
+        exit;
+    }
+
+    public function savemedicine(Request $request) {
+        if(!empty(Input::get('medicine'))) {
+            $data['medicine'] =json_encode(Input::get('medicine'));
+            $appMed=AppointmentMedicine::firstOrCreate(['appointment_id' => Input::get('app_id')], $data);
+            if($appMed->wasRecentlyCreated !=1) {
+                AppointmentMedicine::where('appointment_id', Input::get('app_id'))->update(['medicine' => json_encode(Input::get('medicine'))]);   
+            }
+            echo 'success';
+            
         }
         exit;
     }

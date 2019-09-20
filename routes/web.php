@@ -98,5 +98,6 @@ Route::get('/managepatient','PatientController@managepatient');
 Route::get('/dailypatientupdate','PatientController@dailypatientupdate');
 Route::get('/getpatient/{id}','PatientController@getpatient');
 Route::get('/savecomment', 'PatientController@savecomment');
+Route::post('/savemedicine','PatientController@savemedicine');
 
 });

@@ -19,8 +19,8 @@
                     <?php $patientFirstSection = (!empty($patientFirst)?$patientFirst:(!empty($existingPat->first)?json_decode($existingPat->first,true):[]));
                      ?>
                     @foreach($patientFirstSection as $patient)
-                    <li class="indivisual_patient" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
-                        <div class="job-block" id="patient-{{ $patient['id'] }}">
+                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                        <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
@@ -49,8 +49,8 @@
                     <?php $patientSecondSection = (!empty($existingPat->second)?json_decode($existingPat->second,true):[]);
                      ?>
                     @foreach($patientSecondSection as $patient)
-                    <li class="indivisual_patient" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
-                        <div class="job-block" id="patient-{{ $patient['id'] }}">
+                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                        <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
@@ -79,8 +79,8 @@
                     <?php $patientThirdSection = (!empty($existingPat->third) && $existingPat->third?json_decode($existingPat->third,true):[]);
                      ?>
                     @foreach($patientThirdSection as $patient)
-                    <li class="indivisual_patient" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
-                        <div class="job-block" id="patient-{{ $patient['id'] }}">
+                    <li class="indivisual_patient" color="{{ $patient['color'] }}"  app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                        <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
@@ -109,8 +109,8 @@
                     <?php $patientFourthSection = (!empty($existingPat->fourth)?json_decode($existingPat->fourth,true):[]);
                      ?>
                     @foreach($patientFourthSection as $patient)
-                    <li class="indivisual_patient" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
-                        <div class="job-block" id="patient-{{ $patient['id'] }}">
+                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                        <div class="job-block" id="patient-{{ $patient['id'] }}"style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
@@ -139,8 +139,8 @@
                     <?php $patientFifthSection = (!empty($existingPat->fifth)?json_decode($existingPat->fifth,true):[]);
                      ?>
                     @foreach($patientFifthSection as $patient)
-                    <li class="indivisual_patient" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
-                        <div class="job-block" id="patient-{{ $patient['id'] }}">
+                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                        <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
@@ -167,9 +167,67 @@
 </div>
 <!-- Modal HTML -->
 <div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="width:850px;">
         <div class="modal-content">
             
+        </div>
+    </div>
+</div>
+<div id="newvisitModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:550px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close close_appointment"  data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{ __('patient.Create New Visit') }} </h4>
+                <span id="new-visit-error"></span>
+            </div>
+            <div class="modal-body">
+                <form  id='newVisitForm' method="post">
+                    <div class="form-group">
+                            <label for="">{{ __('menu.Date') }} <span style="color: red">*</span></label>
+                            <input id="appointment-date" type="text" name="selected_date" class="form-control"  required="required" style="margin-bottom: 0px;">
+                    </div>
+                    <input type="hidden" id="patient-id" name="patient_id">
+                    <div class="form-group">
+                        <label for="">{{ __('menu.StartTime') }} <span style="color: red">*</span></label>
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <input id="timepicker1" type="text" name="starteTime" class="form-control1 input-small timecall" readonly="" style="margin-bottom: 0px;">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        </div>
+                    </div>  
+
+                    <div class="form-group">
+                        <label for="">{{ __('menu.EndTime') }} <span style="color: red">*</span></label>
+                        <div class="input-group bootstrap-timepicker timepicker">
+                            <input id="timepicker2" type="text" name="endtime" class="form-control1 input-small timecall"  readonly="" style="margin-bottom: 0px;">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="title">Tipo di esame <span style="color: red">*</span></label> 
+                        <select name="examination_id" id="examination_id"  class="form-control" required="required"  style="height: 48px!important">
+                            <option value="">{{ __('menu.selectctexamination') }}</option>
+                            @foreach($examination as $item)
+                            <option value="{{$item->id}}">{{$item->title}}</option>
+                            @endforeach                                 
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label for="title">{{ __('menu.Available rooms') }} <span style="color: red">*</span></label> 
+                        <select name="rooms" id="rooms"  class="form-control" required="required"  style="height: 48px!important">
+                        </select>   
+                    </div>
+                    <div class="form-group ">
+                        <label for="title">Dottore <span style="color: red">*</span></label> 
+                        <select name="doctro" id="doctors"  class="form-control" required="required"  style="height: 48px!important">
+                        </select>
+                    </div>
+                    
+                    
+                    {!! csrf_field() !!}
+                    <button type="button" id="savebutton" class="btn btn-default" name="add">Inserisci</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -178,10 +236,148 @@
         $('.openPopup').on('click',function(){
             var dataURL = $(this).attr('data-href');
             console.log(dataURL);
-            $('.modal-content').load(dataURL,function(){
+            $('#myModal').find('.modal-content').load(dataURL,function(){
                 $('#myModal').modal({show:true});
             });
-        }); 
+        });
+        $('#examination_id').change(function(){
+            var id= $(this).val();
+            var selecte_date= $('#appointment-date').val();
+            if((id !== '') && (selecte_date !=='')){
+            var starttime= $('#timepicker1').val();
+            var endTime= $('#timepicker2').val();
+
+            var SelectDateTime = selecte_date+' '+starttime;
+
+            $.ajax({
+                method: 'GET',
+                url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
+                data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime},
+                cache: false,
+                success: function(html){                
+                    var decodeData=  JSON.parse(html);
+                $('#rooms').empty();
+                $('#rooms').append('<option value="">Select Rooms</option>');
+            // here is for rooms section //       
+            $.each(decodeData['rooms'], function( key, value ) {
+
+                $('#rooms').append($('<option>',
+                {
+                    value: value.id,
+                    text : value.room_name,
+                }));
+            });
+
+           // end section here //
+
+           //start doctor detail here//
+
+           $('#doctors').empty();
+           if(decodeData['DoctorInformation'] == ''){
+                $('#error').html('<div class="alert alert-danger">Nessun medico disponibile.</div>');
+           }else{
+            $('#error').html('');
+           }
+           $.each(decodeData['DoctorInformation'], function( key1, value1 ) {
+
+                $('#doctors').append($('<option>',
+                {
+                    value: value1.user_id,
+                    text : value1.name,
+                }));
+           });
+            // end here doctor detail//
+           }
+         });
+        }
+        });
+        $('.timecall').timepicker({
+            showMeridian: false  ,
+            minuteStep: 10
+        });
+        var now = new Date();
+        $('#timepicker1').timepicker('setTime', "09:00 AM");
+        $('#timepicker2').timepicker('setTime', "09:10 AM");
+        $('#appointment-date').datepicker({
+            minDate:1,
+            dateFormat: 'yy-mm-dd'
+        });
+        $("#newVisitForm").validate({
+            rules: {
+                examination_id: "required",
+                rooms: "required",
+                doctro: "required",
+                patient: "required",
+                date:"required"
+            },
+            messages: {
+                examination_id: "Seleziona il tipo di esame.",
+                rooms: "Si prega di selezionare la stanza.",
+                doctro: "Per favore, seleziona un dottore.",
+                patient: "Seleziona il paziente.",
+                date:"Per favore, inserisci la data."
+            }
+        });
+        $('#savebutton').click(function(){
+            $('#new-visit-error').html('');
+            var startTime=$('#timepicker1').val();
+            var endTime=$('#timepicker2').val();
+            if(checkStartEndTime(startTime, endTime)){
+                var patId=$('#patient-id').val();
+                if(patId != ''){
+                    if($("#newVisitForm").valid()){
+                        $.ajax({
+                            type:"POST",
+                            url:"{{url('admin/ajaxset-appointment')}}",
+                            data:$("#newVisitForm").serialize(),
+                            success: function(response){
+                                if(response=='success')
+                                {
+                                    $('#newvisitModal').modal('hide');
+                                    $('#myModal').modal({show:true});
+                                    $('#success-message').html('<div class="alert alert-success">Il nuovo appuntamento è stato creato correttamente.</div>');
+                                }else{
+                                    $('#new-visit-error').html('<div class="alert alert-danger"><strong>Error!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
+                                }
+                            }
+                        });
+                    }else{
+                        $("#myForm").submit();
+                    }
+                } else {
+                    $('#new-visit-error').html("<div class='alert alert-danger'><strong>Error!</strong>Paziente non valido.</div>");
+                }
+            } else {
+                $('#new-visit-error').html("<div class='alert alert-danger'><strong>Error!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
+            }
+        });
     });
+    function checkStartEndTime(startTime, endTime)
+    {
+        var startTimeArr = startTime.split(":");
+        var endTimeArr = endTime.split(":");
+
+        var startHour = startTimeArr[0];
+        var startMinute = startTimeArr[1];
+
+        var endHour = endTimeArr[0];
+        var endMinute = endTimeArr[1];
+
+        //Create date object and set the time to that
+        var startTimeObject = new Date();
+        startTimeObject.setHours(startHour, startMinute, 0);
+
+        //Create date object and set the time to that
+        var endTimeObject = new Date(startTimeObject);
+        endTimeObject.setHours(endHour, endMinute, 0);
+
+         //Now we are ready to compare both the dates
+        if(startTimeObject > endTimeObject)
+        {
+            return false;
+        } else{
+            return true;
+        }
+    }
 </script>
 @endsection

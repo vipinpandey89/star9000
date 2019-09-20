@@ -54,5 +54,11 @@ return [
     'Cancel' => 'Annulla',
     'Comment' => 'Commento',
     'History' => 'Storia',
-    'Submit' => 'Sottoscrivi'
+    'Submit' => 'Sottoscrivi',
+    'New Visit' => 'Nuova visita',
+    'New intervention' => 'Nuova intervento',
+    'Patient Info' => 'Informazioni paziente',
+    'Create New Visit' => 'Crea nuova visita',
+    'Medicine' => 'Medicina',
+    'Save' => 'Salva'
 ];
