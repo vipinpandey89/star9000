@@ -16,7 +16,7 @@
 
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 
-			<li class="active">{{ __('menu.Visits') }}</li>
+			<li class="active">{{ __('menu.specialty') }}</li>
 
 		</ol>
 
@@ -42,11 +42,11 @@
 
 								<div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
 
-									<label for="title" class="col-sm-2 control-label">{{ __('menu.Title') }}</label>
+									<label for="title" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
 
 									<div class="col-sm-8">
 
-										<input type="text" class="form-control1" value="{{old('title')}}"   maxlength="30" name="title" id="title" placeholder="{{ __('menu.Title') }}">
+										<input type="text" class="form-control1" value="{{old('title')}}"   maxlength="30" name="title" id="title" placeholder="{{ __('menu.specialty') }}">
 
 										 @if ($errors->has('title'))
 

@@ -18,6 +18,7 @@ use DateInterval;
 use App\AppointmentBooking;
 use App\Examination;
 use App\AppointmentMedicine;
+use App\Surgery;
 
 class PatientController extends Controller
 {
@@ -34,7 +35,7 @@ class PatientController extends Controller
             if(!empty(Input::get('email'))) {
                 $patientData = Patient::where(['email'=>Input::get('email')])->first();
                 if(isset($patientData->id)) {
-                    return redirect('/admin/add-patient')->with('error',"il paziente con questo ID email esiste già."); 
+                    return redirect('/admin/aggiungi-paziente')->with('error',"il paziente con questo ID email esiste già."); 
                 }
             }
             $patient = new Patient();
@@ -47,7 +48,7 @@ class PatientController extends Controller
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if($patient->save()){
-                return redirect('/admin/patient')->with('success',"Il paziente è stato aggiunto correttamente."); 
+                return redirect('/admin/paziente')->with('success',"Il paziente è stato aggiunto correttamente."); 
             }
         }
     	return view('admin.addPatient');
@@ -71,7 +72,7 @@ class PatientController extends Controller
                 $patientData = Patient::where(['email'=>Input::get('email')])->first();
                 if(isset($patientData->id)) {
                     if($patientData->id != $id){
-                        return redirect('/admin/edit-patient/'.$id)->with('error',"il paziente con questo ID email esiste già."); 
+                        return redirect('/admin/modifica-paziente/'.$id)->with('error',"il paziente con questo ID email esiste già."); 
                     }
                 }
             }
@@ -91,7 +92,7 @@ class PatientController extends Controller
                 $patient->relative_info             =     json_encode(Input::get('relative'));
             }
             if($patient->save()){
-                return redirect('/admin/patient')->with('success',"il paziente è stato aggiornato con successo."); 
+                return redirect('/admin/paziente')->with('success',"il paziente è stato aggiornato con successo."); 
             }
         }
         $privacy = Privacy::where(['id'=>1])->first();
@@ -116,7 +117,7 @@ class PatientController extends Controller
             $patient = Patient::find(Input::get('pat_id'));
             $patient->eye_visit  =  json_encode(Input::get('eye_visit'));
             if($patient->save()){
-                return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati dell'occhio sono stati aggiornati correttamente."); 
+                return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati sono stati aggiornati correttamente."); 
             }
         }
         return view('admin.eyeVisit', ['appointmentData' => $appointmentData]);
@@ -195,7 +196,7 @@ class PatientController extends Controller
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                  
-                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.name as doctorname','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.name as doctorname','users.id as doctorid','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
         return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory,'medicines'=>$medicines]);
     }
@@ -212,7 +213,8 @@ class PatientController extends Controller
             $patientHistory->appointment_id  =  Input::get('appid');
             $patientHistory->message  =  $message;
             $patientHistory->save();
-            echo $user->name.' on '.date('F jS, Y', time());
+            setlocale(LC_TIME, 'it_IT');
+            echo $user->name.' '.strftime('%d %B %Y %I:%M', time());
         }
         exit;
     }
@@ -228,5 +230,54 @@ class PatientController extends Controller
             
         }
         exit;
+    }
+
+    public function intervento(Request $request,$type = 1) {
+        $surgeryList= DB::table('surgeries')
+                    ->join('patients', 'surgeries.patient_id', '=', 'patients.id')
+                    ->where(['surgery_type'=>$type])
+                    ->select('surgeries.*','patients.surname','patients.name as patientname','patients.email')
+                    ->get();
+        return view('admin.intervento', ['surgeryList' => $surgeryList, 'type'=>$type]);
+    }
+
+    public function saveintervento(Request $request) {
+        $surgery = new Surgery();
+        $surgery->patient_id      =  Input::get('pat_id');
+        $surgery->doctor_id      =  Input::get('doc_id');
+        $surgery->name  =  Input::get('surgery_name');
+        $surgery->time  =  Input::get('surgery_duration');
+        $surgery->surgery_date  =  Input::get('surgery_date');
+        $surgery->surgery_type  =  Input::get('surgery_type');
+        if($surgery->save()){
+            echo 'success';
+        }
+        exit;
+    }
+
+    public function EditIntervento(Request $request,$surid) {
+        $surgeryData = Surgery::where(['id'=>$surid])->first();
+        $doctorData = User::where(['id'=>$surgeryData['doctor_id']])->select('users.name as docname','users.email as docemail','users.surname as docsurname')->first();
+        $patientData = Patient::where(['id'=>$surgeryData['patient_id']])->first();
+        if($request->method() == 'POST') {
+            $surgery = Surgery::find($surid);
+            $surgery->name  =  Input::get('surgery_name');
+            $surgery->time  =  Input::get('surgery_duration');
+            $surgery->surgery_date  =  Input::get('surgery_date');
+            $surgery->surgery_type  =  Input::get('surgery_type');
+            $surgery->diagnosis = Input::get('diagnosis');
+            $surgery->surgery = Input::get('surgery');
+            $surgery->eye = Input::get('eye');
+            $surgery->medical_number = Input::get('medical_number');
+            $surgery->local_examination = Input::get('local_examination');
+            $surgery->description  =  Input::get('desc');
+            $surgery->operating_record  =  Input::get('operating_record');
+            $surgery->clinical_diary = Input::get('clinical_diary');
+            $surgery->intervention_number = Input::get('intervention_number');
+            if($surgery->save()) {
+                return redirect('/admin/intervento')->with('success',"Le informazioni sulla chirurgia sono state salvate correttamente."); 
+            }
+        }
+        return view('admin.editintervento', ['surgeryData' => $surgeryData,'doctorData'=>$doctorData,'patientData'=>$patientData]);
     }
 }

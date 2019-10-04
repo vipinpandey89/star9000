@@ -21,7 +21,7 @@
 		        <div class="modal-content">
 		            <div class="modal-header">
 		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                <h4 class="modal-title">vita privata</h4>
+		                <h4 class="modal-title">Privacy</h4>
 
 		            </div>
 		            
@@ -30,9 +30,9 @@
 		                <?php  echo $privacy->description; ?>
 		            	</div>
 		                <div class=""> 
-		                	<button type="button" id="agree-button" class="btn btn-default">Essere d'accordo</button>
-		                	<button type="button" id="disagree-button" class="btn btn-default">disaccordo</button>
-		                	 <button class="pull-right btn btn-default" id="print-privacy">{{ __('patient.Print') }}</button>
+		                	<button type="button" id="agree-button" class="btn btn-default">Accetta</button>
+		                	<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button>
+		                	 <button class="pull-right btn btn-default" id="print-privacy">Stampa</button>
 		                </div>
 		            </div>
 		        </div>
@@ -137,7 +137,7 @@
 											<input value="{{$relative->fullname}}" class="form-control1" type="text" name="relative[{{$count}}][fullname]" placeholder="Nome e cognome">
 										</div>
 										<div class="col-lg-3" >
-											<input value="{{$relative->relation}}" class="form-control1" type="text" name="relative[{{$count}}][relation]" placeholder="Relazione">
+											<input value="{{$relative->relation}}" class="form-control1" type="text" name="relative[{{$count}}][relation]" placeholder="Grado di parentela">
 										</div>
 										<div class="col-lg-3" >
 											<input value="{{$relative->contactno}}" class="form-control1" type="number" name="relative[{{$count}}][contactno]" placeholder="Numero di contatto">
@@ -191,7 +191,7 @@
 								</div>
 							</div>
 							{!! csrf_field() !!}
-							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Confermare</button></div>
+							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Salva</button></div>
 						</form>
 						<div class="row">
 							<div class="col-lg-10">
@@ -224,7 +224,7 @@
 							 	  		<td>
 										  <a href="{{url('admin/eyevisit/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										</td>
-							 	  		<td>View</td>
+							 	  		<td>vedi</td>
 							 	  	</tr>
 							 	  	@endforeach
 							 	</tbody>

@@ -34,6 +34,7 @@ Route::match(['get','post'],'/admin','AdminController@index');
 Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function(){
 
 Route::get('/bacheca','AdminController@dasbhoard');
+Route::get('/dashboard','AdminController@dasbhoard');
 
 Route::get('lista-segretaria','AdminController@ListSecretary');
 
@@ -87,17 +88,22 @@ Route::get('doctor-leaves','AdminController@DoctorLeaves');
 Route::get('test-digital-pad','AdminController@TestDigital');
 
 Route::get('/admin-logout','AdminController@AdminLogout');
-Route::get('patient','PatientController@index');
-Route::match(['get','post'],'add-patient','PatientController@AddPatient');
-Route::match(['get','post'],'edit-patient/{id}','PatientController@EditPatient');
+Route::get('paziente','PatientController@index');
+Route::match(['get','post'],'aggiungi-paziente','PatientController@AddPatient');
+Route::match(['get','post'],'modifica-paziente/{id}','PatientController@EditPatient');
 Route::get('/privacydoc','PatientController@Privacydoc');
 Route::post('/saveprivacy','PatientController@SavePrivacy');
 Route::match(['get','post'],'privacy','PrivacyController@index');
 Route::match(['get','post'],'/eyevisit/{id}','PatientController@eyevisit');
-Route::get('/managepatient','PatientController@managepatient');
+Route::get('/gestire-il-paziente','PatientController@managepatient');
 Route::get('/dailypatientupdate','PatientController@dailypatientupdate');
 Route::get('/getpatient/{id}','PatientController@getpatient');
 Route::get('/savecomment', 'PatientController@savecomment');
 Route::post('/savemedicine','PatientController@savemedicine');
+Route::get('/intervento/{type}','PatientController@intervento');
+Route::get('/intervento','PatientController@intervento');
+Route::match(['get','post'],'aggiungi-intervento','PatientController@AddIntervento');
+Route::match(['get','post'],'modifica-intervento/{id}','PatientController@EditIntervento');
+Route::get('/saveintervento','PatientController@saveintervento');
 
 });

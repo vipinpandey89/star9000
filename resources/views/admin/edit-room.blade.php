@@ -92,7 +92,7 @@
 
 								<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
 
-									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.Examination') }}</label>
+									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
 
 									<div class="col-sm-8">
 

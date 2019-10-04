@@ -2,6 +2,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title">{{ __('patient.Detail') }}</h4>
 </div>
+@php setlocale(LC_TIME, 'it_IT'); @endphp
 <div class="modal-body">
 	<div class="row">
 		<div id="success-message"></div>
@@ -52,7 +53,7 @@
 		</div>
 		<div class="col-lg-2">
 			<div><a class="btn btn-default" id="patient-new-visit" href="javascript:void(0);">{{ __('patient.New Visit') }}</a></div>
-			<div><a class="btn btn-default" href="#">{{ __('patient.New intervention') }}</a></div>
+			<div><a class="btn btn-default" id="patient-new-surgery" href="javascript:void(0);">{{ __('patient.New intervention') }}</a></div>
 			<div><a class="btn btn-default" target="_blank" href="{{ url('admin/edit-patient/'.$appointment->id) }}">{{ __('patient.Patient Info') }}</a></div>
 		</div>
 	</div>
@@ -67,14 +68,14 @@
 				<div class="actionBox">
 				    <ul id="comments" class="commentList">
 				      	@foreach($comments as  $comment)
-				      		<li><div class="commentText"><p class="">{{$comment->comment}}</p> <span class="date sub-text">{{ $comment->commentname }} on {{ date('F jS, Y H:i:s', strtotime($comment->created_at)) }}</span></div></li>
+				      		<li><div class="commentText"><p class="">{{$comment->comment}}</p> <span class="date sub-text">{{ $comment->commentname }}  {{ strftime('%d %B %Y %I:%M', strtotime($comment->created_at)) }}</span></div></li>
 				      	@endforeach
 				    </ul>
 				</div>
 		      <div class="col-lg-12" style="margin-top: 10px;">
 		      	<textarea maxlength="100" id="user-comment" rows="3" cols="80"></textarea>
 		      	<input type="hidden" id="selected-appointment-id" value="{{ $appointment->appointid }}">
-		      	<button type="button" class="btn btn-default" id="submit-comment">{{ __('patient.Submit') }}</button>
+		      	<button type="button" class="btn btn-default" id="submit-comment">{{ __('patient.Save') }}</button>
 		      </div>
 		    </div>
 		    <div id="history" class="tab-pane fade">
@@ -83,9 +84,10 @@
 				      	@foreach($patientshistory as  $pathis)
 				      		<li><div class="commentText"><p class="">
 				      			@php
-				      			echo $pathis->message
+				      			echo $pathis->message;
+
 				      			@endphp
-				      			</p><span class="date sub-text"> on {{ date('F jS, Y H:i:s', strtotime($pathis->created_at)) }}</span></div></li>
+				      			</p><span class="date sub-text"> {{ strftime('%d %B %Y %I:%M', strtotime($pathis->created_at)) }}</span></div></li>
 				      	@endforeach
 				    </ul>
 				</div>
@@ -131,6 +133,7 @@
 				<button type="button" class="btn btn-default" id="submit-medicine">{{ __('patient.Save') }}</button>
 		    </div>
 		</div>
+		<input type="hidden" id="doctor-id-selected" value="{{ $appointment->doctorid }}">
 	</div>
 </div>
 <div class="modal-footer">
@@ -162,6 +165,12 @@
 			$('#myModal').modal('hide');
 			$('#newvisitModal').modal({show:true});
 			$('#patient-id').val($('#patientID').val());
+		});
+		$('#patient-new-surgery').click(function(){
+			$('#myModal').modal('hide');
+			$('#newsugeryModal').modal({show:true});
+			$('#surgery-pat-id').val($('#patientID').val());
+			$('#surgery-doctor-id').val($('#doctor-id-selected').val());
 		});
 		
 		$('#add-medicine').click(function(){

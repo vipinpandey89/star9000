@@ -204,16 +204,16 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="title">Tipo di esame <span style="color: red">*</span></label> 
+                        <label for="title">{{ __('menu.specialty') }}<span style="color: red">*</span></label> 
                         <select name="examination_id" id="examination_id"  class="form-control" required="required"  style="height: 48px!important">
-                            <option value="">{{ __('menu.selectctexamination') }}</option>
+                            <option value="">{{ __('menu.Select specialty') }}</option>
                             @foreach($examination as $item)
                             <option value="{{$item->id}}">{{$item->title}}</option>
                             @endforeach                                 
                         </select>
                     </div>
                     <div class="form-group ">
-                        <label for="title">{{ __('menu.Available rooms') }} <span style="color: red">*</span></label> 
+                        <label for="title">{{ __('menu.Type of visit') }} <span style="color: red">*</span></label> 
                         <select name="rooms" id="rooms"  class="form-control" required="required"  style="height: 48px!important">
                         </select>   
                     </div>
@@ -231,11 +231,56 @@
         </div>
     </div>
 </div>
+<div id="newsugeryModal" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:550px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close close_appointment"  data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{ __('patient.Create New intervention') }} </h4>
+                <span id="new-surgery-error"></span>
+            </div>
+            <div class="modal-body">
+                <form  id='newSurgeryForm' method="post">
+                    <div class="form-group">
+                            <label for="">{{ __('patient.Surgery Date') }} <span style="color: red">*</span></label>
+                            <input id="surgery-date" type="text" name="surgery_date" class="form-control"  required="required" style="margin-bottom: 0px;">
+                    </div>
+                    <div class="form-group">
+                            <label for="">{{ __('patient.Surgery Name') }} <span style="color: red">*</span></label>
+                            <input type="text" name="surgery_name" class="form-control"  required="required" style="margin-bottom: 0px;">
+                    </div>
+                    <input type="hidden" id="surgery-pat-id" name="pat_id">
+                    <input type="hidden" id="surgery-doctor-id" name="doc_id">
+                    <div class="form-group">
+                        <label for="">{{ __('patient.Surgery Time') }} <span style="color: red">*</span></label>
+                        
+                        <input id="surgery-duration" type="hidden" name="surgery_duration"/>
+                       
+                    </div>  
+                    <div class="form-group">
+                        <label for="">{{ __('patient.Surgery Type') }} <span style="color: red">*</span></label>
+                        
+                       <select class="form-control1" id="surgery-type" name="surgery_type">
+                           <option value="">{{ __('patient.Select Surgery Type') }}</option>
+                           <option value="1">Ambulatoriale</option>
+                           <option value="2">Day Surgery</option>
+                       </select>
+                       
+                    </div>  
+                    
+                    
+                    {!! csrf_field() !!}
+                    <button type="button" id="savesurgerybutton" class="btn btn-default" name="add">Inserisci</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     $(document).ready(function(){
+        $('#surgery-duration').durationpicker({showDays: false,allowZeroTime: false});
         $('.openPopup').on('click',function(){
             var dataURL = $(this).attr('data-href');
-            console.log(dataURL);
             $('#myModal').find('.modal-content').load(dataURL,function(){
                 $('#myModal').modal({show:true});
             });
@@ -257,7 +302,7 @@
                 success: function(html){                
                     var decodeData=  JSON.parse(html);
                 $('#rooms').empty();
-                $('#rooms').append('<option value="">Select Rooms</option>');
+                //$('#rooms').append('<option value="">Select Rooms</option>');
             // here is for rooms section //       
             $.each(decodeData['rooms'], function( key, value ) {
 
@@ -300,7 +345,13 @@
         $('#timepicker2').timepicker('setTime', "09:10 AM");
         $('#appointment-date').datepicker({
             minDate:1,
-            dateFormat: 'yy-mm-dd'
+            dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends
+        });
+        $('#surgery-date').datepicker({
+            minDate:0,
+            dateFormat: 'yy-mm-dd',
+            beforeShowDay: $.datepicker.noWeekends
         });
         $("#newVisitForm").validate({
             rules: {
@@ -375,7 +426,7 @@
         if(startTimeObject > endTimeObject)
         {
             return false;
-        } else{
+        } else {
             return true;
         }
     }

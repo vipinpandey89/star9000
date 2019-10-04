@@ -10,7 +10,7 @@
 		</ol>
 	</div>
 	<div class="graph-visual tables-main">			
-		<a href="{{url('admin/add-patient')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
+		<a href="{{url('admin/aggiungi-paziente')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
 		<div class="graph">
 			<div class="tables">
 				@if (Session::has('success'))
@@ -45,14 +45,14 @@
 				 		 	<td>{{ (!empty($patient->phone)?$patient->phone:'NA') }}</td>
 				 		 	<td>{{ (!empty($patient->dob)?$patient->dob:'NA') }}</td>
 				 		 	<td>
-				 		 		@if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->relative_info) && !empty($patient->dob))
+				 		 		@if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->dob))
 				 		 			<i class="fa fa-check-square" aria-hidden="true"></i>
 				 		 		@else
 				 		 			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
 				 		 		@endif
 				 		 	</td>	
 				 		 	<td>
-							  <a class="btn btn-info btn-sm" href="{{url('admin/edit-patient/'.$patient->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+							  <a class="btn btn-info btn-sm" href="{{url('admin/modifica-paziente/'.$patient->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 							</td>
 				 		</tr>
 				 		<?php $i++;?>

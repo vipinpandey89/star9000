@@ -38,10 +38,10 @@
 			<div class="col-lg-3">
 				<div class="form-group">
 					<div class="col-sm-10">
-						<select id="filter-doctor" class="form-control1" name="filter_doctor">
+						<select multiple id="filter-doctor" class="form-control1" name="filter_doctor[]">
 							<option value="">{{ __('menu.Select Doctor') }}</option>
 							@foreach($Doctor as $doc)
-								<option value="{{$doc->id}}">{{$doc->name}}</option>
+								<option value="{{$doc->id}}">{{$doc->surname.' '.$doc->name}}</option>
 							@endforeach	
 						</select>
 					</div>									
@@ -50,8 +50,8 @@
 			<div class="col-lg-3">
 				<div class="form-group">
 					<div class="col-sm-10">
-						<select id="filter-examtype" class="form-control1" name="filter_examtype">
-							<option value="">{{ __('menu.Select Exam Type') }}</option>
+						<select id="filter-examtype" class="form-control1" multiplename="filter_examtype">
+							<option value="">{{ __('menu.Select specialty') }}</option>
 							@foreach($examination as $item)
 							<option value="{{$item->id}}">{{$item->title}}</option>
 							@endforeach	
@@ -63,7 +63,7 @@
 				<div class="form-group">
 					<div class="col-sm-10">
 						<select id="filter-room" class="form-control1" name="filter_room">
-							<option value="">{{ __('menu.Select room') }}</option>
+							<option value="">{{ __('menu.Type of visit') }}</option>
 							@foreach($rooms as $room)
 								<option value="{{$room->id}}">{{$room->room_name}}</option>
 							@endforeach	
@@ -162,9 +162,9 @@
 						<input type="hidden" name="pat_id" id="pat_id" value="">
 
 						<div class="form-group ">
-							<label for="title">Tipo di esame <span style="color: red">*</span></label> 
+							<label for="title">{{ __('menu.specialty') }}<span style="color: red">*</span></label> 
 							<select name="examination_id" id="examination_id"  class="form-control" required="required"  style="height: 48px!important">
-								<option value="">{{ __('menu.selectctexamination') }}</option>
+								<option value="">{{ __('menu.Select specialty') }}</option>
 								@foreach($examination as $item)
 								<option value="{{$item->id}}">{{$item->title}}</option>
 								@endforeach									
@@ -176,7 +176,7 @@
 
 
 						<div class="form-group ">
-							<label for="title">{{ __('menu.Available rooms') }} <span style="color: red">*</span></label> 
+							<label for="title">{{ __('menu.Type of visit') }} <span style="color: red">*</span></label> 
 							<select name="rooms" id="rooms"  class="form-control" required="required"  style="height: 48px!important">
 
 
@@ -185,7 +185,7 @@
 						</div>
 
 						<div class="form-group ">
-							<label for="title">Dottore <span style="color: red">*</span></label> 
+							<label for="title">Medico <span style="color: red">*</span></label> 
 							<select name="doctro" id="doctors"  class="form-control" required="required"  style="height: 48px!important">
 
 							</select>
@@ -274,7 +274,8 @@ foreach($patientsData as $dat){
 				center:'title',
 				right:'month,agendaWeek,agendaDay'
 			},
-			defaultView:'agendaWeek',
+			hiddenDays: [ 0, 6 ],
+			defaultView:'agendaDay',
 			monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
 			monthNamesShort: ['genn','febbr','mar','apr','magg','giugno','luglio','ag','sett','ott','nov','dic'],
 			dayNames: ['Domenica', 'Lunedi', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
@@ -303,34 +304,37 @@ foreach($patientsData as $dat){
 			nextYear: 'fa-angle-double-right',
 			minTime:'07:00:00',
 			maxTime:'19:00:00',
+			nowIndicator:true,
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
-			    	if(view.name=='month'){
-			    		view.calendar.gotoDate(date);
-			    		view.calendar.changeView('agendaDay');
-			    	}
-			    	if(view.name=='agendaWeek'){
-			    		view.calendar.gotoDate(date);
-			    		view.calendar.changeView('agendaDay');
-			    	}
-			    	if(view.name=='agenda') {
-			    		view.calendar.gotoDate(date);
-			    		view.calendar.changeView('agendaDay');
-			    	}
-			    	if(view.name=='agendaDay'){
-			    		$.confirm({
-			    			title: ' ',
-			    			content: 'Inserisci un nuovo appuntamento ',
-			    			buttons: {
-			    				Yes: function () {
-									searchDoctorAvailability(date);
-								},
-								cancel: function () {
-									
-								},
-							}
-						});
+		    		if(date.format("YYYY-MM-DD HH:mm:ss") >= moment().format("YYYY-MM-DD HH:mm:ss")) {
+				    	if(view.name=='month'){
+				    		view.calendar.gotoDate(date);
+				    		view.calendar.changeView('agendaDay');
+				    	}
+				    	if(view.name=='agendaWeek'){
+				    		view.calendar.gotoDate(date);
+				    		view.calendar.changeView('agendaDay');
+				    	}
+				    	if(view.name=='agenda') {
+				    		view.calendar.gotoDate(date);
+				    		view.calendar.changeView('agendaDay');
+				    	}
+				    	if(view.name=='agendaDay'){
+				    		$.confirm({
+				    			title: ' ',
+				    			content: 'Inserisci un nuovo appuntamento ',
+				    			buttons: {
+				    				Ok: function () {
+										searchDoctorAvailability(date);
+									},
+									Annulla: function () {
+										
+									},
+								}
+							});
 
+				    	}
 			    	}
 		    	}
 		    },
@@ -416,10 +420,10 @@ foreach($patientsData as $dat){
 							    			title: ' ',
 							    			content: 'vuoi creare un nuovo paziente? ',
 							    			buttons: {
-							    				Yes: function () {
+							    				Ok: function () {
 													showPatientPopup();
 												},
-												cancel: function () {
+												Annulla: function () {
 													
 												},
 											}
@@ -432,7 +436,7 @@ foreach($patientsData as $dat){
 								$('#patient-id').val(value);
 							}
 						},
-						placeholder: "Choose Patient"
+						placeholder: "Scegli paziente"
 					});
 		  	},
 		  	select: function(startDate, endDate, jsEvent, view, resource) {
@@ -494,10 +498,10 @@ foreach($patientsData as $dat){
 					    			title: ' ',
 					    			content: 'vuoi creare un nuovo paziente? ',
 					    			buttons: {
-					    				Yes: function () {
+					    				Ok: function () {
 											showPatientPopup();
 										},
-										cancel: function () {
+										Annulla: function () {
 											
 										},
 									}
@@ -510,7 +514,7 @@ foreach($patientsData as $dat){
 						$('#patient-id').val(value);
 					}
 				},
-				placeholder: "Choose Patient"
+				placeholder: "Scegli paziente"
 			});
 		}
 
@@ -612,7 +616,7 @@ foreach($patientsData as $dat){
 				success: function(html){		   		
 					var decodeData=  JSON.parse(html);
 		   		$('#rooms').empty();
-		   		$('#rooms').append('<option value="">Select Rooms</option>');
+		   		//$('#rooms').append('<option value="">Tipologia visita</option>');
             // here is for rooms section //       
             $.each(decodeData['rooms'], function( key, value ) {
 
@@ -673,7 +677,7 @@ foreach($patientsData as $dat){
 	    			title: 'Annulla appuntamento',
 	    			content: 'sei sicuro?',
 	    			buttons: {
-	    				Yes: function () {
+	    				Ok: function () {
 							$.ajax({
 								type:"POST",
 								url:"{{url('admin/cancel-appointment')}}",
@@ -687,7 +691,7 @@ foreach($patientsData as $dat){
 								}
 							});
 						},
-						cancel: function() {
+						Annulla: function() {
 
 						}
 					}
@@ -701,7 +705,7 @@ foreach($patientsData as $dat){
 	    			title: 'Annulla appuntamento',
 	    			content: 'sei sicuro?',
 	    			buttons: {
-	    				Yes: function () {
+	    				Ok: function () {
 							$.ajax({
 								type:"POST",
 								url:"{{url('admin/cancel-recurrence-appointment')}}",
@@ -715,7 +719,7 @@ foreach($patientsData as $dat){
 								}
 							});
 						},
-						cancel: function() {
+						Annulla: function() {
 
 						}
 					}
@@ -773,7 +777,7 @@ foreach($patientsData as $dat){
 			var emailError=1;
 			if(patEmail != '') {
 				if(patientEmail.indexOf(patEmail) != -1){
-					$('#error-pat').html('<div class="alert alert-danger"><strong>Error!</strong>Il paziente esiste già.</div>');
+					$('#error-pat').html('<div class="alert alert-danger"><strong>Errore!</strong>Il paziente esiste già.</div>');
 					emailError=2;
 				}else{
 					emailError=1;
@@ -796,7 +800,7 @@ foreach($patientsData as $dat){
 								availableTags.push({"surname":patSurname,"email":patEmail,"id":response});
 								$('#error').html('<div class="alert alert-success">Il paziente è stato creato con successo.</div>');
 							} else {
-								$('#error-pat').html('<div class="alert alert-danger"><strong>Error!</strong>si è verificato un errore, riprova più tardi.</div>');
+								$('#error-pat').html('<div class="alert alert-danger"><strong>Errore!</strong>si è verificato un errore, riprova più tardi.</div>');
 							}
 						}
 					});
@@ -822,7 +826,7 @@ foreach($patientsData as $dat){
 								{
 									location.reload();
 								}else{
-									$('#error').html('<div class="alert alert-danger"><strong>Error!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
+									$('#error').html('<div class="alert alert-danger"><strong>Errore!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
 								}
 							}
 						});
@@ -830,10 +834,10 @@ foreach($patientsData as $dat){
 						$("#myForm").submit();
 					}
 				} else {
-					$('#error').html("<div class='alert alert-danger'><strong>Error!</strong>Paziente non valido.</div>");
+					$('#error').html("<div class='alert alert-danger'><strong>Errore!</strong>Paziente non valido.</div>");
 				}
 			} else {
-				$('#error').html("<div class='alert alert-danger'><strong>Error!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
+				$('#error').html("<div class='alert alert-danger'><strong>Errore!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
 			}
 		});
 		

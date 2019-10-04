@@ -12,7 +12,7 @@
 
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 
-			<li class="active">{{ __('menu.Visits') }}</li>
+			<li class="active">{{ __('menu.Add specialty') }}</li>
 
 		</ol>
 
@@ -20,7 +20,7 @@
 
 	<div class="graph-visual tables-main">			
 
-		<a href="{{url('admin/aggiungi-visita')}}" class="btn blue">{{ __('menu.Add Examination') }} </a>
+		<a href="{{url('admin/aggiungi-visita')}}" class="btn blue">{{ __('menu.Add specialty') }} </a>
 
 		<div class="graph">
 
@@ -46,7 +46,7 @@
 
 				 		 <th>S.No</th>		 		 
 
-				 		  <th>{{ __('menu.Title') }}</th>
+				 		  <th>{{ __('menu.specialty') }}</th>
 
 				 		  
 
@@ -84,7 +84,7 @@
 
 
 
-							  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-examination/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questo utente')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+							  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-examination/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa specialità?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
 						</td>
 

@@ -45,7 +45,7 @@
 				 		<tr> 		
 
 				 		 <th>S.No</th>		 		 
-
+				 		  <th>{{ __('menu.Surname') }}</th>
 				 		  <th>{{ __('menu.Name') }}</th>
 
 				 		  <th>Email</th>
@@ -81,7 +81,7 @@
 				 	  	<td>{{$i}}</td>
 
 
-
+				 	  	 <td>{{ !empty($iteam->surname)?$iteam->surname:'NA' }}</td>
 				 		 <td>{{$iteam->name}}</td> 	
 
 
@@ -108,7 +108,7 @@
 
 
 
-							  <a class="btn btn-danger btn-sm" href="{{url('admin/deletesecretary/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questo')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+							  <a class="btn btn-danger btn-sm" href="{{url('admin/deletesecretary/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questo utente?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
 						</td>
 

@@ -18,6 +18,27 @@
 						<div class="form-body">
 							<form class="form-horizontal" method="post" >
 								<div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+
+									<label class="col-sm-2 control-label">{{ __('menu.Surname') }}</label>
+
+									<div class="col-sm-8">
+
+										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->surname:old('surname')}}" maxlength="30" name="surname" id="surname" placeholder="{{ __('menu.Surname') }}">
+
+										@if ($errors->has('surname'))
+
+										<span class="help-block">
+
+											<strong>{{ $errors->first('surname') }}</strong>
+
+										</span>
+
+										@endif
+
+									</div>									
+
+								</div>
+								<div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
 									<label for="room-name" class="col-sm-2 control-label">{{ __('menu.Name') }}</label>
 									<div class="col-sm-8">
 										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->name:old('name')}}"   maxlength="30" name="name" id="name" placeholder="{{ __('menu.Name') }}">
@@ -55,9 +76,9 @@
 
 
 								<div class="form-group {{ $errors->has('regione') ? ' has-error' : '' }}">
-									<label for="room-name" class="col-sm-2 control-label">Regione</label>
+									<label for="room-name" class="col-sm-2 control-label">Nazionalità</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->regione:old('regione')}}"   maxlength="30" name="regione" id="regione" placeholder="Regione">
+										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->regione:old('regione')}}"   maxlength="30" name="regione" id="regione" placeholder="Nazionalità">
 										 @if ($errors->has('regione'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('regione') }}</strong>
@@ -104,7 +125,7 @@
 									<div class="col-sm-12">
 										<div class="col-sm-2">	
 											<input  type="checkbox"  id="{{$detail->weekday_num}}" readonly="" name="weekday_num[{{$detail->weekday_num}}]" class="weekday_num"  value="{{$detail->weekday_num}}" <?php echo($detail->weekday_num==$detail->weekdays_id)?'checked':'';?> placeholder="{{ __('menu.Week Days') }}">	
-											<span>{{$detail->day_of_week}}</span>
+											<span>{{$detail->day_of_week_it}}</span>
 										</div>
 										<div class="col-sm-5 <?php echo $detail->weekday_num;?>_1">
 											<div class="form-group {{ $errors->has('weekday_num') ? ' has-error' : '' }}">
@@ -137,11 +158,11 @@
 								</div>
 							</div>
 					<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
-									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.Examination') }}</label>
+									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
 									<div class="col-sm-8">
 										<select name="examination_type" class="form-control1">
 
-											<option value=" ">{{ __('menu.selectctexamination') }}</option>
+											<option value=" ">{{ __('menu.Select specialty') }}</option>
 												@foreach($examination as $item)
 													<option value="{{$item->id}}" <?php echo ($examId==$item->id)?'selected':'';?>>{{$item->title}}</option>
 												@endforeach											
@@ -197,7 +218,7 @@ closeOnTimeSelect: true,
 closeOnWithoutClick: true,
 closeOnInputClick: true,
 openOnFocus: true,
-timepicker: true,
+timepicker: false,
 datepicker: true,
 weeks: false,
 defaultTime: false, 

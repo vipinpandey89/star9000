@@ -63,7 +63,8 @@ class AppointmentController extends Controller
                      ->select('*')
                      ->where('start_date', '>=', $tenDaysBack);
         if(isset($filterbydoctor) && !empty($filterbydoctor)) {
-            $appoint->where('doctro_name', '=', $filterbydoctor);
+            $appoint->whereIn('doctro_name', $filterbydoctor);
+            //$appoint->where('doctro_name', '=', $filterbydoctor);
         }
         if(isset($filterexamtype) && !empty($filterexamtype)) {
             $appoint->where('examination_id', '=', $filterexamtype);
@@ -86,12 +87,13 @@ class AppointmentController extends Controller
                 $emaildat='- ('.(isset($patient->email)?$patient->email:'').')';
             }
             $eventDescription = "<div>Nome del dottore : ".$DoctorDetail->name."</div>";
-            $eventDescription .= "<div>Nome paziente : ".$patient->surname." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
+             $eventDescription .= "<div>cognome del paziente : ".$patient->surname."</div>";
+            $eventDescription .= "<div>Nome paziente : "." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
             $eventDescription .= "<div>Inizio : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
-            $eventDescription .= "<div>Tipo di esame : ".$exams[$row->examination_id].", Camera : ".$rooms[$row->room_id]."</div>";
+            $eventDescription .= "<div>Specialità : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div>";
             $data[] = array(
                               'id'   => $row->id,
-                              'title'   => (($row->is_cancel == 1)?$DoctorDetail->name.'- Annullato':$DoctorDetail->name),
+                              'title'   => (($row->is_cancel == 1)?$DoctorDetail->surname.' '.$DoctorDetail->name.'- Annullato':$DoctorDetail->surname.' '.$DoctorDetail->name),
                               'start'   => date('Y-m-d H:i',strtotime($row->start_date)),
                               'end'   => date('Y-m-d H:i',strtotime($row->end_date)),
                               'color' => !empty($row->examination_color)?$row->examination_color:'',

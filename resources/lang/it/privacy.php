@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'Privacy' => 'vita privata',
+    'Privacy' => 'Privacy',
     'Description' => 'Descrizione'
 ];

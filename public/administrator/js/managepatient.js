@@ -127,6 +127,39 @@ $(function() {
         $(this).parent().parent().parent().parent().attr('color',e.color.toString('rgba'));
         savepatient('waiting-jobs-list', 'third');
     });
+
+    $('#newSurgeryForm').validate({
+        rules: {
+            surgery_date:"required",
+            surgery_name: "required",
+            surgery_type: "required"
+        },
+        messages: {
+            surgery_name: "Il campo è obbligatorio.",
+            surgery_date:"Il campo è obbligatorio.",
+            surgery_type: "Il campo è obbligatorio."
+        }
+    });
+    $('#savesurgerybutton').click(function(){
+        if($('#newSurgeryForm').valid()){
+            $.ajax({
+                type: "GET",
+                data: $('#newSurgeryForm').serialize(),
+                url: base_url + '/admin/saveintervento',
+                success: function(response) {
+                    if (response == 'success') {
+                        $('#newsugeryModal').modal('hide');
+                        $('#myModal').modal({show:true});
+                        $('#success-message').html('<div class="alert alert-success">La nuova chirurgia è stata creata con successo.</div>');
+                    }
+                }
+            });
+        } else {
+            $('#newSurgeryForm').submit();
+        }
+    });
+
+    
 });
 
 function savepatient(divid, sectiontype, appid=null) {

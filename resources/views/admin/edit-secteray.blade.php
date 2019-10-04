@@ -57,9 +57,9 @@
 
 
 								<div class="form-group {{ $errors->has('regione') ? ' has-error' : '' }}">
-									<label for="reasion" class="col-sm-2 control-label">Regione</label>
+									<label for="reasion" class="col-sm-2 control-label">Nazionalità</label>
 									<div class="col-sm-8">
-										<input  type="text" class="form-control1" id="regione" value="{{!empty($userDetail)?$userDetail->regione:old('regione')}}" name="regione" placeholder="Regione">
+										<input  type="text" class="form-control1" id="regione" value="{{!empty($userDetail)?$userDetail->regione:old('regione')}}" name="regione" placeholder="Nazionalità">
 										 @if ($errors->has('regione'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('regione') }}</strong>
@@ -135,7 +135,7 @@ closeOnTimeSelect: true,
 closeOnWithoutClick: true,
 closeOnInputClick: true,
 openOnFocus: true,
-timepicker: true,
+timepicker: false,
 datepicker: true,
 weeks: false,
 defaultTime: false, 

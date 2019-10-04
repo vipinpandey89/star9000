@@ -50,7 +50,7 @@
 
 				 		  <th>{{ __('menu.Color Code') }} </th>
 
-				 		  <th>{{ __('menu.Examination Type') }} </th>
+				 		  <th>{{ __('menu.specialty') }} </th>
 
 				 		   <th>{{ __('menu.Action') }} </th>
 
@@ -98,7 +98,7 @@
 
 
 
-							  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-room/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questo')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+							  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-room/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa visita?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
 						</td>
 

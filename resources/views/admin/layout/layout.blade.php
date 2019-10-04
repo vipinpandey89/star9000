@@ -46,8 +46,13 @@
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	@endif
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@intervento') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditIntervento'))
+		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
+	@endif
 	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient')
 		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
+		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
 	@endif
 	<script type="text/javascript">
 		var base_url = '<?php echo url('/') ?>';
@@ -76,7 +81,7 @@
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o"></i> <span class="badge">5</span></a>
 
 									<ul class="dropdown-menu two">
-										<li>
+										<!-- <li>
 											<div class="notification_header">
 												<h3>You have 5 new notification</h3>
 											</div>
@@ -88,28 +93,8 @@
 												<p><span>1 hour ago</span></p>
 											</div>
 											<div class="clearfix"></div>	
-										</a></li>
-										<li class="odd"><a href="#">
-											<div class="user_img"><img src="{{url('administrator/images/in5.jpg')}}" alt=""></div>
-											<div class="notification_desc">
-												<p>Lorem ipsum dolor sit amet </p>
-												<p><span>1 hour ago</span></p>
-											</div>
-											<div class="clearfix"></div>	
-										</a></li>
-										<li><a href="#">
-											<div class="user_img"><img src="{{url('administrator/images/in8.jpg')}}" alt=""></div>
-											<div class="notification_desc">
-												<p>Lorem ipsum dolor sit amet </p>
-												<p><span>1 hour ago</span></p>
-											</div>
-											<div class="clearfix"></div>	
-										</a></li>
-										<li>
-											<div class="notification_bottom">
-												<a href="#">See all notification</a>
-											</div> 
-										</li>
+										</a></li> -->
+										
 									</ul>
 								</li>	
 															   		
@@ -135,7 +120,7 @@
 					</header>
 					<div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
 					<?php $userData=Auth::user();
-					$roleTypeArray=['1'=>'Super amministratore','2'=>'segretario','3'=>'Medico']
+					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico']
 					 ?>
 					<div class="down">	
 						<a href="{{url('/admin/bacheca')}}"><img src="{{url('administrator/images/admin.jpg')}}"></a>
@@ -143,7 +128,7 @@
 						<p>{{$roleTypeArray[$userData->role_type]}}</p>
 						<ul>
 							<li><a class="tooltips" href="{{url('admin/profilo-visite')}}"><span>Profilo</span><i class="lnr lnr-user"></i></a></li>
-							<li><a class="tooltips" href="{{url('admin/admin-logout')}}"><span>Log out</span><i class="lnr lnr-power-switch"></i></a></li>
+							<li><a class="tooltips" href="{{url('admin/admin-logout')}}"><span>Esci</span><i class="lnr lnr-power-switch"></i></a></li>
 						</ul>
 					</div>
 					<!--//down-->
@@ -154,7 +139,7 @@
 								@if($userData->role_type=='1')			
 										<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> <span>{{ __('menu.Addsecretary') }}</span></a></li>
 
-										<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> <span>{{ __('menu.Examination') }} </span></a></li>
+										<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> <span>{{ __('menu.Add specialty') }} </span></a></li>
 
 										<li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
 
@@ -164,9 +149,10 @@
 										<li>
 											<a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.Patient') }}</span></a>
 											<ul>
-												<li><a href="{{url('admin/patient')}}"><span>{{ __('menu.Patient Section') }}</span></a></li>
+												<li><a href="{{url('admin/paziente')}}"><span>{{ __('menu.Patient Section') }}</span></a></li>
 												<li><a href="{{url('admin/privacy')}}"><span>{{ __('menu.Privacy') }}</span></a></li>
-												<li><a href="{{url('admin/managepatient')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
+												<li><a href="{{url('admin/intervento')}}"><span>{{ __('menu.Intervention') }}</span></a></li>
+												<li><a href="{{url('admin/gestire-il-paziente')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
 											</ul>
 										</li>
 
@@ -231,6 +217,19 @@
 						@endif
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/managepatient.js')}}" ></script>
+							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
 						@endif
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@intervento') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditIntervento'))
+							<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
+							<script type="text/javascript" src="{{URL::asset('administrator/js/intervento.js')}}" ></script>
+						@endif
+						
+						<script type="text/javascript" src="{{URL::asset('administrator/js/datepicker-it.js')}}" ></script>
+						<script type="text/javascript">
+							$(function() {
+								$.datepicker.setDefaults( $.datepicker.regional["it" ]);
+							});
+						</script>
 					</body>
 					</html>

@@ -136,7 +136,7 @@ class AdminController extends Controller
 
                           // end here // 
 
-                     return redirect('/admin/lista-segretaria')->with('success',"L'utente aggiunge con successo"); 
+                     return redirect('/admin/lista-segretaria')->with('success',"I dati sono stati salvati correttamente."); 
                    }   
     	}
 
@@ -149,7 +149,7 @@ class AdminController extends Controller
 
         User::where(['id'=>$id])->update(array('is_delete'=>'1'));
 
-        $request->session()->flash('success', "L'utente ha eliminato con successo");
+        $request->session()->flash('success', "I dati sono stati cancellati correttamente.");
 
        return Redirect::back();
     }
@@ -219,7 +219,7 @@ class AdminController extends Controller
                         'title' => 'required|string|max:200'  
                       ];
 
-                 $message["title.required"] = 'Il campo di esame è obbligatorio';                 
+                 $message["title.required"] = 'Il campo è obbligatorio.';                 
 
               $this->validate($request, $rules,$message);   
 
@@ -230,7 +230,7 @@ class AdminController extends Controller
 
            $user->save();
 
-            return redirect('/admin/visite')->with('success',"L'utente aggiunge con successo"); 
+            return redirect('/admin/visite')->with('success',"I dati sono stati salvati correttamente."); 
        } 
 
       return view('admin.add-examination');
@@ -247,7 +247,7 @@ class AdminController extends Controller
                         'title' => 'required|string|max:200'  
                       ];
 
-                 $message["title.required"] = 'Il campo di esame è obbligatorio';                 
+                 $message["title.required"] = 'Il campo è obbligatorio.';                 
 
               $this->validate($request, $rules,$message);   
 
@@ -270,7 +270,7 @@ class AdminController extends Controller
 
         Examination::where(['id'=>$id])->delete();
 
-        return redirect('/admin/visite')->with('success',"L'utente ha eliminato con successo"); 
+        return redirect('/admin/visite')->with('success'," I dati sono stati cancellati correttamente."); 
 
     }
 
@@ -318,7 +318,7 @@ class AdminController extends Controller
 
              $room->save();
 
-             return redirect('/admin/assegna-stanza')->with('success',"La stanza è stata eliminata correttamente"); 
+             return redirect('/admin/assegna-stanza')->with('success',"I dati sono stati salvati correttamente."); 
 
         }
 
@@ -393,6 +393,7 @@ class AdminController extends Controller
 
 
            $rules=[
+                        'surname' => 'required|string|max:100',
                         'name' => 'required|string|max:200',                     
                         'phone' => 'required|numeric|digits:10',
                         'email' => 'required|string|email|max:255|unique:users',
@@ -402,18 +403,18 @@ class AdminController extends Controller
                         'weekday_num' => 'required',
                         'examination_type'=>'required'                             
                     ];
-
-                     $message["name.required"] = 'È richiesto il campo nome'; 
-                     $message["cap.required"] = 'Il campo cap è richiesto';
-                     $message["email.required"] = 'Il campo email è obbligatorio';
-                     $message["email.unique"] = "l'email è già stata presa";
-                      $message["email.email"] = "Questa email deve essere un indirizzo email valido";
-                     $message["phone.digits"] = 'Il numero di telefono deve essere di 10 cifre';
-                     $message["phone.required"]= 'Il campo telefono è richiesto';
-                     $message["dob.required"] = 'Il campo dob è richiesto'; 
-                     $message["regione.required"] = 'Il campo Regione è richiesto';
-                     $message["weekday_num.required"] = 'La settimana è obbligatoria';
-                     $message["examination_type.required"] = "L'esame è obbligatorio";
+                      $message["surname.required"] = 'Il campo è obbligatorio.'; 
+                     $message["name.required"] = 'Il campo è obbligatorio.'; 
+                     $message["cap.required"] = 'Il campo è obbligatorio.';
+                     $message["email.required"] = 'Il campo è obbligatorio.';
+                     $message["email.unique"] = "Il campo è obbligatorio.";
+                      $message["email.email"] = "Questa email deve essere un indirizzo email valido.";
+                     $message["phone.digits"] = 'Il campo è obbligatorio.';
+                     $message["phone.required"]= 'Il campo è obbligatorio.';
+                     $message["dob.required"] = 'Il campo è obbligatorio.'; 
+                     $message["regione.required"] = 'Il campo è obbligatorio.';
+                     $message["weekday_num.required"] = 'Il campo è obbligatorio.';
+                     $message["examination_type.required"] = "Il campo è obbligatorio.";
 
                 $this->validate($request, $rules,$message);  
 
@@ -421,7 +422,7 @@ class AdminController extends Controller
 
                 $user = new User();
 
-
+                   $user->surname         =       Input::get('surname');
                    $user->name         =       Input::get('name');
                    $user->email         =      Input::get('email');                    
                    $user->phone        =       Input::get('phone');
@@ -500,7 +501,7 @@ class AdminController extends Controller
 
                           // end here // 
                    } 
-                   return redirect('/admin/elenco-medico')->with('success',"L'utente aggiunge con successo"); 
+                   return redirect('/admin/elenco-medico')->with('success',"I dati sono stati salvati correttamente."); 
             }
 
 
@@ -510,7 +511,7 @@ class AdminController extends Controller
                             ->orderby('weekdays.weekday_num','ASC')                     
                             ->get(); 
 
-          $weekDays= DB::table('weekdays')->orderBy('weekday_num','ASC')->get();    
+          $weekDays= DB::table('weekdays')->whereNotIn('weekday_num', [7,8])->orderBy('weekday_num','ASC')->get();    
         //  echo '<pre>';print_r($weekDays);die;        
          $examination = Examination::all();   
         return view('admin.add-doctor',['examination'=>$examination,'weekDays'=>$weekDays,'doctorDetail'=>$doctorDetail]);
@@ -526,6 +527,7 @@ class AdminController extends Controller
 
 
            $rules=[
+                        'surname' => 'required|string|max:100',
                         'name' => 'required|string|max:200',                     
                         'phone' => 'required|numeric|digits:10',
                         'regione' => 'required|string|min:5', 
@@ -534,21 +536,21 @@ class AdminController extends Controller
                         'weekday_num' => 'required', 
                         'examination_type'=>'required'                              
                     ];
-
-                     $message["name.required"] = 'È richiesto il campo nome'; 
-                     $message["cap.required"] = 'Il campo cap è richiesto';
-                     $message["phone.digits"] = 'Il numero di telefono deve essere di 10 cifre';
-                     $message["phone.required"]= 'Il campo telefono è richiesto';
-                     $message["dob.required"] = 'Il campo dob è richiesto'; 
-                     $message["regione.required"] = 'Il campo Regione è richiesto';
-                     $message["weekday_num.required"] = 'La settimana è obbligatoria';
-                     $message["examination_type.required"] = "L'esame è obbligatorio";
+                     $message["surname.required"] = 'Il campo è obbligatorio.';
+                     $message["name.required"] = 'Il campo è obbligatorio.'; 
+                     $message["cap.required"] = 'Il campo è obbligatorio.';
+                     $message["phone.digits"] = 'Il campo è obbligatorio.';
+                     $message["phone.required"]= 'Il campo è obbligatorio.';
+                     $message["dob.required"] = 'Il campo è obbligatorio.'; 
+                     $message["regione.required"] = 'Il campo è obbligatorio.';
+                     $message["weekday_num.required"] = 'Il campo è obbligatorio.';
+                     $message["examination_type.required"] = "Il campo è obbligatorio.";
 
                 $this->validate($request, $rules,$message); 
 
                   $user = User::where(['id'=>$id])->first();
 
-
+                   $user->surname         =       Input::get('surname');
                    $user->name         =       Input::get('name');                 
                    $user->phone        =       Input::get('phone');
                    $user->regione      =       Input::get('regione');
@@ -604,7 +606,7 @@ class AdminController extends Controller
 
     	$userProfile= User::where(['id'=>$id])->first();
 
-        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$id' order by p.weekday_num"); 
+        $doctorDetail = DB::select("select p.day_of_week,p.day_of_week_it,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$id' where p.weekday_num NOT IN (7,8) order by p.weekday_num"); 
       
     	$examination = Examination::all();   
     	return view('admin.edit-doctor',['examination'=>$examination,'userProfile'=>$userProfile,'doctorDetail'=>$doctorDetail]);
@@ -630,14 +632,14 @@ class AdminController extends Controller
                         'examination_type' => 'required',                             
                     ];
 
-                     $message["name.required"] = 'È richiesto il campo nome'; 
-                     $message["cap.required"] = 'Il campo cap è richiesto';
-                     $message["phone.digits"] = 'Il numero di telefono deve essere di 10 cifre';
-                     $message["phone.required"]= 'Il campo telefono è richiesto';
-                     $message["dob.required"] = 'Il campo dob è richiesto'; 
-                     $message["regione.required"] = 'Il campo Regione è richiesto';
-                     $message["weekday_num.required"] = 'La settimana è obbligatoria';
-                     $message["examination_type.required"] = 'Il tipo di esame è obbligatorio';
+                     $message["name.required"] = 'Il campo è obbligatorio.'; 
+                     $message["cap.required"] = 'Il campo è obbligatorio.';
+                     $message["phone.digits"] = 'Il campo è obbligatorio.';
+                     $message["phone.required"]= 'Il campo è obbligatorio.';
+                     $message["dob.required"] = 'Il campo è obbligatorio.'; 
+                     $message["regione.required"] = 'Il campo è obbligatorio.';
+                     $message["weekday_num.required"] = 'Il campo è obbligatorio.';
+                     $message["examination_type.required"] = 'Il campo è obbligatorio.';
 
                 $this->validate($request, $rules,$message); 
 
@@ -708,7 +710,7 @@ class AdminController extends Controller
                            // ->select('weekdays.*', 'doctors.weekdays_id as doctorweeks','doctors.examination_id')
                            // ->orderby('weekdays.weekday_num','ASC')                     
                            // ->get();  
-        $doctorDetail = DB::select("select p.day_of_week,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$userId' order by p.weekday_num");      
+        $doctorDetail = DB::select("select p.day_of_week,p.day_of_week_it,p.weekday_num,c.examination_id,c.weekdays_id,c.start_time,c.end_time from weekdays p left join doctors c on c.weekdays_id = p.weekday_num and c.userId ='$userId' where p.weekday_num NOT IN (7,8) order by p.weekday_num");      
 
     	$examination = Examination::all();  
 
