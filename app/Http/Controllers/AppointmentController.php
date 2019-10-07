@@ -30,8 +30,9 @@ class AppointmentController extends Controller
         $patientsData = [];
         foreach ($patients as $data) {
             $patientsData[]=[
-                'surname' => $data['surname'].(!empty($data['email'])?' - ('.$data['email'].')':''),
+                'surname' => $data['surname'].' '.$data['name'].(!empty($data['dob'])?' - ('.$data['dob'].')':''),
                 'email' => $data['email'],
+                'dob' => $data['dob'],
                 'id' => $data['id']
             ];
         }
@@ -64,7 +65,6 @@ class AppointmentController extends Controller
                      ->where('start_date', '>=', $tenDaysBack);
         if(isset($filterbydoctor) && !empty($filterbydoctor)) {
             $appoint->whereIn('doctro_name', $filterbydoctor);
-            //$appoint->where('doctro_name', '=', $filterbydoctor);
         }
         if(isset($filterexamtype) && !empty($filterexamtype)) {
             $appoint->where('examination_id', '=', $filterexamtype);
@@ -83,17 +83,18 @@ class AppointmentController extends Controller
             
             $patient = Patient::where($patientWhere)->first();
             $emaildat='';
-            if(!empty($patient->email)){
-                $emaildat='- ('.(isset($patient->email)?$patient->email:'').')';
+            if(!empty($patient->dob)){
+                $emaildat=' - ('.(isset($patient->dob)?$patient->dob:'').')';
             }
             $eventDescription = "<div>Nome del dottore : ".$DoctorDetail->name."</div>";
              $eventDescription .= "<div>cognome del paziente : ".$patient->surname."</div>";
             $eventDescription .= "<div>Nome paziente : "." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
             $eventDescription .= "<div>Inizio : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
             $eventDescription .= "<div>Specialità : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div>";
+            $titlePat = ', Paziente: '.$patient->surname.' '.$patient->name.$emaildat;
             $data[] = array(
                               'id'   => $row->id,
-                              'title'   => (($row->is_cancel == 1)?$DoctorDetail->surname.' '.$DoctorDetail->name.'- Annullato':$DoctorDetail->surname.' '.$DoctorDetail->name),
+                              'title'   => 'Medico: '.(($row->is_cancel == 1)?$DoctorDetail->surname.' '.$DoctorDetail->name.'- Annullato':$DoctorDetail->surname.' '.$DoctorDetail->name).$titlePat,
                               'start'   => date('Y-m-d H:i',strtotime($row->start_date)),
                               'end'   => date('Y-m-d H:i',strtotime($row->end_date)),
                               'color' => !empty($row->examination_color)?$row->examination_color:'',
@@ -103,7 +104,8 @@ class AppointmentController extends Controller
                               'room_id' => $row->room_id,
                               'doctor_id' => $row->doctro_name,
                               'patient_name' => (isset($patient->name)?$patient->name:''),
-                              'patient_email' => $patient->surname.$emaildat,
+                              'visit_motive' => (isset($row->visit_motive)?$row->visit_motive:''),
+                              'patient_email' => $patient->surname.' '.$patient->name.$emaildat,
                               'patient_phone' => (isset($patient->phone)?$patient->phone:''),
                               'patient_id' => (isset($patient->id)?$patient->id:''),
                               'is_cancel' => $row->is_cancel,
@@ -161,6 +163,7 @@ class AppointmentController extends Controller
         $roomID =               Input::get('rooms');
         $patientEmail =         Input::get('patient_email');
         $patientId =            Input::get('patient_id');
+        $visitMotive =            Input::get('visit_motive');
 
         if(empty(Input::get('appointment_id'))) {
             $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date > '" . date('Y-m-d h:i:s',strtotime($startDate)) . "') AND (start_date < '" . date('Y-m-d h:i:s',strtotime($endDate)) . "'))");
@@ -179,6 +182,7 @@ class AppointmentController extends Controller
                 $recurrenceData['patient_email'] = $patientEmail;
                 $recurrenceData['patient_id'] = $patientId;
                 $recurrenceData['patient_added_updated_by'] = $user->id;
+                $recurrenceData['visit_motive'] = $visitMotive;
 
                 $recurrenceData['recurrence_start'] = $date;
                 $recurrenceData['recurrence_end'] = Input::get('recurrence_end');
@@ -204,6 +208,7 @@ class AppointmentController extends Controller
                 $AppointmentBooking->str_enddate         =     strtotime($endDate);
                 $AppointmentBooking->examination_color   =     $GetroomColor->room_color;
                 $AppointmentBooking->room_id   =     $roomID;
+                $AppointmentBooking->visit_motive   =     $visitMotive;
                 $AppointmentBooking->patient_id   =     $patientId;
 
                 if($AppointmentBooking->save()) {
@@ -321,6 +326,7 @@ class AppointmentController extends Controller
                     $AppointmentBooking->examination_id      =     $appointmentData['examination_id'];
                     $AppointmentBooking->starteTime          =     $appointmentData['startTime'];
                     $AppointmentBooking->endtime             =     $appointmentData['endtime'];
+                    $AppointmentBooking->visit_motive        =     $appointmentData['visit_motive'];
                     $AppointmentBooking->start_date          =     $apStatDate;
                     $AppointmentBooking->end_date            =     $apEndDate;
                     $AppointmentBooking->str_starttime       =     strtotime($appointmentData['startTime']);

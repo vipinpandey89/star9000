@@ -203,6 +203,12 @@
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="">Motivo visita</label>
+                        <div class="input-group">
+                            <textarea name="visit_motive" cols="80" class="form-control"></textarea>
+                        </div>
+                    </div>
                     <div class="form-group ">
                         <label for="title">{{ __('menu.specialty') }}<span style="color: red">*</span></label> 
                         <select name="examination_id" id="examination_id"  class="form-control" required="required"  style="height: 48px!important">

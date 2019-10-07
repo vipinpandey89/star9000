@@ -209,6 +209,12 @@
 								<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="">Motivo visita</label>
+							<div class="input-group">
+								<textarea id="appointment-visit-motive" name="visit_motive" cols="80" class="form-control"></textarea>
+							</div>
+						</div>
 						<input type="hidden" id="patient-id" name="patient_id">
 						<div class="form-group">
 							<label for="">{{ __('menu.Patient') }} <span style="color: red">*</span></label>
@@ -307,20 +313,21 @@ foreach($patientsData as $dat){
 			nowIndicator:true,
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
-		    		if(date.format("YYYY-MM-DD HH:mm:ss") >= moment().format("YYYY-MM-DD HH:mm:ss")) {
-				    	if(view.name=='month'){
-				    		view.calendar.gotoDate(date);
-				    		view.calendar.changeView('agendaDay');
-				    	}
-				    	if(view.name=='agendaWeek'){
-				    		view.calendar.gotoDate(date);
-				    		view.calendar.changeView('agendaDay');
-				    	}
-				    	if(view.name=='agenda') {
-				    		view.calendar.gotoDate(date);
-				    		view.calendar.changeView('agendaDay');
-				    	}
-				    	if(view.name=='agendaDay'){
+		    		
+			    	if(view.name=='month'){
+			    		view.calendar.gotoDate(date);
+			    		view.calendar.changeView('agendaDay');
+			    	}
+			    	if(view.name=='agendaWeek'){
+			    		view.calendar.gotoDate(date);
+			    		view.calendar.changeView('agendaDay');
+			    	}
+			    	if(view.name=='agenda') {
+			    		view.calendar.gotoDate(date);
+			    		view.calendar.changeView('agendaDay');
+			    	}
+			    	if(view.name=='agendaDay'){
+			    		if(date.format("YYYY-MM-DD HH:mm:ss") >= moment().format("YYYY-MM-DD HH:mm:ss")) {
 				    		$.confirm({
 				    			title: ' ',
 				    			content: 'Inserisci un nuovo appuntamento ',
@@ -333,9 +340,8 @@ foreach($patientsData as $dat){
 									},
 								}
 							});
-
-				    	}
-			    	}
+			    		}
+			    	}	
 		    	}
 		    },
 		    events: function(start, end, timezone, callback) {
@@ -368,11 +374,12 @@ foreach($patientsData as $dat){
 						$('#doctors').val(event.doctor_id);
 					}, 3000);
 					$('#patient-info').val(event.patient_email);
+					$('#appointment-visit-motive').val(event.visit_motive);
 			    	$('#app_id').val(event.id);
 			    	$('#pat_id').val(event.patient_id);
 			    	$('#patient-id').val(event.patient_id);
 			    	$('#custom-app-title').html('Annulla appuntamento');
-			    	$('#savebutton').html('Aggiornare');
+			    	$('#savebutton').html('Modificare');
 			    	$('#recurrence_box').hide();
 			    	if(event.is_cancel != 1){
 			    		if (moment().format('YYYY-MM-DD') === event.start.format('YYYY-MM-DD') || event.start.isAfter(moment())) {
@@ -462,6 +469,7 @@ foreach($patientsData as $dat){
 			$('#selecte_date').val(date);
 			$('#app_id').val('');
 			$('#pat_id').val('');
+			$('#appointment-visit-motive').val('');
 			$('#patient-id').val('');
 			$('#custom-app-title').html('appuntamento');
 			$('#savebutton').html('Inserisci');
@@ -774,6 +782,8 @@ foreach($patientsData as $dat){
 			$('#error-pat').html('');
 			var patEmail = $('#pat-email').val();
 			var patSurname = $('#pat-surname').val();
+			var patnameS = $('#pat-name').val();
+			var patDob = $('#pat-dob').val();
 			var emailError=1;
 			if(patEmail != '') {
 				if(patientEmail.indexOf(patEmail) != -1){
@@ -782,7 +792,7 @@ foreach($patientsData as $dat){
 				}else{
 					emailError=1;
 				}
-				patSurname = patSurname+' - ('+patEmail+')';
+				patSurname = patSurname+' '+patnameS+' - ('+patDob+')';
 			}
 			if(emailError==1){
 				if($("#patientForm").valid()) {
@@ -797,7 +807,7 @@ foreach($patientsData as $dat){
 								$('#patientModal').hide();
 								$('#patient-info').val(patSurname);
 								$('#patient-id').val(response);
-								availableTags.push({"surname":patSurname,"email":patEmail,"id":response});
+								availableTags.push({"surname":patSurname,"email":patEmail,"id":response,"dob":patDob});
 								$('#error').html('<div class="alert alert-success">Il paziente è stato creato con successo.</div>');
 							} else {
 								$('#error-pat').html('<div class="alert alert-danger"><strong>Errore!</strong>si è verificato un errore, riprova più tardi.</div>');

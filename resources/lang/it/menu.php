@@ -38,7 +38,7 @@ return [
     'Add doctor' =>'Colore della stanza',
     'WeekDays'=>'Giorni della settimana',
     'StartTime'=>'Orario di inizio',
-    'EndTime'=>'Orario di fine',
+    'EndTime'=>'Durata',
     'Available rooms'=>'Stanze disponibili',
     'EditDoctor'=>'Modifica medico',
     'AddDoctor' =>'Aggiungi medico',
