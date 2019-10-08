@@ -380,4 +380,60 @@ class AppointmentController extends Controller
         
     }
 
+    public function getdoctoravailability() {
+        $docids = Input::get('filterByDoctor');
+        $currentDateTime = date('Y-m-d H:i',strtotime(Input::get('dateTimeToday')));
+        $now = new DateTime();
+        $startDate = new DateTime();
+        $endDate = $now->add(new DateInterval('P60D'));
+        $doctorData = DB::table('doctors')
+                ->leftJoin('weekdays', 'doctors.weekdays_id', '=', 'weekdays.weekday_num')
+                ->select('doctors.weekdays_id', 'weekdays.day_of_week', 'doctors.start_time','doctors.end_time')
+                ->where('doctors.userId', '=', $docids[0])
+                ->get();
+
+        $availableDays = array();
+        $todaydiff =0;
+        array_map(function($item) use (&$availableDays,&$currentDateTime,&$todaydiff) {
+            if(date('D',time()) == $item->day_of_week) {
+                if(strtotime($currentDateTime) > strtotime(date('Y-m-d ',time()).$item->start_time)){
+                    $time1 = strtotime($currentDateTime);
+                    $time2 = strtotime(date('Y-m-d ',time()).$item->end_time);
+                    $todaydiff = abs($time1 - $time2) / 60;
+                } else {
+                    $time1 = strtotime(date('Y-m-d ',time()).$item->start_time);
+                    $time2 = strtotime(date('Y-m-d ',time()).$item->end_time);
+                    $todaydiff = abs($time1 - $time2) / 60;
+                }
+            }
+            $ts1 = strtotime(date('Y-m-d ',time()).$item->start_time);
+            $ts2 = strtotime(date('Y-m-d ',time()).$item->end_time);
+            $diff = abs($ts1 - $ts2) / 60;
+            $availableDays[$item->day_of_week] = $diff;
+        }, $doctorData->toArray());
+        $count=1;
+        for($i = $startDate; $i <= $endDate; $i->modify('+1 day')) {
+            $appData= DB::select("select SUM(TIMESTAMPDIFF(MINUTE, start_date , end_date)) as totalminutes from appointement_booking WHERE date_format(start_date,'%Y-%m-%d') = '".$i->format("Y-m-d")."' AND doctro_name =".$docids[0]);
+            $totalTime = 0;
+            if(isset($appData[0]->totalminutes)) {
+                $totalTime = $appData[0]->totalminutes;
+            }
+            if(isset($availableDays[$i->format("D")])) {
+                if($count == 1) {
+                    if($todaydiff > $totalTime) {
+                        echo $i->format("Y-m-d");
+                        break;
+                    }
+                } else {
+                    if($availableDays[$i->format("D")] > $totalTime) {
+                        echo $i->format("Y-m-d");
+                        break;
+                    }
+                }
+            }
+            $count++;
+        }
+        die;
+    }
+
 }

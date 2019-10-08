@@ -54,6 +54,9 @@
 		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
 		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
 	@endif
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
+		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/bootstrap-multiselect.css') }}">
+	@endif
 	<script type="text/javascript">
 		var base_url = '<?php echo url('/') ?>';
 	</script>
@@ -224,7 +227,9 @@
 							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
 							<script type="text/javascript" src="{{URL::asset('administrator/js/intervento.js')}}" ></script>
 						@endif
-						
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
+							<script type="text/javascript" src="{{ URL('administrator/js/bootstrap-multiselect.js') }}"></script>
+						@endif
 						<script type="text/javascript" src="{{URL::asset('administrator/js/datepicker-it.js')}}" ></script>
 						<script type="text/javascript">
 							$(function() {

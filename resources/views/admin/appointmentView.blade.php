@@ -36,10 +36,10 @@
 				</div>
 			</div>
 			<div class="col-lg-3">
-				<div class="form-group">
+				<div class="">
 					<div class="col-sm-10">
-						<select multiple id="filter-doctor" class="form-control1" name="filter_doctor[]">
-							<option value="">{{ __('menu.Select Doctor') }}</option>
+						<select multiple="mutiple" id="filter-doctor" name="filter_doctor[]">
+							<!-- <option value="">{{ __('menu.Select Doctor') }}</option> -->
 							@foreach($Doctor as $doc)
 								<option value="{{$doc->id}}">{{$doc->surname.' '.$doc->name}}</option>
 							@endforeach	
@@ -82,6 +82,13 @@
 				<div class="form-group">
 					<div class="col-sm-10">
 						<button type="button" id="clear-filter-button" class="btn btn-default"> {{ __('menu.Clear Filter') }}</button> 
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="form-group">
+					<div class="col-sm-10">
+						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button> 
 					</div>									
 				</div>
 			</div>
@@ -876,9 +883,51 @@ foreach($patientsData as $dat){
 				$('#calendar').fullCalendar('refetchEvents');
 			}
 		});
+		$('#next-availability').click(function(){
+			var filterByDoctor = $('#filter-doctor').val();
+
+			if(filterByDoctor != '') {
+				if($('#filter-doctor').val().length > 1) {
+					$.confirm({
+		    			title: 'Medico',
+		    			content: 'Seleziona un medico singolo.',
+		    			buttons: {
+		    				Ok: function () {
+								
+							}
+						}
+					});
+				} else {
+					var today = new Date();
+					var dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var timeToday = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTimeToday = dateToday+' '+timeToday;
+					$.ajax({
+						type:"GET",
+						data:{filterByDoctor:filterByDoctor,dateTimeToday:dateTimeToday},
+						url:"{{url('/admin/getdoctoravailability')}}",
+						success: function(availableDate){
+							$('#calendar').fullCalendar('refetchEvents');
+							$('#calendar').fullCalendar('gotoDate',availableDate);
+						}
+					});
+				}
+			} else {
+				$.confirm({
+	    			title: 'Medico',
+	    			content: 'Per favore, seleziona un medico.',
+	    			buttons: {
+	    				Ok: function () {
+							
+						}
+					}
+				});
+			}
+		});
 		$('#clear-filter-button').click(function(){
 			location.reload();
 		});
+		$('#filter-doctor').multiselect();
 	});
 	function checkStartEndTime(startTime, endTime)
 	{

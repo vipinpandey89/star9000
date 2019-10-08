@@ -80,5 +80,6 @@ return [
     'Type of visit'=>'Tipologia visita',
     'Select specialty' => 'Seleziona specialità',
     'Surname' => 'Cognome',
-    'Intervention' => 'intervento'
+    'Intervention' => 'intervento',
+    'Next Availability' => 'Prossima Disponibilità'
 ];

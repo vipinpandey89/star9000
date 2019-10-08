@@ -54,7 +54,7 @@
 		<div class="col-lg-2">
 			<div><a class="btn btn-default" id="patient-new-visit" href="javascript:void(0);">{{ __('patient.New Visit') }}</a></div>
 			<div><a class="btn btn-default" id="patient-new-surgery" href="javascript:void(0);">{{ __('patient.New intervention') }}</a></div>
-			<div><a class="btn btn-default" target="_blank" href="{{ url('admin/edit-patient/'.$appointment->id) }}">{{ __('patient.Patient Info') }}</a></div>
+			<div><a class="btn btn-default" target="_blank" href="{{ url('admin/modifica-paziente/'.$appointment->id) }}">{{ __('patient.Patient Info') }}</a></div>
 		</div>
 	</div>
 	<div class="row">
