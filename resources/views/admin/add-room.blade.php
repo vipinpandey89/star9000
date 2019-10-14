@@ -63,7 +63,14 @@
 									</div>
 
 								</div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label">{{ __('menu.Duration') }}</label>
+									<div class="col-sm-8">
+										<div class="col-sm-8">
+											<input id="duration" type="hidden" name="duration" placeholder="{{ __('menu.Duration') }}">
+										</div>
+									</div>
+								</div>
 								<div class="form-group {{ $errors->has('Color') ? ' has-error' : '' }}">
 
 									<label for="Color" class="col-sm-2 control-label">{{ __('menu.Color Code') }}</label>
@@ -163,7 +170,8 @@
   $(function () {
 
       $('#color-picker-component').colorpicker();
-
+      $('#duration').durationpicker({showDays: false,allowZeroTime: false});
+		
   });
 
  </script>

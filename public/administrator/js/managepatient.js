@@ -122,9 +122,15 @@ $(function() {
     });
 
     $('#waiting-jobs-list').find('.color-pick').show();
-    $('.color-pick').colorpicker().on('changeColor', function(e) {
-        $(this).parent().parent().parent().css('background-color',e.color.toString('rgba'));
-        $(this).parent().parent().parent().parent().attr('color',e.color.toString('rgba'));
+    
+    $(".select-color").colorpicker({hideButton: true});
+    $('.color-pick').click(function(evt){
+        evt.stopImmediatePropagation();
+        $(this).find('.select-color').colorpicker("showPalette");
+    });
+    $(".select-color").on("change.color", function(event, color){
+        $(this).parent().parent().parent().parent().parent().css('background-color',color);
+        $(this).parent().parent().parent().parent().parent().parent().attr('color',color);
         savepatient('waiting-jobs-list', 'third');
     });
 

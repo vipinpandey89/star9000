@@ -82,5 +82,16 @@ return [
     'Operative Register' => 'Stampa Registro Operatorio',
     'Day Surgery Print' => 'Stampa per chirurgia diurna',
     'Clinical Diary' => 'Diario Clinico',
-    'Intervention Number' => 'Numero Intervento'
+    'Intervention Number' => 'Numero Intervento',
+    'Eye Visit Tabs' => 'Schede Eye Visit',
+    'Add Tab' => 'Aggiungi scheda',
+    'Title' => 'Titolo',
+    'Inputs' => 'Ingressi',
+    'Edit Tab' => 'Modifica scheda',
+    'Tab Inputs' => 'Ingressi scheda',
+    'Add Input' => 'Aggiungi Input',
+    'Type' => 'Genere',
+    'Input Type' => 'Tipo di input',
+    'selectcttype' => 'Seleziona il tipo di input',
+    'Edit Input' => 'Modifica input'
 ];

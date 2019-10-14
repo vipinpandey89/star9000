@@ -29,6 +29,7 @@
                                     </a>
                                     <span class="color-pick">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <input type="hidden" class="select-color">
                                     </span>
                                 </div>
                             </div>
@@ -59,6 +60,7 @@
                                     </a>
                                     <span class="color-pick">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <input type="hidden" class="select-color">
                                     </span>
                                 </div>
                             </div>
@@ -89,6 +91,7 @@
                                     </a>
                                     <span class="color-pick">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <input type="hidden" class="select-color">
                                     </span>
                                 </div>
                             </div>
@@ -119,6 +122,7 @@
                                     </a>
                                     <span class="color-pick">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <input type="hidden" class="select-color">
                                     </span>
                                 </div>
                             </div>
@@ -149,6 +153,7 @@
                                     </a>
                                     <span class="color-pick">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <input type="hidden" class="select-color">
                                     </span>
                                 </div>
                             </div>

@@ -106,5 +106,15 @@ Route::get('/intervento','PatientController@intervento');
 Route::match(['get','post'],'aggiungi-intervento','PatientController@AddIntervento');
 Route::match(['get','post'],'modifica-intervento/{id}','PatientController@EditIntervento');
 Route::get('/saveintervento','PatientController@saveintervento');
+//eye visit tabs
+Route::get('/schede-eye-visit','PatientController@eyevisittabs');
+Route::get('/ingressi-scheda/{id}','PatientController@tabsInput');
+
+Route::match(['get','post'],'aggiungi-scheda','PatientController@addtab');
+Route::match(['get','post'],'modifica-scheda/{id}','PatientController@edittab');
+Route::match(['get','post'],'aggiungi-ingressi/{tabid}','PatientController@addInput');
+Route::match(['get','post'],'modifica-ingressi/{tabid}/{id}','PatientController@editInput');
+Route::get('/elimina-scheda/{id}','PatientController@deletetab');
+Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
 
 });

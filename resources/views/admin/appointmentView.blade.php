@@ -927,7 +927,35 @@ foreach($patientsData as $dat){
 		$('#clear-filter-button').click(function(){
 			location.reload();
 		});
-		$('#filter-doctor').multiselect();
+		$('#filter-doctor').multiselect({
+			nonSelectedText: 'Seleziona medico',
+			allSelectedText: 'Tutti selezionati',
+			onChange: function(option, checked) {
+		    // Get selected options.
+		    var selectedOptions = $('#filter-doctor option:selected');
+
+		    if (selectedOptions.length >= 3) {
+		        // Disable all other checkboxes.
+		        var nonSelectedOptions = $('#filter-doctor option').filter(function() {
+		            return !$(this).is(':selected');
+		        });
+
+		        nonSelectedOptions.each(function() {
+		            var input = $('input[value="' + $(this).val() + '"]');
+		            input.prop('disabled', true);
+		            input.parent('li').addClass('disabled');
+		        });
+		    }
+		    else {
+		        // Enable all checkboxes.
+		        $('#filter-doctor option').each(function() {
+		            var input = $('input[value="' + $(this).val() + '"]');
+		            input.prop('disabled', false);
+		            input.parent('li').addClass('disabled');
+		        });
+		    }
+		}
+		});
 	});
 	function checkStartEndTime(startTime, endTime)
 	{

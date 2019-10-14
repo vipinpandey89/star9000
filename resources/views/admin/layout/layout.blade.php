@@ -14,11 +14,10 @@
 	<link href="{{URL::asset('administrator/css/bootstrap.min.css')}}" rel='stylesheet' type='text/css' />
 
 	<link href="{{URl::asset('administrator/bootstrap-colorpicker.css')}}" rel='stylesheet'/>
-
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index')
 	<link href="{{URL::asset('administrator/css/fullcalendar.min.css')}}" rel='stylesheet' />
-
 	<link href="{{URL::asset('administrator/css/fullcalendar.print.min.css')}}" rel='stylesheet' media='print' />
-
+	@endif
 	<link href="{{URL::asset('administrator/css/style.css')}}" rel='stylesheet' type='text/css' />
 
 	<link href="{{URl::asset('administrator/css/font-awesome.css')}}" rel="stylesheet"> 
@@ -54,8 +53,14 @@
 		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
 		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
 	@endif
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms'))
+		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
+	@endif
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
 		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/bootstrap-multiselect.css') }}">
+	@endif
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient'))
+		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/evol-colorpicker.min.css') }}">
 	@endif
 	<script type="text/javascript">
 		var base_url = '<?php echo url('/') ?>';
@@ -158,6 +163,7 @@
 												<li><a href="{{url('admin/gestire-il-paziente')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
 											</ul>
 										</li>
+										<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i><span>{{ __('menu.Eye Visit Tabs') }}</span></a></li>
 
 
 								@elseif( Auth::user()->role_type=='2')
@@ -207,7 +213,9 @@
 						<script src="{{URL::asset('administrator/bootstrap-colorpicker.js')}}"></script>
 
 						<script type="text/javascript" src="{{URL::asset('administrator/js/moment.min.js')}}" ></script>
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index')
 						<script type="text/javascript" src="{{URL::asset('administrator/js/fullcalendar.min.js')}}" ></script>
+						@endif
 						<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
 						<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 						<script src="{{URL::asset('administrator/js/jquery.easy-autocomplete.min.js')}}"></script>
@@ -218,6 +226,9 @@
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 						@endif
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@addInput') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@editInput'))
+							<script type="text/javascript" src="{{URL::asset('administrator/js/tabinput.js')}}" ></script>
+						@endif
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/managepatient.js')}}" ></script>
 							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
@@ -227,8 +238,14 @@
 							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
 							<script type="text/javascript" src="{{URL::asset('administrator/js/intervento.js')}}" ></script>
 						@endif
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms'))
+							<script type="text/javascript" src="{{URL::asset('administrator/js/jquery.durationpicker.min.js')}}" ></script>
+						@endif
 						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
 							<script type="text/javascript" src="{{ URL('administrator/js/bootstrap-multiselect.js') }}"></script>
+						@endif
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient'))
+							<script type="text/javascript" src="{{ URL('administrator/js/evol-colorpicker.min.js') }}"></script>
 						@endif
 						<script type="text/javascript" src="{{URL::asset('administrator/js/datepicker-it.js')}}" ></script>
 						<script type="text/javascript">

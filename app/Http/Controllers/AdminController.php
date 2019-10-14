@@ -314,7 +314,8 @@ class AdminController extends Controller
 
              $room->room_name = Input::get('room-name');
              $room->room_color = Input::get('Color');
-              $room->examination_type = Input::get('examination_type');
+             $room->duration = Input::get('duration');
+             $room->examination_type = Input::get('examination_type');
 
              $room->save();
 

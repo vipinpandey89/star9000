@@ -19,6 +19,9 @@ use App\AppointmentBooking;
 use App\Examination;
 use App\AppointmentMedicine;
 use App\Surgery;
+use App\EyeVisitTabs;
+use App\InputTabs;
+use App\EyeVisitData;
 
 class PatientController extends Controller
 {
@@ -109,18 +112,28 @@ class PatientController extends Controller
     }
 
     public function eyevisit(Request $request, $appid) {
+        $eyeVisitTabs = EyeVisitTabs::where(['status'=>1])->get();
+        $inputTabs = InputTabs::where(['status'=>1])->get();
+        $eyeVisitInputTabs = [];
+        array_map(function($item) use (&$eyeVisitInputTabs) {
+            $eyeVisitInputTabs[$item['tab_id']][] = $item;
+        }, $inputTabs->toArray());
         $appointmentData  = DB::table('appointement_booking')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')                     
                             ->select('appointement_booking.*', 'users.name','users.phone','users.email')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
+        $eyeDataPat=EyeVisitData::where('appointment_id', $appid)->select('eye_visit_data.eye_visit')->first();
         if($request->method() == 'POST') {
-            $patient = Patient::find(Input::get('pat_id'));
-            $patient->eye_visit  =  json_encode(Input::get('eye_visit'));
-            if($patient->save()){
-                return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati sono stati aggiornati correttamente."); 
+            $eyeData['eye_visit'] = json_encode(Input::get('eye_visit'));
+            $mage = EyeVisitData::firstOrNew(['appointment_id'=>$appid], $eyeData);
+            if($mage->exists){
+                EyeVisitData::where('id', $mage->id)->update($eyeData);
+            } else {
+                $mage->save();
             }
+            return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati sono stati aggiornati correttamente.");
         }
-        return view('admin.eyeVisit', ['appointmentData' => $appointmentData]);
+        return view('admin.eyeVisit', ['appointmentData' => $appointmentData,'eyeVisitTabs'=>$eyeVisitTabs,'eyeVisitInputTabs'=>$eyeVisitInputTabs,'eyeDataPat'=>$eyeDataPat]);
     }
 
     public function managepatient() {
@@ -157,7 +170,7 @@ class PatientController extends Controller
             
             $managePatientData['manage_date'] = date('Y-m-d',time());
             $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
-            if(isset($mage->id)){
+            if($mage->exists){
                 Managepatient::where('id', $mage->id)->update($managePatientData);
                 echo 'success';
             } else {
@@ -279,5 +292,115 @@ class PatientController extends Controller
             }
         }
         return view('admin.editintervento', ['surgeryData' => $surgeryData,'doctorData'=>$doctorData,'patientData'=>$patientData]);
+    }
+
+    public function eyevisittabs(Request $request) {
+        $eyeVisitTabs = EyeVisitTabs::where(['status'=>1])->get();
+        return view('admin.eyeVisitTabs', ['eyeVisitTabs' => $eyeVisitTabs]);
+    }
+
+    public function addtab(Request $request) {
+        $user = auth()->user();
+        if($request->method() == 'POST') {
+            $rules=[
+                    'title' => 'required|string|max:200'  
+                ];
+
+            $message["title.required"] = 'Il campo è obbligatorio.';                 
+            $this->validate($request, $rules,$message); 
+            $eyevisittab = new EyeVisitTabs();
+            $eyevisittab->title  =  Input::get('title');
+            if($eyevisittab->save()) {
+                return redirect('/admin/schede-eye-visit')->with('success',"La nuova scheda è stata aggiunta correttamente."); 
+            }
+        }
+        return view('admin.addTab');
+    }
+
+    public function edittab(Request $request,$id) {
+        $user = auth()->user();
+        $tabsData = EyeVisitTabs::where(['id'=>$id])->first();
+        if($request->method() == 'POST') {
+            $rules=[
+                    'title' => 'required|string|max:200'  
+                ];
+
+            $message["title.required"] = 'Il campo è obbligatorio.';                 
+            $this->validate($request, $rules,$message); 
+            $eyevisittab = EyeVisitTabs::find($id);
+            $eyevisittab->title  =  Input::get('title');
+            if($eyevisittab->save()) {
+                return redirect('/admin/schede-eye-visit')->with('success',"La scheda è stata aggiornata correttamente."); 
+            }
+        }
+        return view('admin.editTab', ['tabsData'=>$tabsData]);
+    }
+
+    public function deletetab(Request $request, $id) {
+        if(!empty($id)) {
+            $eyevisittab = EyeVisitTabs::find($id);
+            $eyevisittab->status  =  0;
+            if($eyevisittab->save()) {
+                return redirect('/admin/schede-eye-visit')->with('success',"La scheda è stata eliminata correttamente."); 
+            }
+        }
+    }
+
+    public function tabsInput(Request $request, $id) {
+        $tabsData = EyeVisitTabs::where(['id'=>$id])->first();
+        $inputTabs = InputTabs::where(['tab_id'=>$id,'status'=>1])->get();
+        return view('admin.tabsInput', ['tabsData'=>$tabsData,'inputTabs'=>$inputTabs]);
+    }
+
+    public function addInput(Request $request,$tabid) {
+        $user = auth()->user();
+        if($request->method() == 'POST') {
+            $inputtab = new InputTabs();
+            $inputtab->title  =  Input::get('title');
+            $inputtab->input_name  =  str_replace(' ', '_', strtolower(Input::get('title')));
+            $inputtab->type = Input::get('type');
+            $inputtab->tab_id = $tabid;
+            $intval = Input::get('input_val');
+            
+            if(!empty($intval)){
+                $inputtab->input_values = json_encode($intval);
+            }
+            
+            if($inputtab->save()) {
+                return redirect('/admin/ingressi-scheda/'.$tabid)->with('success',"Il nuovo input è stato aggiunto correttamente."); 
+            }
+        }
+        return view('admin.addInput',['tabid'=>$tabid]);
+    }
+
+    public function editInput(Request $request,$tabid,$id) {
+        $user = auth()->user();
+        $inputData = InputTabs::where(['id'=>$id])->first();
+        if($request->method() == 'POST') {
+            $inputtab = InputTabs::find($id);
+            $inputtab->title  =  Input::get('title');
+            $inputtab->input_name  =  str_replace(' ', '_', strtolower(Input::get('title')));
+            $inputtab->type = Input::get('type');
+            $inputtab->tab_id = $tabid;
+            $intval = Input::get('input_val');
+            
+            if(!empty($intval)) {
+                $inputtab->input_values = json_encode($intval);
+            }
+            if($inputtab->save()) {
+                return redirect('/admin/ingressi-scheda/'.$tabid)->with('success',"L'input è stato aggiornato correttamente."); 
+            }
+        }
+        return view('admin.editInput', ['inputData'=>$inputData,'tabid'=>$tabid]);
+    }
+
+    public function deleteinput(Request $request,$tabid, $id) {
+        if(!empty($id)) {
+            $inputtab = InputTabs::find($id);
+            $inputtab->status  =  0;
+            if($inputtab->save()) {
+                return redirect('/admin/ingressi-scheda/'.$tabid)->with('success',"L'input è stato cancellato correttamente."); 
+            }
+        }
     }
 }

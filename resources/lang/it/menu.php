@@ -81,5 +81,7 @@ return [
     'Select specialty' => 'Seleziona specialità',
     'Surname' => 'Cognome',
     'Intervention' => 'intervento',
-    'Next Availability' => 'Prossima Disponibilità'
+    'Next Availability' => 'Prossima Disponibilità',
+    'Duration' => 'Durata',
+    'Eye Visit Tabs' => 'Schede Eye Visit'
 ];
