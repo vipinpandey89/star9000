@@ -42,7 +42,7 @@ $inputValues = json_decode($inputData->input_values);
 
 									<label for="title" class="col-sm-2 control-label">{{ __('patient.Title') }}</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" maxlength="30" value="{{ $inputData->title }}" name="title" id="title" placeholder="{{ __('patient.Title') }}">
+										<input type="text" class="form-control1" maxlength="200" value="{{ $inputData->title }}" name="title" id="title" placeholder="{{ __('patient.Title') }}">
 									</div>
 								</div>
 								<div class="form-group">
@@ -57,6 +57,7 @@ $inputValues = json_decode($inputData->input_values);
 											<option value="radio" {{ ($inputData->type == 'radio')?'selected':'' }}>Radio Button</option>
 											<option value="checkbox" {{ ($inputData->type == 'checkbox')?'selected':'' }}>Check Box</option>
 											<option value="date" {{ ($inputData->type == 'date')?'selected':'' }}>Date</option>
+											<option value="print" {{ ($inputData->type == 'print')?'selected':'' }}>Print Button</option>
 										</select>
 									</div>
 

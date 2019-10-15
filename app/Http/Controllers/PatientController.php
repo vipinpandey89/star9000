@@ -111,9 +111,10 @@ class PatientController extends Controller
         exit;
     }
 
-    public function eyevisit(Request $request, $appid) {
+    public function eyevisit(Request $request,$patid, $appid) {
         $eyeVisitTabs = EyeVisitTabs::where(['status'=>1])->get();
         $inputTabs = InputTabs::where(['status'=>1])->get();
+        $patientData = Patient::where(['id'=>$patid])->select('patients.surname','patients.name')->first();
         $eyeVisitInputTabs = [];
         array_map(function($item) use (&$eyeVisitInputTabs) {
             $eyeVisitInputTabs[$item['tab_id']][] = $item;
@@ -131,9 +132,9 @@ class PatientController extends Controller
             } else {
                 $mage->save();
             }
-            return redirect('/admin/eyevisit/'.$appid)->with('success',"I dati sono stati aggiornati correttamente.");
+            return redirect('/admin/eyevisit/'.$patid.'/'.$appid)->with('success',"I dati sono stati aggiornati correttamente.");
         }
-        return view('admin.eyeVisit', ['appointmentData' => $appointmentData,'eyeVisitTabs'=>$eyeVisitTabs,'eyeVisitInputTabs'=>$eyeVisitInputTabs,'eyeDataPat'=>$eyeDataPat]);
+        return view('admin.eyeVisit', ['appointmentData' => $appointmentData,'eyeVisitTabs'=>$eyeVisitTabs,'eyeVisitInputTabs'=>$eyeVisitInputTabs,'eyeDataPat'=>$eyeDataPat,'patid'=>$patid,'patientData'=>$patientData]);
     }
 
     public function managepatient() {

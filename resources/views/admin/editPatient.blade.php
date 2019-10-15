@@ -6,6 +6,7 @@
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
+			<li><a href="{{url('admin/paziente')}}">Sezione paziente</a></li>
 			<li class="active">{{ __('patient.Edit Patient') }}</li>
 		</ol>
 	</div>
@@ -222,7 +223,7 @@
 							 	  		<td>{{ !empty($appnt->starteTime)?$appnt->starteTime:'NA'}}</td>
 							 	  		<td>{{ !empty($appnt->endtime)?$appnt->endtime:'NA'}}</td>
 							 	  		<td>
-										  <a href="{{url('admin/eyevisit/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										  <a href="{{url('admin/eyevisit/'.$patientData->id.'/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										</td>
 							 	  		<td>vedi</td>
 							 	  	</tr>

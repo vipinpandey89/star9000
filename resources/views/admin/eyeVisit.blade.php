@@ -6,11 +6,15 @@ $patientEyeData = [];
 if(isset($eyeDataPat->eye_visit)) {
 	$patientEyeData = json_decode($eyeDataPat->eye_visit,true);
 }
+$refrazioneArray = ['VISUS NAT'=>['LONTANO','VICINO'],'IN USO'=>['LONTANO','VICINO','LAC'],'AUTO REF' => ['MIOSI','CICLO'],'SOGG' => ['LONTANO','VICINO','CICLO','FORO ST'],'PRESCRIZIONE'=>['LONTANO','INTERMEDIO','VICINO']];
+$eyeArray =['right','left','oo'];
 @endphp
-<div class="outter-wp">
+<div class="outter-wp" style="margin-left: 12px;">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
+			<li><a href="{{url('admin/paziente')}}">Sezione paziente</a></li>
+			<li><a href="{{url('admin/modifica-paziente/'.$patid)}}">{{$patientData->surname.' '.$patientData->name}}</a></li>
 			<li class="active">{{ __("patient.Patient's Eye Visit") }}</li>
 		</ol>
 	</div>
@@ -31,7 +35,7 @@ if(isset($eyeDataPat->eye_visit)) {
 			{{ __('patient.Doctor Name') }} : {{ $appointmentData->name }} | {{ __('patient.Doctor Email') }} : {{ $appointmentData->email }} | {{ __('patient.Date') }} : {{ date('Y-m-d', strtotime($appointmentData->start_date)) }} | {{ __('patient.Start Time') }} : {{ $appointmentData->starteTime }} | {{ __('patient.End Time') }} : {{ $appointmentData->endtime }}
 		</div>
 		<br>
-		<div class="row">
+		<div class="row"  style="margin-left: 8px;">
 			<ul class="nav nav-tabs">
 				@php $tabCounter = 1; @endphp
 				@foreach($eyeVisitTabs as $tab)
@@ -45,6 +49,82 @@ if(isset($eyeDataPat->eye_visit)) {
 					@foreach($eyeVisitTabs as $tab)
 					<div id="tab-content-{{ $tabCounterSec }}" class="tab-pane fade in {{ ($tabCounterSec == 1)?'active':'' }}">
 						<br>
+						@if($tab->id == 3)
+						<div class="comparison">
+							<table class="table-bordered table">
+								<thead>
+									<tr>
+										<th class="tl tl2"></th>
+								        <th colspan="4" class="qbo">
+								          Occhio destro
+								        </th>
+								        <th colspan="4" class="qbo">
+								          Occhio sinistro
+								        </th>
+								        <th colspan="4" class="qbo">
+								          OO
+								        </th>
+								    </tr>
+								    <tr>
+								        <th class="tl"></th>
+								        <th class="compare-heading">
+								          Visus
+								        </th>
+								        <th class="compare-heading">
+								          SF
+								        </th>
+								        <th class="compare-heading">
+								          CIL
+								        </th>
+								        <th class="compare-heading">
+								          X
+								        </th>
+								        <th class="compare-heading">
+								          Visus
+								        </th>
+								        <th class="compare-heading">
+								          SF
+								        </th>
+								        <th class="compare-heading">
+								          CIL
+								        </th>
+								        <th class="compare-heading">
+								          X
+								        </th>
+								        <th class="compare-heading">
+								          Visus
+								        </th>
+								        <th class="compare-heading">
+								          SF
+								        </th>
+								        <th class="compare-heading">
+								          CIL
+								        </th>
+								        <th class="compare-heading">
+								          X
+								        </th>
+								    </tr>
+								</thead>
+								<tbody>
+									@foreach($refrazioneArray as $regKey=>$refData)
+									<tr>
+								        <th class="span" colspan="13" scope="colgroup">
+								            <center>{{$regKey}}</center>
+								        </th>
+								    </tr>
+								    @foreach($refData as $rData)
+								    <tr class="compare-row">
+										<td>{{$rData}}</td>
+										@foreach($eyeArray as $eye)
+										@include('admin.inputfield',['eyeVisitInputTabs' => $eyeVisitInputTabs,'regKey'=>$regKey,'eye'=>$eye,'rData'=>$rData,'patientEyeData'=>$patientEyeData])
+										@endforeach
+								    </tr>
+								    @endforeach	
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+						@else
 						<div class="row" style="margin-left:8px;">
 						@if(isset($eyeVisitInputTabs[$tab->id]))
 						@foreach($eyeVisitInputTabs[$tab->id] as $tabInput)
@@ -122,6 +202,18 @@ if(isset($eyeDataPat->eye_visit)) {
 									</div>
 							    	@php
 							        break;
+							    case 'print':
+							        @endphp
+							    	<div class="col-lg-6">
+										<div class="form-group">
+											<label class="col-sm-2 control-label">&nbsp;</label>
+											<div class="col-sm-8">
+												<button class="hidden-print float-right btn btn-primary eyevisit-print" id="{{ $tabInput['input_name'] }}" parent="tab-content-{{ $tabCounterSec }}">{{ $tabInput['title'] }}</button>
+											</div>									
+										</div>
+									</div>
+							    	@php
+							        break;
 							    default:
 							    	@endphp
 							    	<div class="col-lg-6">
@@ -139,6 +231,7 @@ if(isset($eyeDataPat->eye_visit)) {
 						@endforeach
 						@endif
 						</div>
+						@endif
 					</div>
 					@php $tabCounterSec++; @endphp
 				    @endforeach
@@ -150,12 +243,25 @@ if(isset($eyeDataPat->eye_visit)) {
 		</div>
 	</div>
 </div>
+<div id="print-div" class="visible-print-block"></div>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('.eye-visit-datepicker').datepicker({dateFormat: 'yy-mm-dd'});
 		$('.eye-visit-datepicker').keydown(function(){
 			return false;
-		})
+		});
+		$('.eyevisit-print').click(function(){
+			var parentdiv = $(this).attr('parent');
+			$('#'+parentdiv).clone().appendTo('#print-div');
+			$('#print-div').find('button').remove();
+			/*$('#print-div input').replaceWith(function() {
+			    return $('<div>' + $(this).val() + '</div>');
+			});*/
+		    var newWin=window.open('','Stampa visita oculare');
+			newWin.document.open();
+			newWin.document.write('<html><body onload="window.print()">'+$('#print-div').html()+'</body></html>');
+			newWin.document.close();
+		});
 	});
 </script>
 @endsection

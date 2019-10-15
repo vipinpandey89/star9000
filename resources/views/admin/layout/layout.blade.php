@@ -10,7 +10,6 @@
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<script src="{{URL::asset('administrator/js/jquery-1.10.2.min.js')}}"></script>
 	<link href="{{URL::asset('administrator/css/jquery-confirm.min.css')}}" rel='stylesheet' type='text/css' />
-
 	<link href="{{URL::asset('administrator/css/bootstrap.min.css')}}" rel='stylesheet' type='text/css' />
 
 	<link href="{{URl::asset('administrator/bootstrap-colorpicker.css')}}" rel='stylesheet'/>
@@ -59,6 +58,7 @@
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
 		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/bootstrap-multiselect.css') }}">
 	@endif
+	
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient'))
 		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/evol-colorpicker.min.css') }}">
 	@endif
