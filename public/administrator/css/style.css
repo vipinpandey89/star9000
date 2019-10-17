@@ -8266,3 +8266,11 @@ footer  p a:hover ,.footer p a:hover{
 .nohide{
   display: block !important;
 }
+.tooltip > .tooltip-inner {
+    background-color: #73AD21; 
+    color: #FFFFFF; 
+    border: 1px solid green; 
+    padding: 15px;
+    font-size: 16px;
+    max-width: 350px;
+  }

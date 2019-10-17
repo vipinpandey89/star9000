@@ -123,6 +123,27 @@ $eyeArray =['right','left','oo'];
 									@endforeach
 								</tbody>
 							</table>
+							<br>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">DIST. INTERP.</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="eye_visit[3][dist_interp]" value="{{ (isset($patientEyeData[3]['dist_interp']))?$patientEyeData[3]['dist_interp']:'' }}">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">Note</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="eye_visit[3][note]" value="{{ (isset($patientEyeData[3]['note']))?$patientEyeData[3]['note']:'' }}">
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						@else
 						<div class="row" style="margin-left:8px;">

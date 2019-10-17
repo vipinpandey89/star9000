@@ -86,11 +86,11 @@ class AppointmentController extends Controller
             if(!empty($patient->dob)){
                 $emaildat=' - ('.(isset($patient->dob)?$patient->dob:'').')';
             }
-            $eventDescription = "<div>Nome del dottore : ".$DoctorDetail->name."</div>";
+            $eventDescription = "<div><div>Nome del dottore : ".$DoctorDetail->name."</div>";
              $eventDescription .= "<div>cognome del paziente : ".$patient->surname."</div>";
             $eventDescription .= "<div>Nome paziente : "." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
             $eventDescription .= "<div>Inizio : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
-            $eventDescription .= "<div>Specialità : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div>";
+            $eventDescription .= "<div>Specialità : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div></div>";
             $titlePat = ', Paziente: '.$patient->surname.' '.$patient->name.$emaildat;
             $data[] = array(
                               'id'   => $row->id,
@@ -110,7 +110,8 @@ class AppointmentController extends Controller
                               'patient_id' => (isset($patient->id)?$patient->id:''),
                               'is_cancel' => $row->is_cancel,
                               'recurrence' => $recurrence,
-                              'description' => $eventDescription
+                              'description' => $eventDescription,
+                              'icon' => '  <i class="eventtooltip fa fa-info-circle" aria-hidden="true"></i> '
                          );
         }
 

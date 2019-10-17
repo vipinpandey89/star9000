@@ -287,6 +287,16 @@ foreach($patientsData as $dat){
 				center:'title',
 				right:'month,agendaWeek,agendaDay'
 			},
+			editable: true,
+			droppable: true,
+			views: {
+		        month: { 
+		            editable: false
+		        },
+		        agendaDay: {
+		        	editable: false
+		        }
+		    },
 			hiddenDays: [ 0, 6 ],
 			defaultView:'agendaDay',
 			monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
@@ -305,7 +315,6 @@ foreach($patientsData as $dat){
 			slotDuration: '00:10:00',
 			slotLabelInterval: 10,
 			slotLabelFormat: 'H:mm',
-			editable: false,
 			axisFormat: 'HH:mm',
 			timeFormat: 'HH:mm',
 			theme: true,    
@@ -318,6 +327,13 @@ foreach($patientsData as $dat){
 			minTime:'07:00:00',
 			maxTime:'19:00:00',
 			nowIndicator:true,
+			eventDrop: function(event, delta, revertFunc) {
+				alert(event.title + " was dropped on " + event.start.format());
+
+			    if (!confirm("Are you sure about this change?")) {
+			      revertFunc();
+			    }
+			},
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
 		    		
@@ -355,12 +371,14 @@ foreach($patientsData as $dat){
 		    	renderAppointment(callback);
 		    },
 		    eventRender: function(event, element) {
-		    	element.tooltip({
+		    	if(event.icon){          
+			        element.find(".fc-content").prepend(event.icon);
+			     }
+		    	element.find('.eventtooltip').tooltip({
 		    		title:event.description,
 		    		html:true,
 		    		container:'body'
 		    	});
-		        //element.attr('title', event.description);
 		    },
 		    selectable:true,
 		    selectHelper:true,
