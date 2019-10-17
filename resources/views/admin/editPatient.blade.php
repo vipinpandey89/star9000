@@ -92,7 +92,84 @@
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										&nbsp;								
+										<label class="col-sm-2 control-label">{{ __('patient.Sex') }}</label>
+										<div class="col-sm-8">
+											<select class="form-control1" id="sex" name="sex">
+					                           <option value="">{{ __('patient.Select Sex') }}</option>
+					                           <option value="1" {{ ($patientData->sex == 1)?'selected':'' }}>{{ __('patient.Male') }}</option>
+					                           <option value="2" {{ ($patientData->sex == 2)?'selected':'' }}>{{ __('patient.Female') }}</option>
+					                       </select>
+										</div>								
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Document') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->document }}" id="document" type="text" class="form-control1" name="document" placeholder="{{ __('patient.Document') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Profession') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->profession }}" id="profession" type="text" class="form-control1" name="profession" placeholder="{{ __('patient.Profession') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Address') }}</label>
+										<div class="col-sm-8">
+											<textarea class="form-control" id="address" name="address">{{ $patientData->address }}</textarea>
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Postal Code') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->postal_code }}" id="postal-code" type="number" class="form-control1" name="postal_code" placeholder="{{ __('patient.Postal Code') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Telephone Number') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->telephone }}" id="telephone" type="number" class="form-control1" name="telephone" placeholder="{{ __('patient.Telephone Number') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Nationality') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->nationality }}" id="nationality" type="text" class="form-control1" name="nationality" placeholder="{{ __('patient.Nationality') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Pec') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->pec }}" id="pec" type="text" class="form-control1" name="pec" placeholder="{{ __('patient.Pec') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<label class="col-sm-2 control-label">ID</label>
+									<div class="col-sm-8">
+										<input disabled value="{{ $patientData->id }}" type="text" class="form-control1">
 									</div>
 								</div>
 							</div>

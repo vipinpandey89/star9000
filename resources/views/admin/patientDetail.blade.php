@@ -33,7 +33,7 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-10">
-					{{ __('patient.Doctor Name') }} : {{ (!empty($appointment->doctorname)?$appointment->doctorname:'NA') }}
+					{{ __('patient.Doctor Name') }} : {{ (!empty($appointment->surname)?$appointment->surname:'') }} {{ (!empty($appointment->doctorname)?$appointment->doctorname:'NA') }}
 				</div>
 			</div>
 			<div class="row">

@@ -47,6 +47,14 @@ class PatientController extends Controller
             $patient->name  =  Input::get('name');
             $patient->phone  =  Input::get('phone');
             $patient->dob  =  Input::get('dob');
+            $patient->sex  =  Input::get('sex');
+            $patient->document  =  Input::get('document');
+            $patient->profession  =  Input::get('profession');
+            $patient->address  =  Input::get('address');
+            $patient->postal_code  =  Input::get('postal_code');
+            $patient->telephone  =  Input::get('telephone');
+            $patient->nationality  =  Input::get('nationality');
+            $patient->pec  =  Input::get('pec');
             $patient->description  =  Input::get('description');
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
@@ -85,6 +93,14 @@ class PatientController extends Controller
             $patient->name  =  Input::get('name');
             $patient->phone  =  Input::get('phone');
             $patient->dob  =  Input::get('dob');
+            $patient->sex  =  Input::get('sex');
+            $patient->document  =  Input::get('document');
+            $patient->profession  =  Input::get('profession');
+            $patient->address  =  Input::get('address');
+            $patient->postal_code  =  Input::get('postal_code');
+            $patient->telephone  =  Input::get('telephone');
+            $patient->nationality  =  Input::get('nationality');
+            $patient->pec  =  Input::get('pec');
             $patient->description  =  Input::get('description');
             if(!empty(Input::get('minor_patient'))) {
                 $patient->minor_patient  =  Input::get('minor_patient');
@@ -143,20 +159,24 @@ class PatientController extends Controller
         $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
         $patientsOfTheDay = DB::table('appointement_booking')
                             ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
-                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime','appointement_booking.doctro_name as docId', 'patients.*')                     
                             ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
         $patientFirst = [];
-        if(empty($existingPat)){
-            foreach ($patientsOfTheDay as $pat) {
-                $patientFirst[] =[
-                    'id'=>$pat->id,
-                    'updated_by'=>$user->id,
-                    'update_date'=>date('Y-m-d H:i:s', time()),
-                    'color'=>''
-                ];
-            }
+        $todaysDoc =[];
+        foreach ($patientsOfTheDay as $pat) {
+            $patientFirst[] =[
+                'id'=>$pat->id,
+                'updated_by'=>$user->id,
+                'update_date'=>date('Y-m-d H:i:s', time()),
+                'color'=>''
+            ];
+            $todaysDoc[]=$pat->docId;
         }
-        return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination]);
+        $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
+        if(!empty($existingPat)){
+            $patientFirst = [];
+        }
+        return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination,'doctorData'=>$doctorData]);
     }
 
     public function dailypatientupdate() {
@@ -210,7 +230,7 @@ class PatientController extends Controller
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                  
-                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.name as doctorname','users.id as doctorid','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.surname','users.name as doctorname','users.id as doctorid','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
         return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory,'medicines'=>$medicines]);
     }

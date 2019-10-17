@@ -430,6 +430,11 @@ class AdminController extends Controller
                    $user->regione      =       Input::get('regione');
                    $user->cap          =       Input::get('cap'); 
                    $user->dob          =       Input::get('dob');
+                   $user->address      =       Input::get('address');
+                   $user->postal_code  =       Input::get('postal_code');
+                   $user->telephone    =       Input::get('telephone');
+                   $user->performance_type    =       Input::get('performance_type');
+
                    $user->password     =       bcrypt($rand);
                    $user->role_type     =     '3';
 
@@ -557,7 +562,11 @@ class AdminController extends Controller
                    $user->regione      =       Input::get('regione');
                    $user->cap          =       Input::get('cap'); 
                    $user->dob          =       Input::get('dob');                    
- 
+                   $user->address      =       Input::get('address');
+                   $user->postal_code  =       Input::get('postal_code');
+                   $user->telephone    =       Input::get('telephone');
+                   $user->performance_type    =       Input::get('performance_type');
+
                    $ExaminationId= Input::get('examination_type');
 
                   $weekDays= !empty($request->input('weekday_num'))?$request->input('weekday_num'):'';  

@@ -70,8 +70,82 @@
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										&nbsp;								
+										<label class="col-sm-2 control-label">{{ __('patient.Sex') }}</label>
+										<div class="col-sm-8">
+											<select class="form-control1" id="sex" name="sex">
+					                           <option value="">{{ __('patient.Select Sex') }}</option>
+					                           <option value="1">{{ __('patient.Male') }}</option>
+					                           <option value="2">{{ __('patient.Female') }}</option>
+					                       </select>
+										</div>								
 									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Document') }}</label>
+										<div class="col-sm-8">
+											<input id="document" type="text" class="form-control1" name="document" placeholder="{{ __('patient.Document') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Profession') }}</label>
+										<div class="col-sm-8">
+											<input id="profession" type="text" class="form-control1" name="profession" placeholder="{{ __('patient.Profession') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Address') }}</label>
+										<div class="col-sm-8">
+											<textarea class="form-control" id="address" name="address"></textarea>
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Postal Code') }}</label>
+										<div class="col-sm-8">
+											<input id="postal-code" type="number" class="form-control1" name="postal_code" placeholder="{{ __('patient.Postal Code') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Telephone Number') }}</label>
+										<div class="col-sm-8">
+											<input id="telephone" type="number" class="form-control1" name="telephone" placeholder="{{ __('patient.Telephone Number') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Nationality') }}</label>
+										<div class="col-sm-8">
+											<input id="nationality" type="text" class="form-control1" name="nationality" placeholder="{{ __('patient.Nationality') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Pec') }}</label>
+										<div class="col-sm-8">
+											<input id="pec" type="text" class="form-control1" name="pec" placeholder="{{ __('patient.Pec') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									&nbsp;
 								</div>
 							</div>
 							<div class="row">
@@ -79,8 +153,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{ __('patient.Description') }}</label>
 										<div class="col-sm-8">
-											<textarea id="description" class="form-control" name="description" placeholder="{{ __('patient.Description') }}">
-											</textarea>
+											<textarea id="description" class="form-control" name="description" placeholder="{{ __('patient.Description') }}"></textarea>
 										</div>									
 									</div>
 								</div>

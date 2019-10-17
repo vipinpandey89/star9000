@@ -93,5 +93,16 @@ return [
     'Type' => 'Genere',
     'Input Type' => 'Tipo di input',
     'selectcttype' => 'Seleziona il tipo di input',
-    'Edit Input' => 'Modifica input'
+    'Edit Input' => 'Modifica input',
+    'Sex' => 'Sesso',
+    'Male' => 'Maschio',
+    'Female' => 'Femmina',
+    'Select Sex' => 'Seleziona il sesso',
+    'Document' => 'Documento',
+    'Profession' => 'Professione',
+    'Address' => 'Indirizzo',
+    'Postal Code'=> 'Codice Postale',
+    'Telephone Number' => 'Numero di telefono',
+    'Nationality' => 'Nazionalità',
+    'Pec' => 'Pec'
 ];

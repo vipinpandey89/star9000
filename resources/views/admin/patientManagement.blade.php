@@ -10,6 +10,16 @@
 		</ol>
 	</div>
     <input type="hidden" value="{{$user->id}}" id="logged-in-user"/>
+    <div class="row">
+        <div class="col-sm-4">
+            <select id="doctor-dropdown" class="form-control1">
+                <option>Selezionare Medico</option>
+                @foreach($doctorData as $dData)
+                <option value="{{$dData->id}}">{{ $dData->surname.' '.$dData->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 	<div class="body-section">
     <div class="jobs-list-wrapper">
         <div class="jobs-list">
@@ -19,7 +29,7 @@
                     <?php $patientFirstSection = (!empty($patientFirst)?$patientFirst:(!empty($existingPat->first)?json_decode($existingPat->first,true):[]));
                      ?>
                     @foreach($patientFirstSection as $patient)
-                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                    <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
@@ -50,7 +60,7 @@
                     <?php $patientSecondSection = (!empty($existingPat->second)?json_decode($existingPat->second,true):[]);
                      ?>
                     @foreach($patientSecondSection as $patient)
-                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                    <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
@@ -81,7 +91,7 @@
                     <?php $patientThirdSection = (!empty($existingPat->third) && $existingPat->third?json_decode($existingPat->third,true):[]);
                      ?>
                     @foreach($patientThirdSection as $patient)
-                    <li class="indivisual_patient" color="{{ $patient['color'] }}"  app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                    <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}"  app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
@@ -112,7 +122,7 @@
                     <?php $patientFourthSection = (!empty($existingPat->fourth)?json_decode($existingPat->fourth,true):[]);
                      ?>
                     @foreach($patientFourthSection as $patient)
-                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                    <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}"style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
@@ -143,7 +153,7 @@
                     <?php $patientFifthSection = (!empty($existingPat->fifth)?json_decode($existingPat->fifth,true):[]);
                      ?>
                     @foreach($patientFifthSection as $patient)
-                    <li class="indivisual_patient" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
+                    <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
                                 <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>

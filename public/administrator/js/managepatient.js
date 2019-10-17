@@ -26,7 +26,7 @@ $(function() {
 
 $(function() {
     $("#in-progress-list").sortable({
-        connectWith: ["#waiting-jobs-list", "#complete-jobs-list", "#rework-jobs-list", "#new-jobs-list"],
+        connectWith: ["#waiting-jobs-list", "#complete-jobs-list", "#rework-jobs-list"],
         over: function(event, ui) { //triggered when sortable element hovers sortable list
             $('#in-progress').css('background-color', 'rgba(0,0,0,.1)');
         },
@@ -50,7 +50,7 @@ $(function() {
 
 $(function() {
     $("#waiting-jobs-list").sortable({
-        connectWith: ["#in-progress-list", "#complete-jobs-list", "#rework-jobs-list", "#new-jobs-list"],
+        connectWith: ["#in-progress-list", "#complete-jobs-list", "#rework-jobs-list"],
         over: function(event, ui) { //triggered when sortable element hovers sortable list
             $('#waiting').css('background-color', 'rgba(0,0,0,.1)')
         },
@@ -74,7 +74,7 @@ $(function() {
 
 $(function() {
     $("#complete-jobs-list").sortable({
-        connectWith: ["#in-progress-list", "#waiting-jobs-list", "#rework-jobs-list", "#new-jobs-list"],
+        connectWith: ["#in-progress-list", "#waiting-jobs-list", "#rework-jobs-list"],
         over: function(event, ui) { //triggered when sortable element hovers sortable list
             $('#complete').css('background-color', 'rgba(0,0,0,.1)')
         },
@@ -100,7 +100,7 @@ $(function() {
 
 $(function() {
     $("#rework-jobs-list").sortable({
-        connectWith: ["#in-progress-list", "#waiting-jobs-list", "#complete-jobs-list", "#new-jobs-list"],
+        connectWith: ["#in-progress-list", "#waiting-jobs-list", "#complete-jobs-list"],
         over: function(event, ui) { //triggered when sortable element hovers sortable list
             $('#rework').css('background-color', 'rgba(0,0,0,.1)')
         },
@@ -164,7 +164,15 @@ $(function() {
             $('#newSurgeryForm').submit();
         }
     });
-
+    $('#doctor-dropdown').change(function(){
+        $('.indivisual_patient').css('border','');
+        var selectedDoc = $(this).val();
+        if(selectedDoc != '') {
+            $('.doc-'+selectedDoc).css('border','thin solid gray');
+        } else {
+            $('.indivisual_patient').css('border','');
+        }
+    });
     
 });
 

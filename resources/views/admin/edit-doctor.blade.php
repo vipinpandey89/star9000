@@ -86,7 +86,30 @@
                                			 @endif
 									</div>									
 								</div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Indirizzo</label>
+									<div class="col-sm-8">
+										<textarea id="doc-address" class="form-control" name="address">{{ !empty($userProfile->address)?$userProfile->address:'' }}</textarea>
+									</div>									
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Codice Postale</label>
+									<div class="col-sm-8">
+										<input value="{{!empty($userProfile->postal_code)?$userProfile->postal_code:''}}" type="number" id="doc-postal-code" class="form-control1" name="postal_code" placeholder="Codice Postale">
+									</div>									
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Numero di telefono</label>
+									<div class="col-sm-8">
+										<input value="{{!empty($userProfile->telephone)?$userProfile->telephone:''}}" type="number" id="telephone" class="form-control1" name="telephone" placeholder="Numero di telefono">
+									</div>									
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Tipo di prestazione</label>
+									<div class="col-sm-8">
+										<input value="{{!empty($userProfile->performance_type)?$userProfile->performance_type:''}}" type="text" id="performance-type" class="form-control1" name="performance_type" placeholder="Tipo di prestazione">
+									</div>									
+								</div>
 
 							<div class="form-group {{ $errors->has('cap') ? ' has-error' : '' }}">
 									<label for="room-name" class="col-sm-2 control-label">Cap</label>
@@ -229,7 +252,8 @@ defaultDate: false,
 
 <script type="text/javascript">
 	$('.timecall').timepicker({
-		showMeridian: false   
+		showMeridian: false,
+		minuteStep:10
 	});
 </script>
 @endsection							
