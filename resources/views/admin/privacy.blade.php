@@ -38,6 +38,16 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">Ultimo aggiornamento</label>
+										<div class="col-sm-8"><br>
+											@php echo date('Y-m-d H:i',strtotime($privacy->updated_at)); @endphp
+										</div>									
+									</div>
+								</div>
+							</div>
 							
 							{!! csrf_field() !!}								
 

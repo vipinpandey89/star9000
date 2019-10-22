@@ -85,10 +85,10 @@
 									
 								</li>
 
-								<li class="dropdown note">
+								<!-- <li class="dropdown note">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell-o"></i> <span class="badge">5</span></a>
 
-									<ul class="dropdown-menu two">
+									<ul class="dropdown-menu two"> -->
 										<!-- <li>
 											<div class="notification_header">
 												<h3>You have 5 new notification</h3>
@@ -103,7 +103,7 @@
 											<div class="clearfix"></div>	
 										</a></li> -->
 										
-									</ul>
+									<!-- </ul> -->
 								</li>	
 															   		
 								<div class="clearfix"></div>	
@@ -130,6 +130,7 @@
 					<?php $userData=Auth::user();
 					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico']
 					 ?>
+					 <input type="hidden" id="main-content-userid" value="{{ $userData->id }}">
 					<div class="down">	
 						<a href="{{url('/admin/bacheca')}}"><img src="{{url('administrator/images/admin.jpg')}}"></a>
 						<a href="{{url('/admin/bacheca')}}"><span class=" name-caret">{{$userData->email}}</span></a>
@@ -164,6 +165,7 @@
 											</ul>
 										</li>
 										<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i><span>{{ __('menu.Eye Visit Tabs') }}</span></a></li>
+										<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i><span>{{ __('menu.Reminder') }}</span></a></li>
 
 
 								@elseif( Auth::user()->role_type=='2')
@@ -253,5 +255,6 @@
 								$.datepicker.setDefaults( $.datepicker.regional["it" ]);
 							});
 						</script>
+						<script type="text/javascript" src="{{ URL('administrator/js/reminder.js') }}"></script>
 					</body>
 					</html>

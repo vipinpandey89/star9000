@@ -349,7 +349,7 @@
                 $('#doctors').append($('<option>',
                 {
                     value: value1.user_id,
-                    text : value1.name,
+                    text : value1.surname+' '+value1.name,
                 }));
            });
             // end here doctor detail//

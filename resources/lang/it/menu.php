@@ -83,5 +83,6 @@ return [
     'Intervention' => 'intervento',
     'Next Availability' => 'Prossima Disponibilità',
     'Duration' => 'Durata',
-    'Eye Visit Tabs' => 'Schede Eye Visit'
+    'Eye Visit Tabs' => 'Scheda visita oculistica',
+    'Reminder' => 'Promemoria'
 ];

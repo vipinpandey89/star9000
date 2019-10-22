@@ -80,7 +80,7 @@ Route::post('ajaxset-appointment','AppointmentController@AjaxSetAppointment');
 Route::post('create-patient','AppointmentController@CreatePatient');
 
 Route::post('cancel-appointment','AppointmentController@CancelAppointment');
-
+Route::post('modify-appointment','AppointmentController@ModifyAppointment');
 Route::post('cancel-recurrence-appointment','AppointmentController@CancelRecurrenceAppointment');
 Route::get('getdoctoravailability','AppointmentController@getdoctoravailability');
 
@@ -116,5 +116,12 @@ Route::match(['get','post'],'aggiungi-ingressi/{tabid}','PatientController@addIn
 Route::match(['get','post'],'modifica-ingressi/{tabid}/{id}','PatientController@editInput');
 Route::get('/elimina-scheda/{id}','PatientController@deletetab');
 Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
+
+Route::get('/promemoria','ReminderController@index');
+Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
+Route::match(['get','post'],'modifica-promemoria/{id}','ReminderController@editReminder');
+Route::get('/elimina-promemoria/{id}','ReminderController@deleteReminder');
+Route::get('/getreminder','ReminderController@getreminder');
+Route::get('/updatereminder','ReminderController@updatereminder');
 
 });

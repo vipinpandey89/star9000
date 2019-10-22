@@ -131,7 +131,7 @@ class AppointmentController extends Controller
         } elseif($getDay =='Fri') { $Wekday_num = '6'; } elseif($getDay =='Sat')  { $Wekday_num = '7';} elseif($getDay =='Sun')   { $Wekday_num = '8'; }
 
          //(end_time >= ".$startTime." and start_time <= ".$endTime." )
-        $getData['DoctorInformation'] = DB::select("select u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");        
+        $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");        
 
 
         $getData['rooms']= Room::where(['examination_type'=>$id])->get();
@@ -167,9 +167,9 @@ class AppointmentController extends Controller
         $visitMotive =            Input::get('visit_motive');
 
         if(empty(Input::get('appointment_id'))) {
-            $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date > '" . date('Y-m-d h:i:s',strtotime($startDate)) . "') AND (start_date < '" . date('Y-m-d h:i:s',strtotime($endDate)) . "'))");
+            $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date >= '" . date('Y-m-d H:i:s',strtotime($startDate)) . "') AND (start_date <= '" . date('Y-m-d H:i:s',strtotime($endDate)) . "'))");
         } else {
-            $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date > '" . date('Y-m-d h:i:s',strtotime($startDate)) . "') AND (start_date < '" . date('Y-m-d h:i:s',strtotime($endDate)) . "')) AND id <> ".Input::get('appointment_id'));
+            $matchdata= DB::select("select id from appointement_booking WHERE doctro_name = ".$doctor." AND is_cancel='0' AND ((end_date >= '" . date('Y-m-d H:i:s',strtotime($startDate)) . "') AND (start_date <= '" . date('Y-m-d H:i:s',strtotime($endDate)) . "')) AND id <> ".Input::get('appointment_id'));
         }
         if(empty($matchdata))
         {
@@ -356,7 +356,7 @@ class AppointmentController extends Controller
                 $request->session()->flash('success', "L'appuntamento è stato cancellato con successo.");
                 return  'success';  
             }else{
-                $request->session()->flash('error', "Error occured. Try again later.");
+                $request->session()->flash('error', "C'è stato un'errore. Riprovare più tardi.");
                 return  'error';
             }
         }
@@ -435,6 +435,49 @@ class AppointmentController extends Controller
             $count++;
         }
         die;
+    }
+
+    public function ModifyAppointment() {
+        $appid = Input::get('id');
+        $docId = Input::get('docId');
+        $updatedStartDate = Input::get('updatedStartDate');
+        $updatedEndDate = Input::get('updatedEndDate');
+        //check doctor availability--do on monday
+        $weekArray = ['Mon'=>2,'Tue'=>3,'Wed'=>4,'Thu'=>5,'Fri'=>6,'Sat'=>7,'Sun'=>8];
+        $selectedDay = $weekArray[date('D',strtotime($updatedStartDate))];
+        $todayDate = date('Y-m-d ',strtotime($updatedStartDate));
+        $doctorDetail = Doctor::where(['userId'=>$docId,'weekdays_id'=>$selectedDay])->first();
+        if(!empty($doctorDetail)) {
+        $doctorShiftStart = date('Y-m-d H:i:s',strtotime($todayDate.$doctorDetail->start_time));
+        $doctorShiftEnd = date('Y-m-d H:i:s',strtotime($todayDate.$doctorDetail->end_time));
+        if((date('Y-m-d H:i:s',strtotime($updatedStartDate)) >= $doctorShiftStart) && (date('Y-m-d H:i:s',strtotime($updatedEndDate)) <= $doctorShiftEnd)) {
+            $matchdata= DB::select(DB::raw("select id from appointement_booking WHERE doctro_name = ".$docId." AND is_cancel='0' AND ((end_date >= '" . date('Y-m-d H:i:s',strtotime($updatedStartDate)) . "') AND (start_date <= '" . date('Y-m-d H:i:s',strtotime($updatedEndDate)) . "'))"));
+            
+            if(empty($matchdata)) {
+                $appointment = AppointmentBooking::find($appid);
+                if(!empty($appointment)) {
+                    $updateData = [
+                        'starteTime' => date('H:i', strtotime($updatedStartDate)),
+                        'endtime' => date('H:i', strtotime($updatedEndDate)),
+                        'start_date'=>date('Y-m-d H:i', strtotime($updatedStartDate)),
+                        'end_date'=>date('Y-m-d H:i', strtotime($updatedEndDate))
+                    ];
+                    if(AppointmentBooking::where('id', $appid)->update($updateData)) {
+                        return  'success';  
+                    }else{
+                        return  'error';
+                    }
+                }
+            } else {
+                echo 'exist';
+            }
+        } else {
+            echo 'docnotAvailable';
+        }
+        } else {
+            echo 'docnotAvailable';
+        }
+        exit;
     }
 
 }

@@ -83,7 +83,7 @@ return [
     'Day Surgery Print' => 'Stampa per chirurgia diurna',
     'Clinical Diary' => 'Diario Clinico',
     'Intervention Number' => 'Numero Intervento',
-    'Eye Visit Tabs' => 'Schede Eye Visit',
+    'Eye Visit Tabs' => 'Scheda visita oculistica',
     'Add Tab' => 'Aggiungi scheda',
     'Title' => 'Titolo',
     'Inputs' => 'Ingressi',
@@ -104,5 +104,8 @@ return [
     'Postal Code'=> 'Codice Postale',
     'Telephone Number' => 'Numero di telefono',
     'Nationality' => 'Nazionalità',
-    'Pec' => 'Pec'
+    'Pec' => 'Pec',
+    'Reminder'=> 'Promemoria',
+    'Add Reminder' => 'Aggiungi promemoria',
+    'Time' => 'Tempo'
 ];

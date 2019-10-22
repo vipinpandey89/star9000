@@ -327,12 +327,66 @@ foreach($patientsData as $dat){
 			minTime:'07:00:00',
 			maxTime:'19:00:00',
 			nowIndicator:true,
+			eventResize: function(event, delta, revertFunc) {
+				revertFunc();
+			},
 			eventDrop: function(event, delta, revertFunc) {
-				alert(event.title + " was dropped on " + event.start.format());
+				if(event.start.isAfter(moment())) {
+					if(moment().format('YYYY-MM-DD') === event.start.format('YYYY-MM-DD')) {
+						if(event.start.format("YYYY-MM-DD HH:mm:ss") < moment().format("YYYY-MM-DD HH:mm:ss")) {
+							revertFunc();
+							throw new Error('Not allowed.');
+						}
 
-			    if (!confirm("Are you sure about this change?")) {
-			      revertFunc();
-			    }
+					}
+					var updatedStartDate = event.start.format('YYYY-MM-DD HH:mm:ss');
+					var updatedEndDate = event.end.format('YYYY-MM-DD HH:mm:ss');
+					$.confirm({
+						title: event.title,
+						content: 'sei sicuro?',
+						buttons: {
+							Ok: function () {
+								$.ajax({
+									type:"POST",
+									url:"{{url('admin/modify-appointment')}}",
+									data:{updatedStartDate:updatedStartDate,updatedEndDate:updatedEndDate,id:event.id,docId:event.doctor_id,"_token": "{{ csrf_token() }}",},
+									success: function(response){
+										console.log(response);
+										if(response=='success')
+										{
+											$('#calendar').fullCalendar('refetchEvents');
+										} else if(response=='exist') {
+											$.confirm({
+												title: 'Esiste già un appuntamento dal medico.',
+												content: '',
+												buttons: {
+													Ok: function () {
+													}
+												}
+											});
+											revertFunc();
+										} else if(response=='docnotAvailable') {
+											$.confirm({
+												title: 'Medico non disponibile.',
+												content: '',
+												buttons: {
+													Ok: function () {
+													}
+												}
+											});
+											revertFunc();
+										}
+									}
+								});
+							},
+							Annulla: function() {
+								revertFunc();
+							}
+						}
+					});
+				} else {
+					revertFunc();
+				}
 			},
 			dayClick: function(date, jsEvent, view) {
 		    	if (moment().format('YYYY-MM-DD') === date.format('YYYY-MM-DD') || date.isAfter(moment())) {
@@ -496,7 +550,7 @@ foreach($patientsData as $dat){
 			$('#pat_id').val('');
 			$('#appointment-visit-motive').val('');
 			$('#patient-id').val('');
-			$('#custom-app-title').html('appuntamento');
+			$('#custom-app-title').html('Appuntamento');
 			$('#savebutton').html('Inserisci');
 			$('#delete-appointment').hide();
 			$('#delete-recurrence-appointment').hide();
@@ -675,7 +729,7 @@ foreach($patientsData as $dat){
 	           	$('#doctors').append($('<option>',
 	           	{
 	           		value: value1.user_id,
-	           		text : value1.name,
+	           		text : value1.surname+' '+value1.name,
 	           	}));
            });
            	// end here doctor detail//
