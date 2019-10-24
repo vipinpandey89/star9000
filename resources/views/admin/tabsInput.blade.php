@@ -12,15 +12,19 @@
 
             <li><a href="{{url('admin/dashboard')}}">Home</a></li>
             <li><a href="{{url('admin/schede-eye-visit')}}">{{ __('patient.Eye Visit Tabs') }}</a></li>
+            @if($tabsData->id != 3)
             <li class="active">{{ __('patient.Tab Inputs') }}</li>
+            @else
+            <li class="active"><a href="{{ !empty($refrizione)?url('admin/ingressi-scheda/3'):'javascript:void(0);'}}">Refrazione Elenco di input {{ !empty($refrizione)?' - '.$refrizione:'' }}</a></li>
+            @endif
         </ol>
 
     </div>
-    <center><h2>{{ $tabsData->title }}</h2></center>
+    <center><h2>{{ $tabsData->title.(!empty($refrizione)?' - '.$refrizione:'') }}</h2></center>
     <div class="graph-visual inputles-main">
-
+        @if($tabsData->id != 3)
         <a href="{{url('admin/aggiungi-ingressi/'.$tabsData->id)}}" class="btn blue">{{ __('patient.Add Input') }} </a>
-
+        @endif
         <div class="graph">
 
             <div class="inputles">
@@ -36,7 +40,7 @@
                 </div>
 
                 @endif
-
+                @if(($tabsData->id != 3) || !empty($refrizione))
                 <table class="table table-bordered">
 
                     <thead>
@@ -77,12 +81,37 @@
 
                             <?php $i++;?>
 
-                                @endforeach
+                            @endforeach
 
                     </tbody>
 
                 </table>
-
+                @else
+                @php $inputArray = ['LONTANO','VICINO','LAC','MIOSI','CICLO','FORO ST','INTERMEDIO']; @endphp
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>{{ __('patient.Title') }}</th>
+                            <th>Ingressi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $rCounter = 1; @endphp
+                        @foreach($inputArray as $input)
+                        <tr>
+                            <td>{{ $rCounter }}</td>
+                            <td>{{ $input }}</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" href="{{url('admin/ingressi-scheda/3/'.$input)}}"><i class="fa fa-list" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        @php  $rCounter++; @endphp
+                        @endforeach
+                        
+                    </tbody>
+                </table>
+                @endif
             </div>
 
         </div>

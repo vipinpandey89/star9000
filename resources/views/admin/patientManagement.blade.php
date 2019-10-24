@@ -306,6 +306,7 @@
                 $('#myModal').modal({show:true});
             });
         });
+
         $('#examination_id').change(function(){
             var id= $(this).val();
             var selecte_date= $('#appointment-date').val();
@@ -318,7 +319,7 @@
             $.ajax({
                 method: 'GET',
                 url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
-                data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime},
+                data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime,avdoc:1},
                 cache: false,
                 success: function(html){                
                     var decodeData=  JSON.parse(html);
@@ -360,6 +361,57 @@
         $('.timecall').timepicker({
             showMeridian: false  ,
             minuteStep: 10
+        });
+        $('#timepicker1,#timepicker2').timepicker().on('changeTime.timepicker', function(e) {
+            var id= $('#examination_id').val();
+            if((id !== '') && (selecte_date !=='')){
+                
+            var selecte_date= $('#selecte_date').val();
+
+            var starttime= $('#timepicker1').val();
+            var endTime= $('#timepicker2').val();
+
+            var SelectDateTime = selecte_date+' '+starttime;
+            var roomSelected = $('#rooms').val();
+            $.ajax({
+                method: 'GET',
+                url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
+                data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime,avdoc:1},
+                cache: false,
+                success: function(html){                
+                    var decodeData=  JSON.parse(html);
+                    $('#rooms').empty();
+                    //$('#rooms').append('<option value="">Select Rooms</option>');
+                    // here is for rooms section //       
+                    $.each(decodeData['rooms'], function( key, value ) {
+
+                        $('#rooms').append($('<option>',
+                        {
+                            value: value.id,
+                            text : value.room_name,
+                        }));
+                    });
+
+                   // end section here //
+
+                   //start doctor detail here//
+
+                   $('#doctors').empty();
+                   $.each(decodeData['DoctorInformation'], function( key1, value1 ) {
+
+                        $('#doctors').append($('<option>',
+                        {
+                            value: value1.user_id,
+                            text : value1.surname+' '+value1.name,
+                        }));
+                   });
+                    // end here doctor detail//
+                    if(roomSelected != '') {
+                        $('#rooms').val(roomSelected);
+                    }
+                   }
+            });
+            }
         });
         var now = new Date();
         $('#timepicker1').timepicker('setTime', "09:00 AM");

@@ -29,7 +29,7 @@ $(document).ready(function(){
 	});
 	var counter = $('.optionsec').length;
 	$('#add-data').click(function(){
-		if($('.optionsec').length < 10) {
+		if($('.optionsec').length < 100) {
 			var relativeHtml = '<div class="optionsec row"><div class="col-lg-2" ></div><div class="col-lg-8 " ><input class="form-control1" type="text" name="input_val[]"></div> <div class="col-lg-2" ><i class="remove-data fa fa-times" aria-hidden="true"></i></div></div>';
 			$('#data-section').append(relativeHtml);
 			counter++;

@@ -167,6 +167,7 @@
 					
 					<form  id='myForm' method="post" enctype="multipart/form-data"> 			<input type="hidden" name="appointment_id" id="app_id" value="">
 						<input type="hidden" name="pat_id" id="pat_id" value="">
+						<input type="hidden" id="available_doc" value="1">
 
 						<div class="form-group ">
 							<label for="title">{{ __('menu.specialty') }}<span style="color: red">*</span></label> 
@@ -440,9 +441,11 @@ foreach($patientsData as $dat){
 			    return moment().diff(select.start) <= 0; 
 			},
 		    eventClick: function(event) {
+		    		$('#available_doc').val('2');
 			    	$('#myForm')[0].reset();
 			    	$("#myForm").valid();
 			    	$('#error').html('');
+			    	$('#app_id').val(event.id);
 			    	var dateSec = event.start.format('Y')+'-'+event.start.format('M')+'-'+event.start.format('D');
 					$('#selecte_date').val(dateSec);
 			    	$('#timepicker1').val(event.starttime);
@@ -452,9 +455,10 @@ foreach($patientsData as $dat){
 						$('#rooms').val(event.room_id);
 						$('#doctors').val(event.doctor_id);
 					}, 3000);
+					$('#available_doc').val('1');
 					$('#patient-info').val(event.patient_email);
 					$('#appointment-visit-motive').val(event.visit_motive);
-			    	$('#app_id').val(event.id);
+			    	
 			    	$('#pat_id').val(event.patient_id);
 			    	$('#patient-id').val(event.patient_id);
 			    	$('#custom-app-title').html('Annulla appuntamento');
@@ -632,6 +636,7 @@ foreach($patientsData as $dat){
 		});
 		$('#timepicker1,#timepicker2').timepicker().on('changeTime.timepicker', function(e) {
 			var id= $('#examination_id').val();
+			var Avdoc= $('#available_doc').val();
 			if(id !== ''){
 				var startDateRecurrence = new Date($('#selecte_date').val());
 			$('#recurrence_end').datepicker({
@@ -647,12 +652,12 @@ foreach($patientsData as $dat){
 			$.ajax({
 				method: 'GET',
 				url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
-				data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime},
+				data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime,avdoc:Avdoc},
 				cache: false,
 				success: function(html){		   		
 					var decodeData=  JSON.parse(html);
 			   		$('#rooms').empty();
-			   		$('#rooms').append('<option value="">Select Rooms</option>');
+			   		//$('#rooms').append('<option value="">Select Rooms</option>');
 		            // here is for rooms section //       
 		            $.each(decodeData['rooms'], function( key, value ) {
 
@@ -673,7 +678,7 @@ foreach($patientsData as $dat){
 			           	$('#doctors').append($('<option>',
 			           	{
 			           		value: value1.user_id,
-			           		text : value1.name,
+			           		text : value1.surname+' '+value1.name,
 			           	}));
 		           });
 		           	// end here doctor detail//
@@ -687,6 +692,7 @@ foreach($patientsData as $dat){
 		$('#examination_id').change(function(){
 
 			var id= $(this).val();
+			
 			if(id !== ''){
 			var selecte_date= $('#selecte_date').val();
 
@@ -694,11 +700,11 @@ foreach($patientsData as $dat){
 			var endTime= $('#timepicker2').val();
 
 			var SelectDateTime = selecte_date+' '+starttime;
-
+			var AvdocSec= $('#available_doc').val();
 			$.ajax({
 				method: 'GET',
 				url: "{{ url('/admin/ajaxresponse') }}"+'/'+id,
-				data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime},
+				data:{selectdate:SelectDateTime,starttime:starttime,endtime:endTime,avdoc:AvdocSec},
 				cache: false,
 				success: function(html){		   		
 					var decodeData=  JSON.parse(html);

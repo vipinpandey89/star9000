@@ -1,5 +1,5 @@
 @if(isset($eyeVisitInputTabs[3]))
-@foreach($eyeVisitInputTabs[3] as $tabInput)
+@foreach($eyeVisitInputTabs[3][$rData] as $tabInput)
 	@php
 	$nameOfInput = "eye_visit[".$tabInput['tab_id']."][".$regKey."][".$eye."][".$rData."][".$tabInput['input_name']."]";
 	$inputValR = isset($patientEyeData[$tabInput['tab_id']][$regKey][$eye][$rData][$tabInput['input_name']])?$patientEyeData[$tabInput['tab_id']][$regKey][$eye][$rData][$tabInput['input_name']]:'';

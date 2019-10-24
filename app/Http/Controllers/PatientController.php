@@ -133,11 +133,15 @@ class PatientController extends Controller
         $patientData = Patient::where(['id'=>$patid])->select('patients.surname','patients.name')->first();
         $eyeVisitInputTabs = [];
         array_map(function($item) use (&$eyeVisitInputTabs) {
-            $eyeVisitInputTabs[$item['tab_id']][] = $item;
+            if($item['tab_id'] == 3) {
+                $eyeVisitInputTabs[$item['tab_id']][$item['refrazione_section']][] = $item;
+            } else {
+                $eyeVisitInputTabs[$item['tab_id']][] = $item;
+            }
         }, $inputTabs->toArray());
         $appointmentData  = DB::table('appointement_booking')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')                     
-                            ->select('appointement_booking.*', 'users.name','users.phone','users.email')                     
+                            ->select('appointement_booking.*', 'users.surname','users.name','users.phone','users.email')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
         $eyeDataPat=EyeVisitData::where('appointment_id', $appid)->select('eye_visit_data.eye_visit')->first();
         if($request->method() == 'POST') {
@@ -367,10 +371,14 @@ class PatientController extends Controller
         }
     }
 
-    public function tabsInput(Request $request, $id) {
+    public function tabsInput(Request $request, $id, $refrizione=null) {
+        $where = ['tab_id'=>$id,'status'=>1];
+        if(!empty($refrizione)) {
+            $where['refrazione_section'] = $refrizione;
+        }
         $tabsData = EyeVisitTabs::where(['id'=>$id])->first();
-        $inputTabs = InputTabs::where(['tab_id'=>$id,'status'=>1])->get();
-        return view('admin.tabsInput', ['tabsData'=>$tabsData,'inputTabs'=>$inputTabs]);
+        $inputTabs = InputTabs::where($where)->get();
+        return view('admin.tabsInput', ['tabsData'=>$tabsData,'inputTabs'=>$inputTabs,'refrizione' => $refrizione]);
     }
 
     public function addInput(Request $request,$tabid) {

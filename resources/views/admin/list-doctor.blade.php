@@ -55,6 +55,7 @@
 				 		  <th>Cap</th>
 
 				 		  <th>Nata/o a</th>
+				 		  <th>Disponibilità</th>
 
 				 		   <th>{{ __('menu.Action') }}</th>
 
@@ -97,7 +98,7 @@
 
 
 				 		   <td>{{date('d-m-Y',strtotime($iteam->dob))}}</td> 		 		
-
+				 		    <td>{{ ($iteam->status == 1)?'A disposizione':'Non disponibile' }}</td> 
 				 		
 
 				 		  <td>				 		  		

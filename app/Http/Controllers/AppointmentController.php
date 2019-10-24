@@ -126,13 +126,14 @@ class AppointmentController extends Controller
         $endTime = isset($_GET['endtime'])?$_GET['endtime']:'';
         $getDay = date('D',strtotime($selectedDate));
 
-
         if($getDay =='Mon') { $Wekday_num = '2';  }elseif($getDay =='Tue')  {$Wekday_num = '3'; } elseif($getDay =='Wed')  { $Wekday_num = '4'; } elseif($getDay =='Thu')  { $Wekday_num = '5'; 
         } elseif($getDay =='Fri') { $Wekday_num = '6'; } elseif($getDay =='Sat')  { $Wekday_num = '7';} elseif($getDay =='Sun')   { $Wekday_num = '8'; }
 
-         //(end_time >= ".$startTime." and start_time <= ".$endTime." )
+        if($_GET['avdoc'] == 2){
         $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");        
-
+        }else{
+            $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE u.status = 1 and d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");
+        }
 
         $getData['rooms']= Room::where(['examination_type'=>$id])->get();
 

@@ -566,7 +566,7 @@ class AdminController extends Controller
                    $user->postal_code  =       Input::get('postal_code');
                    $user->telephone    =       Input::get('telephone');
                    $user->performance_type    =       Input::get('performance_type');
-
+                   $user->status    =       Input::get('status');
                    $ExaminationId= Input::get('examination_type');
 
                   $weekDays= !empty($request->input('weekday_num'))?$request->input('weekday_num'):'';  

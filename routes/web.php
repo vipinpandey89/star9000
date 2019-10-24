@@ -109,6 +109,7 @@ Route::get('/saveintervento','PatientController@saveintervento');
 //eye visit tabs
 Route::get('/schede-eye-visit','PatientController@eyevisittabs');
 Route::get('/ingressi-scheda/{id}','PatientController@tabsInput');
+Route::get('/ingressi-scheda/{id}/{refrizone}','PatientController@tabsInput');
 
 Route::match(['get','post'],'aggiungi-scheda','PatientController@addtab');
 Route::match(['get','post'],'modifica-scheda/{id}','PatientController@edittab');

@@ -7,6 +7,7 @@
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
+			<li><a href="{{url('admin/elenco-medico')}}">Medico</a></li>
 			<li class="active">{{ __('menu.EditDoctor') }}</li>
 		</ol>
 	</div>	
@@ -17,6 +18,15 @@
 					<div class="grid-1">
 						<div class="form-body">
 							<form class="form-horizontal" method="post" >
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Disponibilità medico</label>
+									<div class="col-sm-8">
+										<select name="status" class="form-control1">
+											<option value="1" {{ ($userProfile->status ==1)?'selected':''}} >A disposizione</option>
+											<option value="2" {{ ($userProfile->status ==2)?'selected':''}}>Non disponibile</option>	
+										</select>
+									</div>									
+								</div>
 								<div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
 
 									<label class="col-sm-2 control-label">{{ __('menu.Surname') }}</label>

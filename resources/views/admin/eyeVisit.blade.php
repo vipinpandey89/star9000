@@ -32,7 +32,7 @@ $eyeArray =['right','left','oo'];
 			</div>
 		@endif
 		<div>
-			{{ __('patient.Doctor Name') }} : {{ $appointmentData->name }} | {{ __('patient.Doctor Email') }} : {{ $appointmentData->email }} | {{ __('patient.Date') }} : {{ date('Y-m-d', strtotime($appointmentData->start_date)) }} | {{ __('patient.Start Time') }} : {{ $appointmentData->starteTime }} | {{ __('patient.End Time') }} : {{ $appointmentData->endtime }}
+			{{ __('patient.Doctor Name') }} : {{ $appointmentData->surname.' '.$appointmentData->name }} | {{ __('patient.Doctor Email') }} : {{ $appointmentData->email }} | {{ __('patient.Date') }} : {{ date('Y-m-d', strtotime($appointmentData->start_date)) }} | {{ __('patient.Start Time') }} : {{ $appointmentData->starteTime }} | {{ __('patient.End Time') }} : {{ $appointmentData->endtime }}
 		</div>
 		<br>
 		<div class="row"  style="margin-left: 8px;">
