@@ -56,13 +56,15 @@ $eyeArray =['right','left','oo'];
 									<tr>
 										<th class="tl tl2"></th>
 								        <th colspan="4" class="qbo">
-								          Occhio destro
+								           <input type="checkbox" value="1" name="eye_visit[cus_eye_type][]" <?php echo ((isset($patientEyeData['cus_eye_type']))?(in_array(1, $patientEyeData['cus_eye_type'])?'checked':''):''); ?>> Occhio destro
 								        </th>
 								        <th colspan="4" class="qbo">
-								          Occhio sinistro
+								        	<input type="checkbox" value="2" name="eye_visit[cus_eye_type][]" <?php echo ((isset($patientEyeData['cus_eye_type']))?(in_array(2, $patientEyeData['cus_eye_type'])?'checked':''):''); ?>>
+								            Occhio sinistro
 								        </th>
 								        <th colspan="4" class="qbo">
-								          OO
+								        	<input type="checkbox" value="3" name="eye_visit[cus_eye_type][]" <?php echo ((isset($patientEyeData['cus_eye_type']))?(in_array(3, $patientEyeData['cus_eye_type'])?'checked':''):''); ?>>
+								          	OO
 								        </th>
 								    </tr>
 								    <tr>
