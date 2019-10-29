@@ -47,14 +47,20 @@
 									<div class="col-sm-8">
 										<select id="input-type" name="type" class="form-control1">
 											<option value="">{{ __('patient.selectcttype') }}</option>
-											<option value="text">Text Box</option>
-											<option value="number">Number</option>
-											<option value="textarea">TextArea</option>
-											<option value="select">Select Box</option>
-											<option value="radio">Radio Button</option>
-											<option value="checkbox">Check Box</option>
-											<option value="date">Date</option>
-											<option value="print">Print Button</option>
+											<option value="text">Casella di testo</option>
+											<option value="number">Numero</option>
+											<option value="textarea">Testo</option>
+											<option value="select">Selezione casella 
+</option>
+											<option value="radio">Pulsante di opzione 
+</option>
+											<option value="checkbox">Casella di spunta 
+</option>
+											<option value="date">Data</option>
+											<option value="print">Pulsante stampa
+
+
+</option>
 										</select>
 									</div>
 

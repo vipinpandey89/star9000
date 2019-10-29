@@ -325,16 +325,23 @@
                     var decodeData=  JSON.parse(html);
                 $('#rooms').empty();
                 //$('#rooms').append('<option value="">Select Rooms</option>');
-            // here is for rooms section //       
+            // here is for rooms section // 
+            var firstDuration = 0;
+            var ffCounter=1;       
             $.each(decodeData['rooms'], function( key, value ) {
 
                 $('#rooms').append($('<option>',
                 {
                     value: value.id,
                     text : value.room_name,
+                    roomtime: value.duration
                 }));
+                if(ffCounter == 1) {
+                    firstDuration = value.duration;
+                }
+                ffCounter++;
             });
-
+            setSecondTimePicker(SelectDateTime,firstDuration);
            // end section here //
 
            //start doctor detail here//
@@ -366,7 +373,7 @@
             var id= $('#examination_id').val();
             if((id !== '') && (selecte_date !=='')){
                 
-            var selecte_date= $('#selecte_date').val();
+            var selecte_date= $('#appointment-date').val();
 
             var starttime= $('#timepicker1').val();
             var endTime= $('#timepicker2').val();
@@ -382,16 +389,23 @@
                     var decodeData=  JSON.parse(html);
                     $('#rooms').empty();
                     //$('#rooms').append('<option value="">Select Rooms</option>');
-                    // here is for rooms section //       
+                    // here is for rooms section // 
+                    var firstDurationSec = 0;
+                    var ffCounterSec=1;         
                     $.each(decodeData['rooms'], function( key, value ) {
 
                         $('#rooms').append($('<option>',
                         {
                             value: value.id,
                             text : value.room_name,
+                            roomtime: value.duration
                         }));
+                        if(ffCounterSec == 1) {
+                            firstDurationSec = value.duration;
+                        }
+                        ffCounterSec++;
                     });
-
+                    setSecondTimePicker(SelectDateTime,firstDurationSec);
                    // end section here //
 
                    //start doctor detail here//
@@ -475,6 +489,13 @@
                 $('#new-visit-error').html("<div class='alert alert-danger'><strong>Error!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
             }
         });
+        $('#rooms').change(function(){
+            var optionSelRoom = $('option:selected', this).attr('roomtime');
+            var selecte_date_room= $('#appointment-date').val();
+            var starttime_room= $('#timepicker1').val();
+            var SelectDateTimeRoom = selecte_date_room+' '+starttime_room;
+            setSecondTimePicker(SelectDateTimeRoom,optionSelRoom);
+        });
     });
     function checkStartEndTime(startTime, endTime)
     {
@@ -502,6 +523,18 @@
         } else {
             return true;
         }
+    }
+    function setSecondTimePicker(SelectDateTime, firstDuration) {
+        var timeObject = new Date(SelectDateTime); 
+        timeObject.setSeconds(timeObject.getSeconds() + firstDuration);
+        var hoursEndSeel = addZero(timeObject.getHours())+':'+addZero(timeObject.getMinutes());
+        $('#timepicker2').val(hoursEndSeel);
+    }
+    function addZero(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
     }
 </script>
 @endsection

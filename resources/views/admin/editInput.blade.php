@@ -50,14 +50,14 @@ $inputValues = json_decode($inputData->input_values);
 									<div class="col-sm-8">
 										<select id="input-type" name="type" class="form-control1">
 											<option value="">{{ __('patient.selectcttype') }}</option>
-											<option value="text" {{ ($inputData->type == 'text')?'selected':'' }}>Text Box</option>
-											<option value="number" {{ ($inputData->type == 'number')?'selected':'' }}>Number</option>
-											<option value="textarea" {{ ($inputData->type == 'textarea')?'selected':'' }}>TextArea</option>
-											<option value="select" {{ ($inputData->type == 'select')?'selected':'' }}>Select Box</option>
-											<option value="radio" {{ ($inputData->type == 'radio')?'selected':'' }}>Radio Button</option>
-											<option value="checkbox" {{ ($inputData->type == 'checkbox')?'selected':'' }}>Check Box</option>
-											<option value="date" {{ ($inputData->type == 'date')?'selected':'' }}>Date</option>
-											<option value="print" {{ ($inputData->type == 'print')?'selected':'' }}>Print Button</option>
+											<option value="text" {{ ($inputData->type == 'text')?'selected':'' }}>Casella di testo</option>
+											<option value="number" {{ ($inputData->type == 'number')?'selected':'' }}>Numero</option>
+											<option value="textarea" {{ ($inputData->type == 'textarea')?'selected':'' }}>Testo</option>
+											<option value="select" {{ ($inputData->type == 'select')?'selected':'' }}>Selezione casella</option>
+											<option value="radio" {{ ($inputData->type == 'radio')?'selected':'' }}>Pulsante di opzione</option>
+											<option value="checkbox" {{ ($inputData->type == 'checkbox')?'selected':'' }}>Casella di spunta</option>
+											<option value="date" {{ ($inputData->type == 'date')?'selected':'' }}>Data</option>
+											<option value="print" {{ ($inputData->type == 'print')?'selected':'' }}>Pulsante stampa</option>
 										</select>
 									</div>
 

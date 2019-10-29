@@ -3,7 +3,9 @@
 @section('title','dasbhoard')
 
 @section('content')
-
+@php
+$iArray = ['text'=>'Casella di testo','number'=>'Numero','textarea'=>'Testo','select'=>'Selezione casella','radio'=>'Pulsante di opzione','checkbox'=>'Casella di spunta','date'=>'Data','print'=>'Pulsante stampa'];
+@endphp
 <div class="outter-wp">
 
     <div class="sub-heard-part">
@@ -67,7 +69,7 @@
                                 <td>{{$i}}</td>
                                 <td>{{ !empty($input->title)?$input->title:'NA' }}</td>
                                 <td>
-                                    {{ !empty($input->type)?$input->type:'NA' }}
+                                    {{ !empty($input->type)?$iArray[$input->type]:'NA' }}
                                 </td>
                                 <td>
 
