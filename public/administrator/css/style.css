@@ -8274,3 +8274,8 @@ footer  p a:hover ,.footer p a:hover{
     font-size: 16px;
     max-width: 350px;
   }
+
+  .ui-available a {
+    background-color: #5FBA7D !important;
+    color: #ffffff !important;
+}

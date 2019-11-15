@@ -21,6 +21,20 @@
 	@endif
 	<div class="row">
 		<form method="get" action="{{url('admin/calendario')}}">
+			<div class="col-lg-3" >
+				<div class="form-group">
+					<div class="col-sm-10">
+						<div id="date-selecter-picker" ></div>
+					</div>									
+				</div>
+			</div>
+			<div class="col-lg-6" >
+				<div class="form-group">
+					<div class="col-sm-10">
+						<input class="form-control1" type="text" id="up-search-bttn" placeholder="Ricerca">
+					</div>									
+				</div>
+			</div>
 			<div class="col-lg-3">
 				<div class="form-group">
 					<div class="col-sm-10">
@@ -88,12 +102,15 @@
 			<div class="col-lg-3">
 				<div class="form-group">
 					<div class="col-sm-10">
-						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button> 
+						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button>
+						<button type="button" id="all-availability" class="btn btn-default"> {{ __('menu.All Availability') }}</button> 
 					</div>									
 				</div>
 			</div>
 		</form>
 	</div>
+	<div><center><span id="doc-av-mssg" style="color: orange;"></span></center></div>
+	<br>
 	<div class="graph-visual tables-main">	
 
 		<div id='calendar'></div>
@@ -1000,7 +1017,8 @@ foreach($patientsData as $dat){
 						url:"{{url('/admin/getdoctoravailability')}}",
 						success: function(availableDate){
 							$('#calendar').fullCalendar('refetchEvents');
-							$('#calendar').fullCalendar('gotoDate',availableDate);
+							$("#calendar").fullCalendar('gotoDate', availableDate);
+							$('#calendar').fullCalendar('changeView', 'agendaDay');
 						}
 					});
 				}
@@ -1016,9 +1034,88 @@ foreach($patientsData as $dat){
 				});
 			}
 		});
+		$('#all-availability').click(function(){
+			var filterByDoctor = $('#filter-doctor').val();
+
+			if(filterByDoctor != '') {
+				if($('#filter-doctor').val().length > 1) {
+					$.confirm({
+		    			title: 'Medico',
+		    			content: 'Seleziona un medico singolo.',
+		    			buttons: {
+		    				Ok: function () {
+								
+							}
+						}
+					});
+				} else {
+					var today = new Date();
+					var dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+					var timeToday = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+					var dateTimeToday = dateToday+' '+timeToday;
+					$.ajax({
+						type:"GET",
+						data:{filterByDoctor:filterByDoctor,dateTimeToday:dateTimeToday},
+						dataType:'json',
+						url:"{{url('/admin/getdoctoravailabilityDates')}}",
+						success: function(result){
+							var availableDates = result.dates;
+							var docAvailabilty = result.ava;
+							$('#date-selecter-picker').datepicker('destroy').datepicker({
+								dateFormat: 'yy-mm-dd',
+								beforeShowDay: function( date ) {
+									var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+									var n = date.getDay()
+									if((n == 0) || n == 6) {
+										return [false];
+									} else{
+							            for (i = 0; i < availableDates.length; i++) {
+							            	var dateSelectedCus = y + '-' + (m+1) + '-' + d;
+							                if($.inArray(dateSelectedCus,availableDates) != -1) {
+							                    return [true, 'ui-available', docAvailabilty[dateSelectedCus]];
+							                }
+							            }
+							            return [true];
+						        	}
+						        },
+								onSelect: function(dateText, inst) {
+							        var datePik = $(this).val();
+							        var day  = inst.selectedDay,
+					                    mon  = inst.selectedMonth,
+					                    year = inst.selectedYear;
+
+					                var inst = $(inst.dpDiv).find('[data-year="'+year+'"][data-month="'+mon+'"]').filter(function() {
+					                    return $(this).find('a').text().trim() == day;
+					                });
+					                if ( inst.hasClass('ui-available')){
+					                    $('#doc-av-mssg').html(inst.attr('title'));
+					                } else {
+					                    $('#doc-av-mssg').html('');
+					                }
+					               
+							        $("#calendar").fullCalendar( 'gotoDate', datePik );
+							         $('#calendar').fullCalendar('changeView', 'agendaDay');
+							    }
+							});
+						}
+					});
+				}
+			} else {
+				$.confirm({
+					title: 'Medico',
+					content: 'Per favore, seleziona un medico.',
+					buttons: {
+						Ok: function () {
+							
+						}
+					}
+				});
+			}
+		});
 		$('#clear-filter-button').click(function(){
 			location.reload();
 		});
+		
 		$('#filter-doctor').multiselect({
 			nonSelectedText: 'Seleziona medico',
 			allSelectedText: 'Tutti selezionati',
@@ -1026,7 +1123,7 @@ foreach($patientsData as $dat){
 		    // Get selected options.
 		    var selectedOptions = $('#filter-doctor option:selected');
 
-		    if (selectedOptions.length >= 3) {
+		    if (selectedOptions.length >= 2) {
 		        // Disable all other checkboxes.
 		        var nonSelectedOptions = $('#filter-doctor option').filter(function() {
 		            return !$(this).is(':selected');
@@ -1056,6 +1153,41 @@ foreach($patientsData as $dat){
 			var SelectDateTimeRoom = selecte_date_room+' '+starttime_room;
 			setSecondTimePicker(SelectDateTimeRoom,optionSelRoom);
 		});
+		$('#date-selecter-picker').datepicker({
+			dateFormat: 'yy-mm-dd',
+			beforeShowDay: $.datepicker.noWeekends,
+			onSelect: function(dateText, inst) {
+		        var datePik = $(this).val();
+		        $("#calendar").fullCalendar( 'gotoDate', datePik );
+		        $('#calendar').fullCalendar('changeView', 'agendaDay');
+		    }
+		});
+		$('#up-search-bttn').easyAutocomplete({
+			url: function(phrase) {
+			    return "{{ url('/admin/searchAppointment') }}";
+			},
+			getValue: function(element) {
+			    return element.name;
+			},
+			ajaxSettings: {
+			    dataType: "json",
+			    method: "POST",
+			    data: {
+			      dataType: "json"
+			    }
+			},
+			preparePostData: function(data) {
+			    data.phrase = $("#up-search-bttn").val();
+			    return data;
+			},
+			requestDelay: 400,
+			list: {
+				onSelectItemEvent: function() {
+					var selAppDate = $('#up-search-bttn').getSelectedItemData().appdate;
+					$("#calendar").fullCalendar( 'gotoDate', selAppDate );
+				}
+			}
+		})
 	});
 	function checkStartEndTime(startTime, endTime)
 	{

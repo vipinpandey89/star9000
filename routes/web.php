@@ -83,6 +83,9 @@ Route::post('cancel-appointment','AppointmentController@CancelAppointment');
 Route::post('modify-appointment','AppointmentController@ModifyAppointment');
 Route::post('cancel-recurrence-appointment','AppointmentController@CancelRecurrenceAppointment');
 Route::get('getdoctoravailability','AppointmentController@getdoctoravailability');
+Route::get('getdoctoravailabilityDates','AppointmentController@getdoctoravailabilityDates');
+Route::post('searchAppointment','AppointmentController@searchAppointment');
+Route::get('compareDoctor','AppointmentController@compareDoctor');
 
 Route::get('doctor-leaves','AdminController@DoctorLeaves');
 

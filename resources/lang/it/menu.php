@@ -84,5 +84,6 @@ return [
     'Next Availability' => 'Prossima Disponibilità',
     'Duration' => 'Durata',
     'Eye Visit Tabs' => 'Scheda visita oculistica',
-    'Reminder' => 'Promemoria'
+    'Reminder' => 'Promemoria',
+    'All Availability' => 'Tutta la disponibilità'
 ];

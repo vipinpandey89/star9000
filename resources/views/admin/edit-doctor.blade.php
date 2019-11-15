@@ -18,15 +18,6 @@
 					<div class="grid-1">
 						<div class="form-body">
 							<form class="form-horizontal" method="post" >
-								<div class="form-group">
-									<label class="col-sm-2 control-label">Disponibilità medico</label>
-									<div class="col-sm-8">
-										<select name="status" class="form-control1">
-											<option value="1" {{ ($userProfile->status ==1)?'selected':''}} >A disposizione</option>
-											<option value="2" {{ ($userProfile->status ==2)?'selected':''}}>Non disponibile</option>	
-										</select>
-									</div>									
-								</div>
 								<div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
 
 									<label class="col-sm-2 control-label">{{ __('menu.Surname') }}</label>
@@ -124,7 +115,7 @@
 							<div class="form-group {{ $errors->has('cap') ? ' has-error' : '' }}">
 									<label for="room-name" class="col-sm-2 control-label">Cap</label>
 									<div class="col-sm-8">
-										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->cap:old('cap')}}"   maxlength="6" name="cap" id="cap" placeholder="Cap">
+										<input type="text" class="form-control1" value="{{!empty($userProfile)?$userProfile->cap:''}}"   maxlength="6" name="cap" id="cap" placeholder="Cap">
 										 @if ($errors->has('cap'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('cap') }}</strong>
@@ -190,26 +181,38 @@
 
 								</div>
 							</div>
-					<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
-									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
+							<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
+											<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
+											<div class="col-sm-8">
+												<select name="examination_type" class="form-control1">
+
+													<option value=" ">{{ __('menu.Select specialty') }}</option>
+														@foreach($examination as $item)
+															<option value="{{$item->id}}" <?php echo ($examId==$item->id)?'selected':'';?>>{{$item->title}}</option>
+														@endforeach											
+
+												</select>
+												 @if ($errors->has('examination_type'))
+				                                    <span class="help-block">
+				                                        <strong>{{ $errors->first('examination_type') }}</strong>
+				                                    </span>
+		                               			 @endif
+
+											</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Disponibilità da</label>
 									<div class="col-sm-8">
-										<select name="examination_type" class="form-control1">
+										<input type="text" id="availability-from" class="form-control1" name="availability_from" placeholder="Disponibilità da" value="<?php echo !empty($userProfile->availability_from)?$userProfile->availability_from:'';?>">
+									</div>									
+								</div>
 
-											<option value=" ">{{ __('menu.Select specialty') }}</option>
-												@foreach($examination as $item)
-													<option value="{{$item->id}}" <?php echo ($examId==$item->id)?'selected':'';?>>{{$item->title}}</option>
-												@endforeach											
-
-										</select>
-										 @if ($errors->has('examination_type'))
-		                                    <span class="help-block">
-		                                        <strong>{{ $errors->first('examination_type') }}</strong>
-		                                    </span>
-                               			 @endif
-
-									</div>
-						</div>
-
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Disponibilità a</label>
+									<div class="col-sm-8">
+										<input type="text" id="availability-to" class="form-control1" name="availability_to" placeholder="Disponibilità a" value="<?php echo !empty($userProfile->availability_to)?$userProfile->availability_to:'';?>">
+									</div>									
+								</div>
 							    
 								{!! csrf_field() !!}								
 								
@@ -261,9 +264,29 @@ defaultDate: false,
 </script>
 
 <script type="text/javascript">
-	$('.timecall').timepicker({
-		showMeridian: false,
-		minuteStep:10
+	$(document).ready(function(){
+		$('#availability-from').datepicker({
+			dateFormat: "yy-mm-dd",
+			minDate: 0,
+			beforeShowDay: $.datepicker.noWeekends,
+	        onSelect: function(date){            
+	            var date1 = $('#availability-from').datepicker('getDate');           
+	            var date = new Date( Date.parse( date1 ) ); 
+	            date.setDate( date.getDate() + 1 );        
+	            var newDate = date.toDateString(); 
+	            newDate = new Date( Date.parse( newDate ) );                      
+	            $('#availability-to').datepicker("option","minDate",newDate);            
+	        }
+		});
+		$('#availability-to').datepicker({
+			dateFormat: "yy-mm-dd",
+			beforeShowDay: $.datepicker.noWeekends,
+			minDate: 0
+		});
+		$('.timecall').timepicker({
+			showMeridian: false,
+			minuteStep:10
+		});
 	});
 </script>
 @endsection							

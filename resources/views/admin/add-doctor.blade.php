@@ -35,15 +35,6 @@
 						<div class="form-body">
 
 							<form class="form-horizontal" method="post" >
-								<div class="form-group">
-									<label class="col-sm-2 control-label">Disponibilità medico</label>
-									<div class="col-sm-8">
-										<select name="status" class="form-control1">
-											<option value="1">A disposizione</option>
-											<option value="2">Non disponibile</option>	
-										</select>
-									</div>									
-								</div>
 								<div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
 
 									<label class="col-sm-2 control-label">{{ __('menu.Surname') }}</label>
@@ -320,10 +311,6 @@
 
 								</div>
 
-
-
-
-
 								<div class="form-group {{ $errors->has('examination_type') ? ' has-error' : '' }}">
 
 									<label for="examination_type" class="col-sm-2 control-label">{{ __('menu.specialty') }}</label>
@@ -362,7 +349,19 @@
 
 								</div>
 
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Disponibilità da</label>
+									<div class="col-sm-8">
+										<input type="text" id="availability-from" class="form-control1" name="availability_from" placeholder="Disponibilità da">
+									</div>									
+								</div>
 
+								<div class="form-group">
+									<label class="col-sm-2 control-label">Disponibilità a</label>
+									<div class="col-sm-8">
+										<input type="text" id="availability-to" class="form-control1" name="availability_to" placeholder="Disponibilità a">
+									</div>									
+								</div>
 
 								
 
@@ -462,14 +461,30 @@ defaultDate: false,
 
 
 <script type="text/javascript">
-
-	$('.timecall').timepicker({
-
-		showMeridian: false,
-		minuteStep:10   
-
+	$(document).ready(function(){
+		$('#availability-from').datepicker({
+			dateFormat: "yy-mm-dd",
+			minDate: 0,
+			beforeShowDay: $.datepicker.noWeekends,
+	        onSelect: function(date){            
+	            var date1 = $('#availability-from').datepicker('getDate');           
+	            var date = new Date( Date.parse( date1 ) ); 
+	            date.setDate( date.getDate() + 1 );        
+	            var newDate = date.toDateString(); 
+	            newDate = new Date( Date.parse( newDate ) );                      
+	            $('#availability-to').datepicker("option","minDate",newDate);            
+	        }
+		});
+		$('#availability-to').datepicker({
+			dateFormat: "yy-mm-dd",
+			beforeShowDay: $.datepicker.noWeekends,
+			minDate: 0
+		});
+		$('.timecall').timepicker({
+			showMeridian: false,
+			minuteStep:10   
+		});
 	});
-
 </script>
 
 @endsection							

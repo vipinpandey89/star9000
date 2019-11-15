@@ -59,7 +59,7 @@ class AppointmentController extends Controller
         $filterbydoctor = Input::get('filterbydoctor');
         $filterexamtype = Input::get('filterexamtype');
         $filterroom = Input::get('filterroom');
-        $tenDaysBack = date('Y-m-d', strtotime('-10 days', time()));
+        $tenDaysBack = date('Y-m-d', strtotime('-90 days', time()));
         $appoint = DB::table('appointement_booking')
                      ->select('*')
                      ->where('start_date', '>=', $tenDaysBack);
@@ -125,14 +125,14 @@ class AppointmentController extends Controller
         $startTime = isset($_GET['starttime'])?$_GET['starttime']:'';
         $endTime = isset($_GET['endtime'])?$_GET['endtime']:'';
         $getDay = date('D',strtotime($selectedDate));
-
+        $appointDate = date('Y-m-d', strtotime($selectedDate));
         if($getDay =='Mon') { $Wekday_num = '2';  }elseif($getDay =='Tue')  {$Wekday_num = '3'; } elseif($getDay =='Wed')  { $Wekday_num = '4'; } elseif($getDay =='Thu')  { $Wekday_num = '5'; 
         } elseif($getDay =='Fri') { $Wekday_num = '6'; } elseif($getDay =='Sat')  { $Wekday_num = '7';} elseif($getDay =='Sun')   { $Wekday_num = '8'; }
 
         if($_GET['avdoc'] == 2){
         $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");        
         }else{
-            $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE u.status = 1 and d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");
+            $getData['DoctorInformation'] = DB::select("select u.surname,u.name,u.id as user_id,d.examination_id,d.weekdays_id FROM doctors as d  join users as u  on u.id= d.userId  WHERE u.status = 1 and ('".$appointDate."' between u.availability_from and u.availability_to) and d.examination_id=$id and d.weekdays_id=$Wekday_num and ((TIME(d.end_time) >= TIME('".$startTime."')) and (TIME(d.start_time) <= TIME('".$endTime."')) ) group by d.userId");
         }
 
         $getData['rooms']= Room::where(['examination_type'=>$id])->get();
@@ -481,4 +481,75 @@ class AppointmentController extends Controller
         exit;
     }
 
+    public function searchAppointment() {
+        $user = auth()->user();
+        $phrase = Input::get('phrase');
+        $appoint = DB::table('appointement_booking')
+                     ->select('appointement_booking.*', 'users.name','users.surname','users.phone','users.email','patients.name as patname','patients.surname as patsurname','patients.email as patemail','patients.dob as patdob','patients.phone as patphone') 
+                     ->join('users', 'appointement_booking.doctro_name', '=', 'users.id') 
+                     ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')
+                     ->where('appointement_booking.visit_motive', 'like', '%' . $phrase . '%')
+                     ->orWhere('users.name', 'like', '%' . $phrase . '%')
+                     ->orWhere('users.surname', 'like', '%' . $phrase . '%')
+                     ->orWhere('users.email', 'like', '%' . $phrase . '%')
+                     ->orWhere('patients.name', 'like', '%' . $phrase . '%')
+                     ->orWhere('patients.surname', 'like', '%' . $phrase . '%')
+                     ->orWhere('patients.email', 'like', '%' . $phrase . '%')
+                     ->orWhere('patients.dob', 'like', '%' . $phrase . '%')
+                     ->orWhere('patients.phone', 'like', '%' . $phrase . '%')
+                     ->get();
+        $returnArray= [];
+        foreach ($appoint as $appData) {
+            $name = 'Data : '.date('Y-m-d',strtotime($appData->start_date)).', Medico : '.$appData->surname.' '.$appData->name.', Paziente : '.$appData->patsurname.' '.$appData->patname.'('.$appData->patdob.')';
+            $returnArray[] =[
+                'name' => $name,
+                'appdate' => date('Y-m-d',strtotime($appData->start_date))
+            ];
+        }
+        return json_encode($returnArray);
+    }
+
+    public function getdoctoravailabilityDates() {
+        $docids = Input::get('filterByDoctor');
+        $currentDateTime = date('Y-m-d H:i',strtotime(Input::get('dateTimeToday')));
+        $now = new DateTime();
+        $startDate = new DateTime();
+        
+        $doctorData = DB::table('doctors')
+                ->leftJoin('weekdays', 'doctors.weekdays_id', '=', 'weekdays.weekday_num')
+                ->select('doctors.weekdays_id', 'weekdays.day_of_week', 'doctors.start_time','doctors.end_time')
+                ->where('doctors.userId', '=', $docids[0])
+                ->get();
+        $docData= User::where(['id'=>$docids[0]])->first();
+        $endDate = new DateTime($docData->availability_to);
+        $availableDays = array();
+        $availableTimes = array();
+        array_map(function($item) use (&$availableDays,&$availableTimes) {
+            $availableDays[] = $item->day_of_week;
+            $availableTimes[$item->day_of_week] = 'Disponibilità medico da '.$item->start_time.' per '.$item->end_time;
+        }, $doctorData->toArray());
+        $docAvailableDays = [];
+        for($i = $startDate; $i <= $endDate; $i->modify('+1 day')) {
+            if(in_array($i->format("D"), $availableDays)) {
+                $docAvailableDays['dates'][] = $i->format("Y-m-d");
+                $docAvailableDays['ava'][$i->format("Y-m-d")] = $availableTimes[$i->format("D")];
+            }
+        }
+        return json_encode($docAvailableDays);
+    }
+
+    public function compareDoctor() {
+        $docIds = Input::get('filterByDoctor');
+        $date = Input::get('date');
+        $docData = DB::table('users')
+                    ->select('users.id','users.surname','users.name')
+                    ->whereIn('users.id', $docIds)->get();
+        $appointData= DB::select("select appointement_booking.*,patients.surname,patients.name,patients.dob from appointement_booking left join patients on appointement_booking.patient_id = patients.id WHERE date_format(start_date,'%Y-%m-%d') = '".$date."' AND doctro_name IN (".implode(',',$docIds).") order by starteTime asc");
+        $docAppData = [];
+        array_map(function($item) use (&$docAppData) {
+            $docAppData[$item->doctro_name][] = $item;
+        }, $appointData);
+        //print_r($docAppData);print_r($docData);die;
+        return view('admin.compareDoctor', ['docAppData' => $docAppData,'docData'=>$docData,'date'=>$date]); 
+    }
 }
