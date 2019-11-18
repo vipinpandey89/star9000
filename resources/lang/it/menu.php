@@ -85,5 +85,6 @@ return [
     'Duration' => 'Durata',
     'Eye Visit Tabs' => 'Scheda visita oculistica',
     'Reminder' => 'Promemoria',
-    'All Availability' => 'Tutta la disponibilità'
+    'All Availability' => 'Tutta la disponibilità',
+    'Compare' => 'Confrontare'
 ];

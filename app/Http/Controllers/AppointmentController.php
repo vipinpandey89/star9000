@@ -543,8 +543,8 @@ class AppointmentController extends Controller
         $date = Input::get('date');
         $docData = DB::table('users')
                     ->select('users.id','users.surname','users.name')
-                    ->whereIn('users.id', $docIds)->get();
-        $appointData= DB::select("select appointement_booking.*,patients.surname,patients.name,patients.dob from appointement_booking left join patients on appointement_booking.patient_id = patients.id WHERE date_format(start_date,'%Y-%m-%d') = '".$date."' AND doctro_name IN (".implode(',',$docIds).") order by starteTime asc");
+                    ->whereIn('users.id', explode(',',$docIds[0]))->get();
+        $appointData= DB::select("select appointement_booking.*,patients.surname,patients.name,patients.dob from appointement_booking left join patients on appointement_booking.patient_id = patients.id WHERE date_format(start_date,'%Y-%m-%d') = '".$date."' AND doctro_name IN (".$docIds[0].") order by starteTime asc");
         $docAppData = [];
         array_map(function($item) use (&$docAppData) {
             $docAppData[$item->doctro_name][] = $item;

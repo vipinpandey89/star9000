@@ -104,9 +104,11 @@
 					<div class="col-sm-10">
 						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button>
 						<button type="button" id="all-availability" class="btn btn-default"> {{ __('menu.All Availability') }}</button> 
+						<button type="button" id="compare-doctor" class="btn btn-default"> {{ __('menu.Compare') }}</button> 
 					</div>									
 				</div>
 			</div>
+			
 		</form>
 	</div>
 	<div><center><span id="doc-av-mssg" style="color: orange;"></span></center></div>
@@ -285,6 +287,13 @@
 	<!-- end here-->
 	
 </div>
+<div id="myModalCompare" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:850px;">
+        <div class="modal-content">
+            
+        </div>
+    </div>
+</div>
 <?php
 $patientEmail=[];
 foreach($patientsData as $dat){
@@ -307,9 +316,12 @@ foreach($patientsData as $dat){
 			},
 			editable: true,
 			droppable: true,
+			eventLimit:true,
+			eventLimitText:'Di Più',
 			views: {
 		        month: { 
-		            editable: false
+		            editable: false,
+		            eventLimit: 8
 		        },
 		        agendaDay: {
 		        	editable: false
@@ -1107,6 +1119,38 @@ foreach($patientsData as $dat){
 					buttons: {
 						Ok: function () {
 							
+						}
+					}
+				});
+			}
+		});
+		$('#compare-doctor').click(function(){
+			var filterByDoctorC = $('#filter-doctor').val();
+			if(filterByDoctorC != '') {
+				if($('#filter-doctor').val().length < 2) {
+					$.confirm({
+		    			title: 'Medico',
+		    			content: 'Seleziona due medico.',
+		    			buttons: {
+		    				Ok: function () {
+								
+							}
+						}
+					});
+				} else {
+					var selectCalDate= $('#calendar').fullCalendar('getDate');
+					var dateCom = selectCalDate.format('Y')+'-'+selectCalDate.format('M')+'-'+selectCalDate.format('D');
+					var dataURL = base_url+'/admin/compareDoctor?filterByDoctor[]='+filterByDoctorC+'&date='+dateCom;
+		            $('#myModalCompare').find('.modal-content').load(dataURL,function(){
+		                $('#myModalCompare').modal({show:true});
+		            });
+	        	}
+			} else {
+				$.confirm({
+					title: 'Medico',
+					content: 'Per favore, seleziona un medico.',
+					buttons: {
+						Ok: function () {
 						}
 					}
 				});

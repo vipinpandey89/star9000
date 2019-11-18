@@ -1,8 +1,8 @@
-@extends('admin.layout.layout')
-@section('title','dasbhoard')
-@section('content')
-<div class="outter-wp" style="margin-left: 12px;">
-<h2>Confronto degli appuntamenti con i medici</h2>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Confronto degli appuntamenti con i medici ({{ $date }})</h4>
+</div>
+<div class="modal-body">
 <div class="comparison">
 	<table class="table-bordered table">
 		<thead>
@@ -47,4 +47,3 @@
 	</table>
 </div>
 </div>
-@endsection
