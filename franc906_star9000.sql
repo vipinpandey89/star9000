@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 24, 2019 at 02:24 PM
+-- Generation Time: Nov 20, 2019 at 03:29 PM
 -- Server version: 5.7.27-0ubuntu0.16.04.1
 -- PHP Version: 7.0.33-2+ubuntu16.04.1+deb.sury.org+2+will+reach+end+of+life+in+april+2019
 
@@ -78,7 +78,18 @@ INSERT INTO `appointement_booking` (`id`, `doctro_name`, `examination_id`, `room
 (25, '28', 3, 5, 8, '#0ae291', 'test', '14:00', '16:10', '2019-10-08 14:00:00', '2019-10-08 16:10:00', '2019-10-08 07:07:58', '2019-10-08 07:07:58', '1570543200', '1570551000', '1570543200', '1570551000', '0', 0),
 (26, '28', 3, 5, 17, '#ff66cc', 'surgery critical', '16:00', '18:20', '2019-10-18 16:00:00', '2019-10-18 18:20:00', '2019-10-08 09:11:46', '2019-10-18 08:25:55', '1571414400', '1571422800', '1571414400', '1571422800', '0', 0),
 (27, '29', 3, 5, 3, '#ff66cc', 'gdfd', '17:30', '17:40', '2019-10-21 17:30:00', '2019-10-21 17:40:00', '2019-10-09 12:01:50', '2019-10-21 08:08:45', '1570642800', '1570643400', '1570642800', '1570643400', '0', 0),
-(28, '28', 3, 5, 2, '#ff66cc', 'sfsdf', '15:00', '17:20', '2019-10-23 15:00:00', '2019-10-23 17:20:00', '2019-10-18 08:24:39', '2019-10-21 07:57:45', '1571414400', '1571422800', '1571414400', '1571422800', '0', 0);
+(28, '28', 3, 5, 2, '#ff66cc', 'sfsdf', '15:00', '17:20', '2019-10-23 15:00:00', '2019-10-23 17:20:00', '2019-10-18 08:24:39', '2019-10-21 07:57:45', '1571414400', '1571422800', '1571414400', '1571422800', '0', 0),
+(29, '29', 3, 7, 3, '#632423', 'tettst', '17:10', '17:50', '2019-10-29 17:10:00', '2019-10-29 17:50:00', '2019-10-29 12:19:38', '2019-10-29 12:19:38', '1572365400', '1572367800', '1572365400', '1572367800', '0', 0),
+(30, '33', 3, 5, 6, '#ff66cc', 'testing', '10:30', '10:50', '2019-11-18 10:30:00', '2019-11-18 10:50:00', '2019-11-14 10:51:23', '2019-11-14 10:51:23', '1573723800', '1573725000', '1574069400', '1574070600', '0', 0),
+(31, '34', 4, 6, 7, '#d99694', 'surgery plastic', '10:10', '10:40', '2019-11-25 10:10:00', '2019-11-25 10:40:00', '2019-11-14 10:56:24', '2019-11-14 10:56:24', '1573722600', '1573724400', '1574673000', '1574674800', '0', 0),
+(32, '33', 3, 5, 4, '#ff66cc', 'ggg', '9:40', '10:00', '2019-11-27 09:40:00', '2019-11-27 10:00:00', '2019-11-14 10:57:48', '2019-11-14 10:57:48', '1573720800', '1573722000', '1574844000', '1574845200', '0', 0),
+(33, '33', 3, 5, 1, '#ff66cc', 'pre operation', '09:30', '09:50', '2019-11-25 09:30:00', '2019-11-25 09:50:00', '2019-11-15 06:52:25', '2019-11-18 13:10:49', '1573808400', '1573809600', '1574067600', '1574068800', '0', 0),
+(34, '34', 4, 6, 2, '#d99694', 'surgery', '11:20', '11:50', '2019-11-18 11:20:00', '2019-11-18 11:50:00', '2019-11-15 07:55:48', '2019-11-15 07:55:48', '1573813200', '1573815000', '1574072400', '1574074200', '0', 0),
+(35, '30', 3, 5, 6, '#ff66cc', 'ttt', '10:50', '11:10', '2019-11-18 10:50:00', '2019-11-18 11:10:00', '2019-11-15 08:39:50', '2019-11-15 08:39:50', '1573811400', '1573812600', '1574070600', '1574071800', '0', 0),
+(36, '30', 3, 5, 1, '#ff66cc', 'new appointment', '11:40', '12:00', '2019-11-19 11:40:00', '2019-11-19 12:00:00', '2019-11-19 06:58:17', '2019-11-19 06:58:17', '1574160000', '1574161200', '1574160000', '1574161200', '0', 0),
+(37, '29', 3, 7, 3, '#632423', 'cus', '14:10', '14:50', '2019-11-19 14:10:00', '2019-11-19 14:50:00', '2019-11-19 07:00:58', '2019-11-19 07:00:58', '1574169000', '1574171400', '1574169000', '1574171400', '0', 0),
+(38, '30', 3, 5, 8, '#ff66cc', 'appointment 123', '12:00', '12:20', '2019-11-20 12:00:00', '2019-11-20 12:20:00', '2019-11-20 06:13:34', '2019-11-20 06:13:34', '1574247600', '1574248800', '1574247600', '1574248800', '0', 0),
+(39, '29', 3, 7, 2, '#632423', 'custom', '14:30', '15:10', '2019-11-20 14:30:00', '2019-11-20 15:10:00', '2019-11-20 06:15:18', '2019-11-20 06:15:18', '1574256600', '1574259000', '1574256600', '1574259000', '0', 0);
 
 -- --------------------------------------------------------
 
@@ -184,7 +195,12 @@ INSERT INTO `daily_patient_history` (`id`, `appointment_id`, `message`, `updated
 (43, 26, '<strong>admin</strong> spostato nella sezione <strong>Check In</strong>', '2019-10-17 05:06:07', '2019-10-17 05:06:07'),
 (44, 26, '<strong>admin</strong> spostato nella sezione <strong>Pazienti del giorno</strong>', '2019-10-17 05:06:17', '2019-10-17 05:06:17'),
 (45, 22, '<strong>admin</strong> spostato nella sezione <strong>Check In</strong>', '2019-10-17 05:08:55', '2019-10-17 05:08:55'),
-(46, 22, '<strong>admin</strong> spostato nella sezione <strong>Ambulatorio</strong>', '2019-10-17 05:09:13', '2019-10-17 05:09:13');
+(46, 22, '<strong>admin</strong> spostato nella sezione <strong>Ambulatorio</strong>', '2019-10-17 05:09:13', '2019-10-17 05:09:13'),
+(47, 37, '<strong>admin</strong> spostato nella sezione <strong>Ambulatorio</strong>', '2019-11-19 08:15:52', '2019-11-19 08:15:52'),
+(48, 37, '<strong>admin</strong> spostato nella sezione <strong>Esami</strong>', '2019-11-19 10:21:04', '2019-11-19 10:21:04'),
+(49, 37, '<strong>admin</strong> spostato nella sezione <strong>Ambulatorio</strong>', '2019-11-19 14:13:18', '2019-11-19 14:13:18'),
+(50, 36, '<strong>admin</strong> spostato nella sezione <strong>Ambulatorio</strong>', '2019-11-19 14:13:21', '2019-11-19 14:13:21'),
+(51, 38, '<strong>admin</strong> spostato nella sezione <strong>Check In</strong>', '2019-11-20 06:22:59', '2019-11-20 06:22:59');
 
 -- --------------------------------------------------------
 
@@ -208,23 +224,25 @@ CREATE TABLE `doctors` (
 --
 
 INSERT INTO `doctors` (`id`, `userId`, `start_time`, `end_time`, `examination_id`, `weekdays_id`, `created_at`, `updated_at`) VALUES
-(82, 29, '13:00', '20:00', 3, '2', '2019-07-31', '2019-07-31'),
-(83, 29, '13:00', '20:00', 3, '3', '2019-07-31', '2019-07-31'),
-(84, 29, '13:00', '20:00', 3, '4', '2019-07-31', '2019-07-31'),
-(85, 29, '13:00', '20:00', 3, '5', '2019-07-31', '2019-07-31'),
-(86, 29, '13:00', '20:00', 3, '6', '2019-07-31', '2019-07-31'),
-(87, 29, '13:00', '20:00', 3, '7', '2019-07-31', '2019-07-31'),
-(97, 32, '10:00', '19:00', 2, '2', '2019-10-16', '2019-10-16'),
-(98, 32, '10:00', '19:00', 2, '3', '2019-10-16', '2019-10-16'),
-(103, 28, '9:30', '18:30', 3, '3', '2019-10-22', '2019-10-22'),
-(104, 28, '9:30', '18:30', 3, '4', '2019-10-22', '2019-10-22'),
-(105, 28, '9:30', '18:30', 3, '5', '2019-10-22', '2019-10-22'),
-(106, 28, '9:30', '18:30', 3, '6', '2019-10-22', '2019-10-22'),
-(107, 30, '9:00', '18:00', 3, '2', '2019-10-23', '2019-10-23'),
-(108, 30, '9:00', '18:00', 3, '3', '2019-10-23', '2019-10-23'),
-(109, 30, '9:00', '18:00', 3, '4', '2019-10-23', '2019-10-23'),
-(110, 30, '9:00', '18:00', 3, '5', '2019-10-23', '2019-10-23'),
-(111, 30, '9:00', '18:00', 3, '6', '2019-10-23', '2019-10-23');
+(116, 34, '10:00', '13:00', 4, '2', '2019-11-12', '2019-11-12'),
+(121, 33, '9:30', '17:30', 3, '2', '2019-11-12', '2019-11-12'),
+(122, 33, '9:30', '17:30', 3, '4', '2019-11-12', '2019-11-12'),
+(123, 30, '9:00', '18:00', 3, '2', '2019-11-15', '2019-11-15'),
+(124, 30, '9:00', '18:00', 3, '3', '2019-11-15', '2019-11-15'),
+(125, 30, '9:00', '18:00', 3, '4', '2019-11-15', '2019-11-15'),
+(126, 30, '9:00', '18:00', 3, '5', '2019-11-15', '2019-11-15'),
+(127, 30, '9:00', '18:00', 3, '6', '2019-11-15', '2019-11-15'),
+(128, 28, '9:30', '18:30', 3, '3', '2019-11-19', '2019-11-19'),
+(129, 28, '9:30', '18:30', 3, '4', '2019-11-19', '2019-11-19'),
+(130, 28, '9:30', '18:30', 3, '5', '2019-11-19', '2019-11-19'),
+(131, 28, '9:30', '18:30', 3, '6', '2019-11-19', '2019-11-19'),
+(132, 29, '13:00', '20:00', 3, '2', '2019-11-19', '2019-11-19'),
+(133, 29, '13:00', '20:00', 3, '3', '2019-11-19', '2019-11-19'),
+(134, 29, '13:00', '20:00', 3, '4', '2019-11-19', '2019-11-19'),
+(135, 29, '13:00', '20:00', 3, '5', '2019-11-19', '2019-11-19'),
+(136, 29, '13:00', '20:00', 3, '6', '2019-11-19', '2019-11-19'),
+(137, 32, '10:00', '19:00', 2, '2', '2019-11-19', '2019-11-19'),
+(138, 32, '10:00', '19:00', 2, '3', '2019-11-19', '2019-11-19');
 
 -- --------------------------------------------------------
 
@@ -392,7 +410,9 @@ INSERT INTO `managepatient` (`id`, `first`, `second`, `third`, `fourth`, `fifth`
 (18, NULL, NULL, '[{"id":"3","updated_by":"1","update_date":"2019-10-9 17:31:54","color":"#b8cce4"}]', NULL, NULL, '2019-10-09', '2019-10-09 12:01:54', '2019-10-09 12:18:27'),
 (20, NULL, '[{"id":"3","updated_by":"1","update_date":"2019-10-10 11:3:34","color":null}]', '[{"id":"17","updated_by":"1","update_date":"2019-10-10 10:56:6","color":"#92cddc"}]', NULL, NULL, '2019-10-10', '2019-10-10 05:26:06', '2019-10-10 05:33:34'),
 (21, '[{"id":"3","updated_by":"1","update_date":"2019-10-16 10:36:45","color":null}]', '[{"id":"17","updated_by":"1","update_date":"2019-10-16 16:6:53","color":null}]', NULL, NULL, NULL, '2019-10-16', '2019-10-16 10:36:53', '2019-10-16 10:36:53'),
-(24, '[{"id":"17","updated_by":"1","update_date":"2019-10-17 05:08:49","color":null},{"id":"3","updated_by":"1","update_date":"2019-10-17 05:08:49","color":null}]', NULL, '[{"id":"2","updated_by":"1","update_date":"2019-10-17 10:39:13","color":"#bfbfbf"}]', NULL, NULL, '2019-10-17', '2019-10-17 05:08:55', '2019-10-17 05:09:17');
+(24, '[{"id":"17","updated_by":"1","update_date":"2019-10-17 05:08:49","color":null},{"id":"3","updated_by":"1","update_date":"2019-10-17 05:08:49","color":null}]', NULL, '[{"id":"2","updated_by":"1","update_date":"2019-10-17 10:39:13","color":"#bfbfbf"}]', NULL, NULL, '2019-10-17', '2019-10-17 05:08:55', '2019-10-17 05:09:17'),
+(25, NULL, NULL, '[{"id":"3","updated_by":"1","update_date":"2019-11-19 18:43:18","color":null},{"id":"1","updated_by":"1","update_date":"2019-11-19 18:43:21","color":null}]', NULL, NULL, '2019-11-19', '2019-11-19 08:15:52', '2019-11-19 14:13:21'),
+(26, NULL, '[{"id":"2","updated_by":1,"update_date":"2019-11-20 07:52:04","color":""}]', NULL, '[{"id":"8","updated_by":1,"update_date":"2019-11-20 07:54:57","color":""}]', NULL, '2019-11-20', '2019-11-20 06:22:59', '2019-11-20 07:54:57');
 
 -- --------------------------------------------------------
 
@@ -552,8 +572,9 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `room_name`, `room_color`, `examination_type`, `duration`, `created_at`, `updated_at`) VALUES
-(5, 'test1', '#ff66cc', 3, 0, '2019-07-23', '2019-10-09'),
-(6, 'tereee', '#d99694', 4, 1200, '2019-10-10', '2019-10-10');
+(5, 'test1', '#ff66cc', 3, 1200, '2019-07-23', '2019-10-29'),
+(6, 'tereee', '#d99694', 4, 1800, '2019-10-10', '2019-10-29'),
+(7, 'Custom room', '#632423', 3, 2400, '2019-10-29', '2019-10-29');
 
 -- --------------------------------------------------------
 
@@ -611,6 +632,8 @@ CREATE TABLE `users` (
   `postal_code` int(11) DEFAULT NULL,
   `telephone` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `performance_type` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `availability_from` date DEFAULT NULL,
+  `availability_to` date DEFAULT NULL,
   `is_delete` enum('0','1') COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '[0]=>''N'',[1]=>''Y''',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1=Active,2=Inactive',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -621,14 +644,16 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `surname`, `name`, `email`, `password`, `remember_token`, `role_type`, `phone`, `regione`, `cap`, `dob`, `address`, `postal_code`, `telephone`, `performance_type`, `is_delete`, `status`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'admin', 'admin@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'YswcJwNnlAiqLSUdUxjTG4uiAAV5sz4YTk7aicyJvRZhfc15pkuCKY1VkZIG', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', 1, NULL, NULL),
-(4, NULL, 'recardo', 'mukeshbisht98@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'smwowtyXBiqSEdfg5tciro9vF6h5l8b8bGk2Jtk1K8ot1zgEVi95A70u1NGH', 2, '9864654654', 'laxmi nagar new dlehi', 110064, '25-07-2019', NULL, NULL, NULL, NULL, '0', 1, '2019-07-18 08:57:25', '2019-07-31 01:25:15'),
-(28, 'bisht', 'mukesh', 'mukesbisht@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'oWW8sEBnNohmvTaXJnYbwXSBTWgb1kgzBoA3CUr6eEMsbuynpHE8MKzcZS9b', 3, '9846465465', 'delgi', 110055, '24-08-2019', NULL, NULL, NULL, NULL, '0', 2, '2019-07-24 05:59:32', '2019-10-22 08:13:45'),
-(29, 'pan', 'pradeep', 'pradeep@gmail.com', '$2y$10$EsDOmznDMoVS21qOwTv6q.df2J9D/hp32KwGCTpHjCYEXF6DIx3.G', NULL, 3, '9746565464', 'laxmi nagar new delhi', 10065, '13-02-2019', NULL, NULL, NULL, NULL, '0', 1, '2019-07-29 02:01:52', '2019-07-29 02:01:52'),
-(30, 'singh', 'Ashwini', 'ashwinikumar@mailinator.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'elJm02iNL2vxfjbIXXP3WqjYZ1FvUBnizMOG1hHUbJ46pATkaK4w36WoD3Qo', 3, '9876543211', 'Noida', 201301, '05-08-1991', NULL, NULL, NULL, NULL, '0', 1, '2019-08-06 03:48:18', '2019-10-23 02:03:15'),
-(31, NULL, 'AshwiniSec', 'ashwinisecretary@mailinator.co', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', NULL, 2, '9876543222', 'Noida', 201301, '12-01-1990', NULL, NULL, NULL, NULL, '0', 1, '2019-08-19 00:56:43', '2019-08-19 00:56:43'),
-(32, 'docsurname', 'Nishu', 'nishu1167@mailinator.com', '$2y$10$GrMx27Usm2keyYNt2aNB7uZa3lVM.VIsrOC7C0ZB3VZpx5WXZzZu6', NULL, 3, '9898989898', 'Indian', 899898, '19-08-2002', 'asfaf', 432424, '444444', 'dfgdfg', '0', 1, '2019-10-16 04:06:02', '2019-10-16 04:06:02');
+INSERT INTO `users` (`id`, `surname`, `name`, `email`, `password`, `remember_token`, `role_type`, `phone`, `regione`, `cap`, `dob`, `address`, `postal_code`, `telephone`, `performance_type`, `availability_from`, `availability_to`, `is_delete`, `status`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'admin', 'admin@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'Dv8pOYATuNDsyrjnJn5ISxnK2fhQYp4DS6PqFPEOtcV05idkpXyBJaE8lxk7', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', 1, NULL, NULL),
+(4, NULL, 'recardo', 'mukeshbisht98@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'M6JaBGy0KoHOoRFryV8Re0YivAZqFaIYw64gf0iaKAaD9MGM628vG8HbGNPy', 2, '9864654654', 'laxmi nagar new dlehi', 110064, '25-07-2019', NULL, NULL, NULL, NULL, NULL, NULL, '0', 1, '2019-07-18 08:57:25', '2019-07-31 01:25:15'),
+(28, 'bisht', 'mukesh', 'mukesbisht@gmail.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'oWW8sEBnNohmvTaXJnYbwXSBTWgb1kgzBoA3CUr6eEMsbuynpHE8MKzcZS9b', 3, '9846465465', 'delgi', 110055, '24-03-2020', NULL, NULL, NULL, NULL, '2019-11-19', '2020-05-29', '0', 2, '2019-07-24 05:59:32', '2019-11-19 01:29:09'),
+(29, 'pan', 'pradeep', 'pradeep@gmail.com', '$2y$10$EsDOmznDMoVS21qOwTv6q.df2J9D/hp32KwGCTpHjCYEXF6DIx3.G', NULL, 3, '9746565464', 'laxmi nagar new delhi', 10065, '13-02-2019', NULL, NULL, NULL, NULL, '2019-11-19', '2021-01-29', '0', 1, '2019-07-29 02:01:52', '2019-11-19 01:29:26'),
+(30, 'singh', 'Ashwini', 'ashwinikumar@mailinator.com', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', 'elJm02iNL2vxfjbIXXP3WqjYZ1FvUBnizMOG1hHUbJ46pATkaK4w36WoD3Qo', 3, '9876543211', 'Noida', 201301, '05-08-1991', NULL, NULL, NULL, NULL, '2019-11-15', '2020-03-27', '0', 1, '2019-08-06 03:48:18', '2019-11-15 03:05:58'),
+(31, NULL, 'AshwiniSec', 'ashwinisecretary@mailinator.co', '$2y$10$xip7EkoVdkmjlpuYyfH/F.a4NHZRGawsCS.BdTKKJ9vEQz03DY7Be', NULL, 2, '9876543222', 'Noida', 201301, '12-01-1990', NULL, NULL, NULL, NULL, NULL, NULL, '0', 1, '2019-08-19 00:56:43', '2019-08-19 00:56:43'),
+(32, 'docsurname', 'Nishu', 'nishu1167@mailinator.com', '$2y$10$GrMx27Usm2keyYNt2aNB7uZa3lVM.VIsrOC7C0ZB3VZpx5WXZzZu6', NULL, 3, '9898989898', 'Indian', 899898, '19-08-2002', 'asfaf', 432424, '444444', 'dfgdfg', '2019-11-19', '2020-06-30', '0', 1, '2019-10-16 04:06:02', '2019-11-19 01:29:43'),
+(33, 'singh', 'Anupam', 'anupamsingh@mailinator.com', '$2y$10$Faed8t6449zcbqG.XPo9xep3aaDAiCUYs7qm8Sbdt5n0x9XNTAKkm', NULL, 3, '9876543211', 'Indian', 123456, '14-02-1991', 'erwer', NULL, NULL, NULL, '2019-11-12', '2019-12-31', '0', 1, '2019-11-12 01:20:34', '2019-11-12 04:19:18'),
+(34, 'singh', 'puja', 'pujasingh@mailinator.com', '$2y$10$zg/c5hpXBWnWEXOmxoM3..z398f9.9j2QLIRERHrmF0gfSmb6bWZy', NULL, 3, '9999999999', 'Indian', 112223, '17-08-2000', 'test', 201301, '98767676', 'test', '2019-11-12', '2019-11-29', '0', 1, '2019-11-12 03:08:55', '2019-11-12 03:08:55');
 
 -- --------------------------------------------------------
 
@@ -782,7 +807,7 @@ ALTER TABLE `weekdays`
 -- AUTO_INCREMENT for table `appointement_booking`
 --
 ALTER TABLE `appointement_booking`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 --
 -- AUTO_INCREMENT for table `appointment_medicine`
 --
@@ -797,12 +822,12 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `daily_patient_history`
 --
 ALTER TABLE `daily_patient_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 --
 -- AUTO_INCREMENT for table `examination`
 --
@@ -827,7 +852,7 @@ ALTER TABLE `input_tabs`
 -- AUTO_INCREMENT for table `managepatient`
 --
 ALTER TABLE `managepatient`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
@@ -857,7 +882,7 @@ ALTER TABLE `reminder`
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `surgeries`
 --
@@ -867,7 +892,7 @@ ALTER TABLE `surgeries`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -179,6 +179,14 @@ class PatientController extends Controller
         $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
         if(!empty($existingPat)){
             $patientFirst = [];
+        } else {
+            $managePatientData['first'] = json_encode($patientFirst);
+            $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
+            if($mage->exists){
+                
+            } else {
+                $mage->save();
+            }
         }
         return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination,'doctorData'=>$doctorData]);
     }
@@ -431,5 +439,104 @@ class PatientController extends Controller
                 return redirect('/admin/ingressi-scheda/'.$tabid)->with('success',"L'input è stato cancellato correttamente."); 
             }
         }
+    }
+
+    public function listByDoctor(Request $request) {
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        $patientsOfTheDay = DB::table('appointement_booking')
+                            ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime','appointement_booking.doctro_name as docId', 'patients.*','appointement_booking.examination_color')                     
+                            ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
+        $patientsTodayData = [];
+        $todaysDoc =[];
+        foreach ($patientsOfTheDay as $pat) {
+            $patientsTodayData[$pat->docId][] =[
+                'id'=>$pat->id,
+                'patname'=>$pat->surname.' '.$pat->name,
+                'dob'=>$pat->dob,
+                'color'=>$pat->examination_color,
+                'appointment_start' => $pat->starteTime,
+                'appointment_end' => $pat->endtime,
+                'curent_status' => $this->getCurrentStatus($existingPat, $pat->id)
+            ];
+            $todaysDoc[]=$pat->docId;
+        }
+        $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
+        return view('admin.listByDoctor', ['doctorData'=>$doctorData,'patientsTodayData'=>$patientsTodayData]);
+    }
+
+    public function dailyPatChangeStatus(Request $request, $patId) {
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        $user = auth()->user();
+        $currentStatus = $this->getCurrentStatus($existingPat, $patId);
+        if($request->method() == 'POST') {
+            $sectionArray = ['Pazienti del giorno'=>'first','Check In'=>'second','Chirurgia'=>'third','Esami'=>'fourth','Check Out'=>'fifth'];
+            $sectionArraySecond = ['first'=>'Pazienti del giorno','second'=>'Check In','third'=>'Chirurgia','fourth'=>'Esami','fifth'=>'Check Out'];
+            $existsec= $sectionArray[$currentStatus];
+            $existingPatientSection = '{}';
+            if(isset($existingPat->$existsec)) {
+                $existingPatientSection = $existingPat->$existsec;
+            }
+            $sectionRemoved = $this->removeElementWithValue(json_decode($existingPatientSection,true), "id", $patId);
+            $sectionToUpdate = Input::get('section');
+            $sectionAdded = [];
+            if(!empty($existingPat->$sectionToUpdate)) {
+                $sectionAdded = json_decode($existingPat->$sectionToUpdate,true);
+            }
+            $toAdd = [
+                'id' => $patId,
+                'updated_by' => $user->id,
+                'update_date' => date('Y-m-d H:i:s',time()),
+                'color' => ''
+            ];
+            array_push($sectionAdded,$toAdd);
+
+            $managePatientData[$existsec]  =  !empty($sectionRemoved)?json_encode($sectionRemoved):null;
+            $managePatientData[$sectionToUpdate]  =  !empty($sectionAdded)?json_encode($sectionAdded):null;
+            $managePatientData['manage_date'] = date('Y-m-d',time());
+            $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
+            if($mage->exists){
+                Managepatient::where('id', $mage->id)->update($managePatientData);
+                echo $patId.'|'.$sectionArraySecond[$sectionToUpdate];
+            } else {
+                $mage->save();
+                echo $patId.'|'.$sectionArraySecond[$sectionToUpdate];
+            }
+            exit;
+        }
+        return view('admin.dailyPatChangeStatus', ['currentStatus'=>$currentStatus,'patId'=>$patId]);
+    }
+
+    public function getCurrentStatus($existingPat, $patId) {
+        $currentStatus = '';
+        if(!empty($existingPat)) {
+            if(!empty($existingPat->first)) {
+                $currentStatus = in_array($patId, array_column(json_decode($existingPat->first,true), 'id'))?'Pazienti del giorno':'';
+            }
+            if(!empty($existingPat->second) && empty($currentStatus)) {
+                $currentStatus = in_array($patId, array_column(json_decode($existingPat->second,true), 'id'))?'Check In':'';
+            }
+            if(!empty($existingPat->third) && empty($currentStatus)) {
+                $currentStatus = in_array($patId, array_column(json_decode($existingPat->third,true), 'id'))?'Chirurgia':'';
+            }
+            if(!empty($existingPat->fourth) && empty($currentStatus)) {
+                $currentStatus = in_array($patId, array_column(json_decode($existingPat->fourth,true), 'id'))?'Esami':'';
+            }
+            if(!empty($existingPat->fifth) && empty($currentStatus)) {
+                $currentStatus = in_array($patId, array_column(json_decode($existingPat->fifth,true), 'id'))?'Check Out':'';
+            }
+        }else{
+            $currentStatus = 'Pazienti del giorno';
+        }
+        return $currentStatus;
+    }
+
+    public function removeElementWithValue($array, $key, $value){
+         foreach($array as $subKey => $subArray){
+              if($subArray[$key] == $value){
+                   unset($array[$subKey]);
+              }
+         }
+         return $array;
     }
 }

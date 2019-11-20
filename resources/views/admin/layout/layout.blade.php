@@ -52,6 +52,9 @@
 		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
 		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
 	@endif
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@listByDoctor')
+		<link rel="stylesheet" href="{{URL('administrator/css/managepatient.css')}}" type='text/css' />
+	@endif
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms'))
 		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
 	@endif
@@ -162,6 +165,7 @@
 												<li><a href="{{url('admin/privacy')}}"><span>{{ __('menu.Privacy') }}</span></a></li>
 												<li><a href="{{url('admin/intervento')}}"><span>{{ __('menu.Intervention') }}</span></a></li>
 												<li><a href="{{url('admin/gestire-il-paziente')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
+
 											</ul>
 										</li>
 										<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i><span>{{ __('menu.Eye Visit Tabs') }}</span></a></li>
@@ -173,6 +177,7 @@
 								       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 
 								       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
+								       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.List By Doctor') }}</span></a></li>
 								@else		
 										<li><a href="{{url('admin/doctor-appointments')}}"><i class="fa fa-table" aria-hidden="true"></i><span>{{ __('menu.Appointments') }}</span></a></li>
 										<li><a href="{{url('admin/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.UserProfile') }}</span></a></li>

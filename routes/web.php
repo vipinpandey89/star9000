@@ -120,7 +120,9 @@ Route::match(['get','post'],'aggiungi-ingressi/{tabid}','PatientController@addIn
 Route::match(['get','post'],'modifica-ingressi/{tabid}/{id}','PatientController@editInput');
 Route::get('/elimina-scheda/{id}','PatientController@deletetab');
 Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
-
+Route::get('/elenco-per-medico','PatientController@listByDoctor');
+Route::get('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
+Route::post('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
 Route::get('/promemoria','ReminderController@index');
 Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
 Route::match(['get','post'],'modifica-promemoria/{id}','ReminderController@editReminder');

@@ -116,7 +116,6 @@ Body Section Styles
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	justify-content: space-between;
 	align-items: stretch;
 	align-content: stretch;
 	height: 100%;
@@ -131,7 +130,7 @@ Body Section Styles
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
-	white-space: nowrap;
+	
 	background-color: #e2e4e6;
 	border-radius: 5px;
 }

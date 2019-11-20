@@ -86,5 +86,6 @@ return [
     'Eye Visit Tabs' => 'Scheda visita oculistica',
     'Reminder' => 'Promemoria',
     'All Availability' => 'Tutta la disponibilità',
-    'Compare' => 'Confrontare'
+    'Compare' => 'Confrontare',
+    'List By Doctor' => 'Elenco per medico'
 ];
