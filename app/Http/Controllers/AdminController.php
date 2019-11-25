@@ -504,7 +504,7 @@ class AdminController extends Controller
                              $message.='la tua password '.$rand.'<br/>';
                              $message.='Grazie per esserti registrato su star9000 <br/>'; 
 
-                            // mail($request->input('email'),$subject,$message,$header); 
+                            mail($request->input('email'),$subject,$message,$header); 
 
                           // end here // 
                    } 

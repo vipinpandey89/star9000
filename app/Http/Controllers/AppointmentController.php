@@ -29,8 +29,9 @@ class AppointmentController extends Controller
         $rooms = Room::all();
         $patientsData = [];
         foreach ($patients as $data) {
+            $patientString = preg_replace('/[^A-Za-z0-9\-]/', '', $data['surname']).' '.preg_replace('/[^A-Za-z0-9\-]/', '', $data['name']).(!empty($data['dob'])?' - ('.$data['dob'].')':'');
             $patientsData[]=[
-                'surname' => $data['surname'].' '.$data['name'].(!empty($data['dob'])?' - ('.$data['dob'].')':''),
+                'surname' => $patientString,
                 'email' => $data['email'],
                 'dob' => $data['dob'],
                 'id' => $data['id']

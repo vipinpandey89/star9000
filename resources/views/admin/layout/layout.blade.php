@@ -13,7 +13,7 @@
 	<link href="{{URL::asset('administrator/css/bootstrap.min.css')}}" rel='stylesheet' type='text/css' />
 
 	<link href="{{URl::asset('administrator/bootstrap-colorpicker.css')}}" rel='stylesheet'/>
-	@if (Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index')
+	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\DoctorController@appointments'))
 	<link href="{{URL::asset('administrator/css/fullcalendar.min.css')}}" rel='stylesheet' />
 	<link href="{{URL::asset('administrator/css/fullcalendar.print.min.css')}}" rel='stylesheet' media='print' />
 	@endif
@@ -146,9 +146,10 @@
 					<!--//down-->
 					<div class="menu">
 						      <ul id="menu" >
-						            	<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>
+						            	
 
-								@if($userData->role_type=='1')			
+								@if($userData->role_type=='1')
+										<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>			
 										<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> <span>{{ __('menu.Addsecretary') }}</span></a></li>
 
 										<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> <span>{{ __('menu.Add specialty') }} </span></a></li>
@@ -173,14 +174,16 @@
 
 
 								@elseif( Auth::user()->role_type=='2')
-
+										<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>
 								       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
 
 								       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
 								       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.List By Doctor') }}</span></a></li>
-								@else		
-										<li><a href="{{url('admin/doctor-appointments')}}"><i class="fa fa-table" aria-hidden="true"></i><span>{{ __('menu.Appointments') }}</span></a></li>
-										<li><a href="{{url('admin/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.UserProfile') }}</span></a></li>
+								@else	
+										<li><a href="{{url('medico/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>	
+										<li><a href="{{url('medico/appuntamenti')}}"><i class="fa fa-table" aria-hidden="true"></i><span>{{ __('menu.Appointments') }}</span></a></li>
+										<li><a href="{{url('medico/paziente')}}"><i class="lnr lnr-user" aria-hidden="true"></i><span>{{ __('menu.Patients') }}</span></a></li>
+										<li><a href="{{url('medico/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.UserProfile') }}</span></a></li>
 								@endif
 							 </ul>
 						 </div>
@@ -220,7 +223,7 @@
 						<script src="{{URL::asset('administrator/bootstrap-colorpicker.js')}}"></script>
 
 						<script type="text/javascript" src="{{URL::asset('administrator/js/moment.min.js')}}" ></script>
-						@if (Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index')
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\DoctorController@appointments'))
 						<script type="text/javascript" src="{{URL::asset('administrator/js/fullcalendar.min.js')}}" ></script>
 						@endif
 						<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>

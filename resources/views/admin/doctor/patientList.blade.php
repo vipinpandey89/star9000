@@ -5,12 +5,11 @@
 <div class="outter-wp container">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
+			<li><a href="{{url('medico/bacheca')}}">Home</a></li>
 			<li class="active">Sezione paziente</li>
 		</ol>
 	</div>
-	<div class="graph-visual tables-main">			
-		<a href="{{url('admin/aggiungi-paziente')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
+	<div class="graph-visual tables-main">
 		<div class="graph">
 			<div class="tables">
 				@if (Session::has('success'))
@@ -72,7 +71,7 @@
 				 		 		@endif
 				 		 	</td>	
 				 		 	<td>
-							  <a class="btn btn-info btn-sm" href="{{url('admin/modifica-paziente/'.$patient->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+							  <a class="btn btn-info btn-sm" href="{{url('medico/modifica-paziente/'.$patient->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 							</td>
 				 		</tr>
 				 		<?php $i++;?>

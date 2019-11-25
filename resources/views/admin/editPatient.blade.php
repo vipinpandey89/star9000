@@ -4,9 +4,10 @@
 
 <div class="outter-wp">
 	<div class="sub-heard-part">
+		@php $sec = ($user->role_type == 3)?'medico':'admin'; @endphp
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
-			<li><a href="{{url('admin/paziente')}}">Sezione paziente</a></li>
+			<li><a href="{{url($sec.'/bacheca')}}">Home</a></li>
+			<li><a href="{{url($sec.'/paziente')}}">Sezione paziente</a></li>
 			<li class="active">{{ __('patient.Edit Patient') }}</li>
 		</ol>
 	</div>
@@ -124,6 +125,60 @@
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Place of birth') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->place_of_birth }}" id="place_of_birth	" type="text" class="form-control1" name="place_of_birth" placeholder="{{ __('patient.Place of birth') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Province of birth') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->province_of_birth }}" id="province_of_birth" type="text" class="form-control1" name="province_of_birth" placeholder="{{ __('patient.Province of birth') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Fiscal code') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->fiscal_code }}" id="fiscal_code" type="text" class="form-control1" name="fiscal_code" placeholder="{{ __('patient.Fiscal code') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Place of living') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->place_of_living }}" id="place_of_living" type="text" class="form-control1" name="place_of_living" placeholder="{{ __('patient.Place of living') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Province of living') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->province_of_living }}" id="province_of_living" type="text" class="form-control1" name="province_of_living" placeholder="{{ __('patient.Province of living') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Number of the address') }}</label>
+										<div class="col-sm-8">
+											<input value="{{ $patientData->number_of_the_address }}" id="number_of_the_address" type="text" class="form-control1" name="number_of_the_address" placeholder="{{ __('patient.Number of the address') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
 										<label class="col-sm-2 control-label">{{ __('patient.Address') }}</label>
 										<div class="col-sm-8">
 											<textarea class="form-control" id="address" name="address">{{ $patientData->address }}</textarea>
@@ -230,8 +285,10 @@
 
 
 							{!! csrf_field() !!}								
-
+							
+							@if($user->role_type != 3)
 							<div class=""> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
+							@endif
 						</form>
 						<form id="privacy-form">
 							<?php
@@ -269,7 +326,9 @@
 								</div>
 							</div>
 							{!! csrf_field() !!}
+							@if($user->role_type != 3)
 							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Salva</button></div>
+							@endif
 						</form>
 						<div class="row">
 							<div class="col-lg-10">
@@ -300,7 +359,7 @@
 							 	  		<td>{{ !empty($appnt->starteTime)?$appnt->starteTime:'NA'}}</td>
 							 	  		<td>{{ !empty($appnt->endtime)?$appnt->endtime:'NA'}}</td>
 							 	  		<td>
-										  <a href="{{url('admin/eyevisit/'.$patientData->id.'/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										  <a href="{{url($sec.'/eyevisit/'.$patientData->id.'/'.$appnt->id)}}" title="{{ __('patient.Eye Visit') }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										</td>
 							 	  		<td>vedi</td>
 							 	  	</tr>

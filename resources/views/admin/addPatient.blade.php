@@ -99,6 +99,62 @@
 									</div>
 								</div>
 							</div>
+
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Place of birth') }}</label>
+										<div class="col-sm-8">
+											<input id="place_of_birth	" type="text" class="form-control1" name="place_of_birth" placeholder="{{ __('patient.Place of birth') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Province of birth') }}</label>
+										<div class="col-sm-8">
+											<input id="province_of_birth" type="text" class="form-control1" name="province_of_birth" placeholder="{{ __('patient.Province of birth') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Fiscal code') }}</label>
+										<div class="col-sm-8">
+											<input id="fiscal_code" type="text" class="form-control1" name="fiscal_code" placeholder="{{ __('patient.Fiscal code') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Place of living') }}</label>
+										<div class="col-sm-8">
+											<input id="place_of_living" type="text" class="form-control1" name="place_of_living" placeholder="{{ __('patient.Place of living') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Province of living') }}</label>
+										<div class="col-sm-8">
+											<input id="province_of_living" type="text" class="form-control1" name="province_of_living" placeholder="{{ __('patient.Province of living') }}">
+										</div>									
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">{{ __('patient.Number of the address') }}</label>
+										<div class="col-sm-8">
+											<input id="number_of_the_address" type="text" class="form-control1" name="number_of_the_address" placeholder="{{ __('patient.Number of the address') }}">
+										</div>							
+									</div>
+								</div>
+							</div>
+
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">

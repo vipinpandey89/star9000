@@ -123,6 +123,7 @@ Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
 Route::get('/elenco-per-medico','PatientController@listByDoctor');
 Route::get('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
 Route::post('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
+Route::post('/importazione-paziente','PatientController@importPatient');
 Route::get('/promemoria','ReminderController@index');
 Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
 Route::match(['get','post'],'modifica-promemoria/{id}','ReminderController@editReminder');
@@ -130,4 +131,15 @@ Route::get('/elimina-promemoria/{id}','ReminderController@deleteReminder');
 Route::get('/getreminder','ReminderController@getreminder');
 Route::get('/updatereminder','ReminderController@updatereminder');
 
+});
+
+//doctor sector
+Route::group(['prefix'=>'medico','middleware'=>['auth','admin']],function(){
+	Route::get('/appuntamenti','DoctorController@appointments');
+	Route::get('/paziente','DoctorController@patients');
+	Route::get('/responsedata','DoctorController@responsedata');
+	Route::match(['get','post'],'profilo-visite','AdminController@SetExamination');
+	Route::get('/bacheca','AdminController@dasbhoard');
+	Route::match(['get','post'],'modifica-paziente/{id}','PatientController@EditPatient');
+	Route::match(['get','post'],'/eyevisit/{patid}/{id}','DoctorController@eyevisit');
 });

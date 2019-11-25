@@ -22,13 +22,15 @@ use App\Surgery;
 use App\EyeVisitTabs;
 use App\InputTabs;
 use App\EyeVisitData;
+use Excel;
 
 class PatientController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $patients = Patient::all();
-        return view('admin.patientList',['patients'=>$patients]);
+        return view('admin.patientList',['patients'=>$patients,'user'=>$user]);
     }
 
     public function AddPatient(Request $request)
@@ -56,6 +58,14 @@ class PatientController extends Controller
             $patient->nationality  =  Input::get('nationality');
             $patient->pec  =  Input::get('pec');
             $patient->description  =  Input::get('description');
+
+            $patient->place_of_birth  =  Input::get('place_of_birth');
+            $patient->province_of_birth  =  Input::get('province_of_birth');
+            $patient->fiscal_code  =  Input::get('fiscal_code');
+            $patient->place_of_living  =  Input::get('place_of_living');
+            $patient->province_of_living  =  Input::get('province_of_living');
+            $patient->number_of_the_address  =  Input::get('number_of_the_address');
+
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if($patient->save()){
@@ -70,14 +80,17 @@ class PatientController extends Controller
         $user = auth()->user();
         $patientData = Patient::where(['id'=>$id])->first();
         
-        $appointments  = DB::table('appointement_booking')
+        $appoint  = DB::table('appointement_booking')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                     
                             ->select('appointement_booking.*', 'users.name','examination.title','room.room_name')                     
                             ->where('patient_id', '=', $id)
-                            ->orderBy('appointement_booking.start_date','DESC')->get();
-        
+                            ->orderBy('appointement_booking.start_date','DESC');
+        if($user->role_type == 3) {
+            $appoint->where('doctro_name', '=', $user->id);
+        }
+        $appointments = $appoint->get();
         if($request->method() == 'POST') {
             if(!empty(Input::get('email'))) {
                 $patientData = Patient::where(['email'=>Input::get('email')])->first();
@@ -102,6 +115,12 @@ class PatientController extends Controller
             $patient->nationality  =  Input::get('nationality');
             $patient->pec  =  Input::get('pec');
             $patient->description  =  Input::get('description');
+            $patient->place_of_birth  =  Input::get('place_of_birth');
+            $patient->province_of_birth  =  Input::get('province_of_birth');
+            $patient->fiscal_code  =  Input::get('fiscal_code');
+            $patient->place_of_living  =  Input::get('place_of_living');
+            $patient->province_of_living  =  Input::get('province_of_living');
+            $patient->number_of_the_address  =  Input::get('number_of_the_address');
             if(!empty(Input::get('minor_patient'))) {
                 $patient->minor_patient  =  Input::get('minor_patient');
             }
@@ -115,7 +134,7 @@ class PatientController extends Controller
             }
         }
         $privacy = Privacy::where(['id'=>1])->first();
-    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy]);
+    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy,'user'=>$user]);
     }
 
     public function SavePrivacy(Request $request) {
@@ -538,5 +557,58 @@ class PatientController extends Controller
               }
          }
          return $array;
+    }
+
+    public function importPatient(Request $request) {
+        $user = auth()->user();
+        if($request->hasFile('import_file')){
+            $extension=$request->file('import_file')->getClientOriginalExtension();
+            if($extension == 'xlsx') {
+                $res=2;
+                Excel::load($request->file('import_file')->getRealPath(), function ($reader) use (&$res,$user) {
+                    $excelData = $reader->toArray();
+                    if(isset($excelData[0]['cognome'])){
+                        $res =1;
+                        foreach ($excelData as $key => $row) {
+                            
+                            $patientData['name'] = $row['nome'];
+                            $patientData['surname'] = $row['cognome'];
+                            $patientData['dob']  = isset($row['nascita_data'])?date('Y-m-d',strtotime($row['nascita_data'])):'';
+                            $patientData['place_of_birth'] = $row['nascita_comune'];
+                            $patientData['province_of_birth'] = $row['nascita_prov'];
+                            $patientData['fiscal_code'] = $row['codfiscale'];
+                            $patientData['place_of_living'] = $row['resid_comune'];
+                            $patientData['province_of_living'] = $row['resid_prov'];
+                            $patientData['address'] = $row['resid_indirizzo'];
+                            $patientData['number_of_the_address'] = $row['resid_civico'];
+                            $patientData['postal_code'] = $row['resid_cap'];
+                            $patientData['telephone'] = $row['telefono'];
+                            $patientData['phone'] = $row['cellulare'];
+                            $patientData['added_by'] = $user->id;
+                            $patientData['updated_by'] = $user->id;
+                            $patientData['privacy_agreement_date'] = isset($row['dt_consenso_privacy'])?date('Y-m-d',strtotime($row['dt_consenso_privacy'])):'';
+                            $mage = Patient::firstOrNew(['name'=>$patientData['name'],'surname'=>$patientData['surname'],'dob'=>$patientData['dob']], $patientData);
+                            if($mage->exists){
+                                Patient::where('id', $mage->id)->update($patientData);
+                            } else {
+                                $mage->save();
+                            }
+                            
+                        } 
+                    }else{
+                        $res=2;
+                    }
+                });
+                if($res == 1) {
+                    return redirect('/admin/paziente')->with('success',"I dati del paziente sono stati importati correttamente.");
+                }else{
+                    return redirect('/admin/paziente')->with('error',"Dati paziente errati.");
+                }
+            }else{
+                return redirect('/admin/paziente')->with('error',"Estensione errata. Seleziona il file con estensione '.xlsx'."); 
+            }
+        } else {
+            return redirect('/admin/paziente')->with('error',"Seleziona il file da importare."); 
+        }
     }
 }
