@@ -32,7 +32,7 @@
                     <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
-                                <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
+                                <div class="job-name">{{ $patients[$patient['id']]->surname.' '.$patients[$patient['id']]->name.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
                                     <a href="javascript:void(0);" data-href="{{ url('admin/getpatient/'.$patients[$patient['id']]->appointid) }}" class="openPopup">
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -63,7 +63,7 @@
                     <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
-                                <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
+                                <div class="job-name">{{ $patients[$patient['id']]->surname.' '.$patients[$patient['id']]->name.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
                                     <a href="javascript:void(0);" data-href="{{ url('admin/getpatient/'.$patients[$patient['id']]->appointid) }}" class="openPopup">
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -94,7 +94,7 @@
                     <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}"  app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
-                                <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
+                                <div class="job-name">{{ $patients[$patient['id']]->surname.' '.$patients[$patient['id']]->name.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
                                     <a href="javascript:void(0);" data-href="{{ url('admin/getpatient/'.$patients[$patient['id']]->appointid) }}" class="openPopup">
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -125,7 +125,7 @@
                     <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}"style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
-                                <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
+                                <div class="job-name">{{ $patients[$patient['id']]->surname.' '.$patients[$patient['id']]->name.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
                                     <a href="javascript:void(0);" data-href="{{ url('admin/getpatient/'.$patients[$patient['id']]->appointid) }}" class="openPopup">
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -156,7 +156,7 @@
                     <li class="indivisual_patient doc-{{ $patients[$patient['id']]->docId }}" color="{{ $patient['color'] }}" app-id="{{ $patients[$patient['id']]->appointid }}" updated-by="{{ $patient['updated_by'] }}" update-date="{{ $patient['update_date'] }}" patient-id="{{ $patient['id'] }}">
                         <div class="job-block" id="patient-{{ $patient['id'] }}" style="@php echo 'background-color:'.$patient['color'] @endphp">
                             <div class="job-name-block">
-                                <div class="job-name">{{ $patients[$patient['id']]->surname.' : '.$patients[$patient['id']]->dob}}</div>
+                                <div class="job-name">{{ $patients[$patient['id']]->surname.' '.$patients[$patient['id']]->name.' : '.$patients[$patient['id']]->dob}}</div>
                                 <div class="job-edit">
                                     <a href="javascript:void(0);" data-href="{{ url('admin/getpatient/'.$patients[$patient['id']]->appointid) }}" class="openPopup">
                                     <i class="fa fa-user" aria-hidden="true"></i>

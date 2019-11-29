@@ -106,10 +106,7 @@
 
 					<div class="new">
 
-						<p><label class="checkbox11"><input type="checkbox" name="checkbox"><i> </i>hai dimenticato la password?</label></p>
-
-
-
+						<p><label class=""><a href="{{ url('resetta-la-password') }}">hai dimenticato la password?</a></label></p>
 						<div class="clearfix"></div>
 
 					</div>

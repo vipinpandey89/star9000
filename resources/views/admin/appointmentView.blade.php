@@ -7,7 +7,7 @@
 }
 </style>
 <div class="outter-wp">
-	<div class="sub-heard-part">
+	<div class="sub-heard-part">	
 		<ol class="breadcrumb m-b-0">
 			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">Calendario</li>
@@ -20,50 +20,40 @@
 	</div>
 	@endif
 	<div class="row">
+		<div class="col-md-12 text-center">
+		
+		<div id="main-filter-section" class="left_filter_section">
 		<form method="get" action="{{url('admin/calendario')}}">
-			<div class="col-lg-3" >
+			<div>
 				<div class="form-group">
-					<div class="col-sm-10">
-						<div id="date-selecter-picker" ></div>
-					</div>									
-				</div>
-			</div>
-			<div class="col-lg-6" >
-				<div class="form-group">
-					<div class="col-sm-10">
+					<div>
 						<input class="form-control1" type="text" id="up-search-bttn" placeholder="Ricerca">
 					</div>									
 				</div>
 			</div>
-			<div class="col-lg-3">
+			<div class="row">
+			 <div class="col-md-4">
 				<div class="form-group">
-					<div class="col-sm-10">
-						<input type="text" id="filter-from-date" class="form-control1" name="fromdate" placeholder="{{ __('menu.From Date') }}">
+					<div>
+						<div id="date-selecter-picker" ></div>
 					</div>									
 				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="form-group">
-					<div class="col-sm-10">
+			 </div>
+			  <div class="col-md-4">
+			  	<div class="form-group">
+			  		<div>
+			  			<input type="text" id="filter-from-date" class="form-control1" name="fromdate" placeholder="{{ __('menu.From Date') }}">
+			  		</div>									
+			  	</div>
+			  	<div class="form-group">
+					<div>
 						<input type="text" id="filter-to-date" class="form-control1" name="todate" placeholder="{{ __('menu.To Date') }}">
 					</div>									
 				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="">
-					<div class="col-sm-10">
-						<select multiple="mutiple" id="filter-doctor" name="filter_doctor[]">
-							<!-- <option value="">{{ __('menu.Select Doctor') }}</option> -->
-							@foreach($Doctor as $doc)
-								<option value="{{$doc->id}}">{{$doc->surname.' '.$doc->name}}</option>
-							@endforeach	
-						</select>
-					</div>									
-				</div>
-			</div>
-			<div class="col-lg-3">
+				
+							<div>
 				<div class="form-group">
-					<div class="col-sm-10">
+					<div>
 						<select id="filter-examtype" class="form-control1" multiplename="filter_examtype">
 							<option value="">{{ __('menu.Select specialty') }}</option>
 							@foreach($examination as $item)
@@ -73,9 +63,9 @@
 					</div>									
 				</div>
 			</div>
-			<div class="col-lg-3">
+			<div>
 				<div class="form-group">
-					<div class="col-sm-10">
+					<div>
 						<select id="filter-room" class="form-control1" name="filter_room">
 							<option value="">{{ __('menu.Type of visit') }}</option>
 							@foreach($rooms as $room)
@@ -85,32 +75,88 @@
 					</div>									
 				</div>
 			</div>
-			<div class="col-lg-3">
+
+			<div class="">
+					<div>
+						<select multiple="mutiple" id="filter-doctor" name="filter_doctor[]">
+							<!-- <option value="">{{ __('menu.Select Doctor') }}</option> -->
+							@foreach($Doctor as $doc)
+								<option value="{{$doc->id}}">{{$doc->surname.' '.$doc->name}}</option>
+							@endforeach	
+						</select>
+					</div>									
+				</div>
+
+			  </div>
+
+
+			  <div class="col-md-4">
+			  <div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<div>
+							<button type="button" id="filter-button" class="btn btn-default"> {{ __('menu.Filter') }}</button>
+						</div>									
+					</div>
+				</div>
+					<div class="col-md-4">
+					<div class="form-group">
+						<div>
+							<button type="button" id="clear-filter-button" class="btn btn-default"> {{ __('menu.Clear Filter') }}</button> 
+						</div>									
+					</div>
+				</div>
+					<div class="col-md-4">
+					<div class="form-group">
+						<div>
+							<button type="button" id="compare-doctor" class="btn btn-default"> {{ __('menu.Compare') }}</button>  
+						</div>									
+					</div>
+				</div>
+
+				<div class="col-md-6">
 				<div class="form-group">
-					<div class="col-sm-10">
-						<button type="button" id="filter-button" class="btn btn-default"> {{ __('menu.Filter') }}</button>
+					<div>
+						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<div>
+						<button type="button" id="all-availability" class="btn btn-default"> {{ __('menu.All Availability') }}</button> 
+						
 					</div>									
 				</div>
 			</div>
-			<div class="col-lg-3">
+
+			</div>
+
+
+		</div>
+			</div>
+			
+
+			
+				<!-- <div class="form-group">
+					<div class="col-sm-10">
+						<button type="button" id="filter-button" class="btn btn-default"> {{ __('menu.Filter') }}</button>
+					</div>									
+				</div> -->
+			
+			<!-- <div class="col-lg-12">
 				<div class="form-group">
 					<div class="col-sm-10">
 						<button type="button" id="clear-filter-button" class="btn btn-default"> {{ __('menu.Clear Filter') }}</button> 
 					</div>									
 				</div>
-			</div>
-			<div class="col-lg-3">
-				<div class="form-group">
-					<div class="col-sm-10">
-						<button type="button" id="next-availability" class="btn btn-default"> {{ __('menu.Next Availability') }}</button>
-						<button type="button" id="all-availability" class="btn btn-default"> {{ __('menu.All Availability') }}</button> 
-						<button type="button" id="compare-doctor" class="btn btn-default"> {{ __('menu.Compare') }}</button> 
-					</div>									
-				</div>
-			</div>
-			
+			</div> -->
+		
 		</form>
-	</div>
+		</div>
+		</div>
+		<div class="col-md-12">
+		<button type="button" id="calendar-action-button">Azioni</button>
 	<div><center><span id="doc-av-mssg" style="color: orange;"></span></center></div>
 	<br>
 	<div class="graph-visual tables-main">	
@@ -130,7 +176,8 @@
 			</div>
 		</div>
 	</div>
-	
+	</div>
+	</div>
 	<div id="patientModal" class="modal" role="dialog" style="overflow-y: scroll;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -1231,7 +1278,10 @@ foreach($patientsData as $dat){
 					$("#calendar").fullCalendar( 'gotoDate', selAppDate );
 				}
 			}
-		})
+		});
+		$('#calendar-action-button').click(function(){
+			$('#main-filter-section').slideToggle('slow');
+		});
 	});
 	function checkStartEndTime(startTime, endTime)
 	{

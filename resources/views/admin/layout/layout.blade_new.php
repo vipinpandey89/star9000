@@ -71,84 +71,99 @@
 </head> 
 <body>
 	<div id="header-menu-section">
-		<div class="top_header">
-		        <nav class="navbar" style="background-color:#021f4e;">
-		          <div class="container-fluid">
-		            <!-- Brand and toggle get grouped for better mobile display -->
-		            <div class="navbar-header">
-		              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-		                <span class="sr-only">Toggle navigation</span>
-		                <span class="icon-bar"></span>
-		                <span class="icon-bar"></span>
-		                <span class="icon-bar"></span>
-		              </button>
-		              <span id="logo"> <h1>Star 9000</h1></span>
-		            </div>
-		            <!-- Collect the nav links, forms, and other content for toggling -->
-		            <?php $userData=Auth::user();
+		<div class="sidebar-menu">
+					<header class="logo">
+						<a href="#" class="sidebar-icon"> <span class="fa fa-bars"></span> </a> <a href="{{url('/admin/bacheca')}}"> <span id="logo"> <h1>Star 9000</h1></span> 
+
+						</a> 
+					</header>
+					<div style="border-top:1px solid rgba(69, 74, 84, 0.7)"></div>
+					<?php $userData=Auth::user();
 					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico']
 					 ?>
-		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		              <ul class="nav navbar-nav navbar-right">
-		                @if($userData->role_type=='1')
-								<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> {{ __('menu.Dashboard') }}</a></li>			
-								<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> {{ __('menu.Addsecretary') }}</a></li>
-
-								<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> {{ __('menu.Add specialty') }}</a></li>
-
-								<li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> {{ __('menu.appointment_label') }}</a></li>
-
-								<li> <a href="{{url('admin/assegna-stanza')}}"><i class="fa fa-hospital-o"></i> {{ __('menu.Rooms') }}</a></li>
-
-								<li><a href="{{url('admin/elenco-medico')}}"> <i class="fa fa-user-md" aria-hidden="true"></i> {{ __('menu.AddDoctor') }}</a></li>
-								<li class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.Patient') }}<span class="caret"></span></a>
-									<ul class="dropdown-menu">
-										<li><a href="{{url('admin/paziente')}}">{{ __('menu.Patient Section') }}</a></li>
-										<li><a href="{{url('admin/privacy')}}">{{ __('menu.Privacy') }}</a></li>
-										<li><a href="{{url('admin/intervento')}}">{{ __('menu.Intervention') }}</a></li>
-										<li><a href="{{url('admin/gestire-il-paziente')}}">{{ __('menu.Manage Patient') }}</a></li>
-
-									</ul>
-								</li>
-								<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i> {{ __('menu.Eye Visit Tabs') }}</a></li>
-								<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i> {{ __('menu.Reminder') }}</a></li>
-
-
-						@elseif( Auth::user()->role_type=='2')
-								<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>
-						       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i>{{ __('menu.AddDoctor') }}</a></li>
-
-						       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i>{{ __('menu.appointment_label') }}</a></li>
-						       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.List By Doctor') }}</a></li>
-						@else	
-								<li><a href="{{url('medico/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>	
-								<li><a href="{{url('medico/appuntamenti')}}"><i class="fa fa-table" aria-hidden="true"></i>{{ __('menu.Appointments') }}</a></li>
-								<li><a href="{{url('medico/paziente')}}"><i class="lnr lnr-user" aria-hidden="true"></i>{{ __('menu.Patients') }}</a></li>
-								<li><a href="{{url('medico/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i>{{ __('menu.UserProfile') }}</a></li>
-						@endif
-
-
-						<li class="dropdown user_dropdown"> 
-							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span><span class="caret"></span></a>
-							<ul class="dropdown-menu">
-							<div class="user_box">
-								<p>{{$userData->surname.' '.$userData->name}}</p>
-								<p>{{$userData->email}}</p>
-								<p>Ruolo : {{$roleTypeArray[$userData->role_type]}}</p>
-								<button><a href="{{url('admin/admin-logout')}}">Logout</a></button>
-							</div>
+					 <input type="hidden" id="main-content-userid" value="{{ $userData->id }}">
+					<div class="down">	
+						<a href="{{url('/admin/bacheca')}}"><img src="{{url('administrator/images/admin.jpg')}}"></a>
+						<a href="{{url('/admin/bacheca')}}"><span class=" name-caret">{{$userData->email}}</span></a>
+						<p>{{$roleTypeArray[$userData->role_type]}}</p>
+						<ul>
+							<li><a class="tooltips" href="{{url('admin/profilo-visite')}}"><span>Profilo</span><i class="lnr lnr-user"></i></a></li>
+							<li><a class="tooltips" href="{{url('admin/admin-logout')}}"><span>Esci</span><i class="lnr lnr-power-switch"></i></a></li>
 						</ul>
-						</li>
-		              </ul>
-		            </div><!-- /.navbar-collapse -->
-		          </div><!-- /.container-fluid -->
-		        </nav>
-		    </div>
+					</div>
+					<!--//down-->
+					<div class="menu">
+						      <ul id="menu" >
+						            	
+
+								@if($userData->role_type=='1')
+										<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>			
+										<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> <span>{{ __('menu.Addsecretary') }}</span></a></li>
+
+										<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> <span>{{ __('menu.Add specialty') }} </span></a></li>
+
+										<li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
+
+										<li><a href="{{url('admin/assegna-stanza')}}"><i class="fa fa-hospital-o"></i> <span>{{ __('menu.Rooms') }}</span></a></li>
+
+										<li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
+										<li>
+											<a href="javascript:void(0);"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.Patient') }}</span></a>
+											<ul>
+												<li><a href="{{url('admin/paziente')}}"><span>{{ __('menu.Patient Section') }}</span></a></li>
+												<li><a href="{{url('admin/privacy')}}"><span>{{ __('menu.Privacy') }}</span></a></li>
+												<li><a href="{{url('admin/intervento')}}"><span>{{ __('menu.Intervention') }}</span></a></li>
+												<li><a href="{{url('admin/gestire-il-paziente')}}"><span>{{ __('menu.Manage Patient') }}</span></a></li>
+
+											</ul>
+										</li>
+										<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i><span>{{ __('menu.Eye Visit Tabs') }}</span></a></li>
+										<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i><span>{{ __('menu.Reminder') }}</span></a></li>
+
+
+								@elseif( Auth::user()->role_type=='2')
+										<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>
+								       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.AddDoctor') }}</span></a></li>
+
+								       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i> <span>{{ __('menu.appointment_label') }}</span></a></li>
+								       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i><span>{{ __('menu.List By Doctor') }}</span></a></li>
+								@else	
+										<li><a href="{{url('medico/bacheca')}}"><i class="fa fa-tachometer"></i> <span>{{ __('menu.Dashboard') }}</span></a></li>	
+										<li><a href="{{url('medico/appuntamenti')}}"><i class="fa fa-table" aria-hidden="true"></i><span>{{ __('menu.Appointments') }}</span></a></li>
+										<li><a href="{{url('medico/paziente')}}"><i class="lnr lnr-user" aria-hidden="true"></i><span>{{ __('menu.Patients') }}</span></a></li>
+										<li><a href="{{url('medico/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i><span>{{ __('menu.UserProfile') }}</span></a></li>
+								@endif
+							 </ul>
+						 </div>
+						 </div>
+					     <div class="clearfix"></div>		
+						</div>
+						<script>
+							var toggle = true;
+
+							$(".sidebar-icon").click(function() {                
+								if (toggle)
+								{
+									$(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+									$("#menu span").css({"position":"absolute"});
+								}
+								else
+								{
+									$(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+									setTimeout(function() {
+										$("#menu span").css({"position":"relative"});
+									}, 400);
+								}
+
+								toggle = !toggle;
+							});
+						</script>
+
+						<!--js -->
 	</div>
 	<div class="page-container">
 
-		<div class="">
+		<div class="left-content">
 
 			<div class="inner-content">
 

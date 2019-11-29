@@ -186,6 +186,19 @@ class PatientController extends Controller
                             ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
         $patientFirst = [];
         $todaysDoc =[];
+        $patInDatabase = [];
+        if(!empty($existingPat)){
+            $first = !empty($existingPat->first)?json_decode($existingPat->first, true):[];
+            $second = !empty($existingPat->second)?json_decode($existingPat->second, true):[];
+            $third = !empty($existingPat->third)?json_decode($existingPat->third, true):[];
+            $fourth = !empty($existingPat->fourth)?json_decode($existingPat->fourth, true):[];
+            $fifth = !empty($existingPat->fifth)?json_decode($existingPat->fifth, true):[];
+            $extData = array_merge($first,$second, $third, $fourth, $fifth);
+            foreach ($extData as  $patvalue) {
+                $patInDatabase[] = $patvalue['id'];
+            }
+        }
+        $newPat = [];
         foreach ($patientsOfTheDay as $pat) {
             $patientFirst[] =[
                 'id'=>$pat->id,
@@ -193,20 +206,26 @@ class PatientController extends Controller
                 'update_date'=>date('Y-m-d H:i:s', time()),
                 'color'=>''
             ];
+            if(!in_array($pat->id, $patInDatabase)) {
+                $newPat[] = [
+                    'id'=>$pat->id,
+                    'updated_by'=>$user->id,
+                    'update_date'=>date('Y-m-d H:i:s', time()),
+                    'color'=>''
+                ];
+            }
             $todaysDoc[]=$pat->docId;
         }
+        //print_r($patInDatabase);print_r($newPat);
         $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
         if(!empty($existingPat)){
             $patientFirst = [];
-        } else {
-            $managePatientData['first'] = json_encode($patientFirst);
-            $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
-            if($mage->exists){
-                
-            } else {
-                $mage->save();
-            }
+            $patFirst = !empty($existingPat->first)?json_decode($existingPat->first, true):[];
+            $newArray = array_merge($patFirst,$newPat);
+            //print_r($newArray);die;
+            $existingPat->first = json_encode($newArray);
         }
+       // print_r($existingPat);die;
         return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination,'doctorData'=>$doctorData]);
     }
 

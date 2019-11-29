@@ -87,11 +87,11 @@ class AppointmentController extends Controller
             if(!empty($patient->dob)){
                 $emaildat=' - ('.(isset($patient->dob)?$patient->dob:'').')';
             }
-            $eventDescription = "<div><div>Nome del dottore : ".$DoctorDetail->name."</div>";
-             $eventDescription .= "<div>cognome del paziente : ".$patient->surname."</div>";
-            $eventDescription .= "<div>Nome paziente : "." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
-            $eventDescription .= "<div>Inizio : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
-            $eventDescription .= "<div>Specialità : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div></div>";
+            $eventDescription = "<div class='tooltips_custome'><div><span class='bold_content'>Nome del dottore</span> : ".$DoctorDetail->name."</div>";
+             $eventDescription .= "<div><span class='bold_content'>cognome del paziente</span> : ".$patient->surname."</div>";
+            $eventDescription .= "<div><span class='bold_content'>Nome paziente</span> : "." ".$patient->name.", Data di nascita :".$patient->dob."</div>";
+            $eventDescription .= "<div><span class='bold_content'>Inizio</span> : ".$row->starteTime.", Fine : ".$row->endtime."</div>";
+            $eventDescription .= "<div><span class='bold_content'>Specialità</span> : ".$exams[$row->examination_id].", Tipologia visita : ".$rooms[$row->room_id]."</div></div>";
             $titlePat = ', Paziente: '.$patient->surname.' '.$patient->name.$emaildat;
             $data[] = array(
                               'id'   => $row->id,
