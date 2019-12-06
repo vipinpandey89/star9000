@@ -35,7 +35,8 @@ class Patient extends Model
                             'province_of_living',
                             'number_of_the_address',
                             'privacy_agreement_date',
-                            'updated_by'
+                            'updated_by',
+                            'patient_signature'
     					];
 
 }

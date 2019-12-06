@@ -1,3 +1,6 @@
+<script type="text/javascript">
+patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
+</script>
 @extends('admin.layout.layout')
 @section('title','dasbhoard')
 @section('content')
@@ -33,9 +36,26 @@
 		            	</div>
 		                <div class=""> 
 		                	<button type="button" id="agree-button" class="btn btn-default">Accetta</button>
-		                	<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button>
+							<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button>
+							<button class="btn btn-default" id="capture-patient-signature">Cattura firma paziente</button>
 		                	 <button class="pull-right btn btn-default" id="print-privacy">Stampa</button>
 		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<input type="hidden" id="patientData-id-pat" value="{{$patientData->id}}"/>
+		<div id="capture-signature-model" class="modal fade">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title">Cattura firma paziente</h4>
+
+		            </div>
+		            
+		            <div class="modal-body">
+		            	
 		            </div>
 		        </div>
 		    </div>

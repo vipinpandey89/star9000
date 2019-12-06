@@ -29,8 +29,33 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
+        return view('admin.patientList',['user'=>$user]);
+    }
+
+    public function getMainPatientList() {
         $patients = Patient::all();
-        return view('admin.patientList',['patients'=>$patients,'user'=>$user]);
+        $returnArray = [];
+        $i=1;
+        foreach ($patients as $patient) {
+            if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->dob)){
+                $checked='<i class="fa fa-check-square" aria-hidden="true"></i>';
+            } else {
+                $checked='<i class="fa fa-exclamation-circle" aria-hidden="true"></i>';
+            }
+            $action ='<a class="btn btn-info btn-sm" href="'.url("admin/modifica-paziente/".$patient->id).'" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            $returnArray['data'][]=[
+                $i,
+                (!empty($patient->surname)?$patient->surname:'NA'),
+                (!empty($patient->name)?$patient->name:'NA'),
+                (!empty($patient->email)?$patient->email:'NA'),
+                (!empty($patient->phone)?$patient->phone:'NA'),
+                (!empty($patient->dob)?$patient->dob:'NA'),
+                $checked,
+                $action
+            ];
+            $i++;
+        }
+        return json_encode($returnArray);
     }
 
     public function AddPatient(Request $request)
@@ -629,5 +654,15 @@ class PatientController extends Controller
         } else {
             return redirect('/admin/paziente')->with('error',"Seleziona il file da importare."); 
         }
+    }
+
+    public function getPatientSignature(Request $request,$patid) {
+        $data = [];
+        $patData = Patient::where(['id'=>$patid])->select('patients.surname','patients.name','patients.id')->first();
+        if($request->method() == 'POST') {
+            echo Input::get('patient_signature');echo Input::get('pat_id');die('herrere');
+        }
+        return view('admin.getPatientSignature', ['data'=>$data,'patData'=>$patData]);
+
     }
 }

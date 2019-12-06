@@ -25,7 +25,14 @@ class AdminController extends Controller
 
     public function index(Request $request)
     {
-
+      $user = auth()->user();
+      if(isset($user->id)) {
+        if($user->role_type == 3) {
+          return redirect('medico/bacheca');
+        } else {
+          return redirect('admin/bacheca');
+        }
+      }
     	if(isset($_POST['addlogin']))
     	{
     			 $rules = [
@@ -47,8 +54,11 @@ class AdminController extends Controller
 
       		if(Auth::attempt(['email' => $email, 'password' => $password]))
       		{
-              //echo 'dfd';die;
-      		  	return redirect('admin/bacheca');
+      		  	if(auth()->user()->role_type == 3) {
+                return redirect('medico/bacheca');
+              } else {
+                return redirect('admin/bacheca');
+              }
 
          	 }else{
                    return redirect('/admin')->with('danger','Indirizzo email o password sono errati!');
@@ -744,6 +754,6 @@ class AdminController extends Controller
     {
     	  Auth::logout();
 
-        return redirect('/admin');
+        return redirect('/');
     }
 }

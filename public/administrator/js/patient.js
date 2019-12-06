@@ -7,7 +7,8 @@ $(document).ready(function(){
 			} ],
 			"language": {
 	            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json"
-	        }
+	        },
+	        "ajax": base_url+'/admin/getMainPatientList'
 		});
 	}
 	if($('#appointmentTable').length) {
@@ -128,5 +129,14 @@ $(document).ready(function(){
 
   			newWin.document.close();
 		});
+	}
+	if($('#capture-patient-signature').length){
+		$('#capture-patient-signature').on('click',function(){
+			var patientSigId= $('#patientData-id-pat').val();
+            var dataURL = base_url+'/admin/ottenere-la-firma-dellutente/'+patientSigId;
+            $('#capture-signature-model').find('.modal-body').load(dataURL,function(){
+                $('#capture-signature-model').modal({show:true});
+            });
+        });
 	}
 });

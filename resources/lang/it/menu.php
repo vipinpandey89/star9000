@@ -88,5 +88,6 @@ return [
     'All Availability' => 'Tutte le disponibilità',
     'Compare' => 'Confronta',
     'List By Doctor' => 'Elenco per medico',
-    'Patients' => 'pazienti'
+    'Patients' => 'pazienti',
+    'Access Level' => 'Livello di accesso'
 ];

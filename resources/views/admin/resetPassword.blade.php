@@ -48,7 +48,7 @@
 
 	<div class="error_page">												
 
-		<div class="error-top">
+		<div class="error-top" style="width:32%;">
 
 			<h2 class="inner-tittle page">Star 9000</h2>
 
@@ -74,8 +74,7 @@
 
 
 
-
-			@if (Session::has('success'))
+            @if (Session::has('success'))
 
 			<div class="alert alert-success alert-block">
 
@@ -86,7 +85,7 @@
 			</div>
 
 			@endif
-			
+
 			@if (Session::has('danger'))
 
 			<div class="alert alert-danger alert-block">
@@ -101,26 +100,16 @@
 
 			<div class="login">
 
-				<h3 class="inner-tittle t-inner">Login</h3>																
+				<h3 class="inner-tittle t-inner">Resetta la password</h3>																
 
 				<form method="post">
 
 					<input type="text" class="text" value="{{ old('email') }}" placeholder="indirizzo e-mail" name="email" >
-
-					<input type="password" value="" placeholder="Password" name="password">
-
-					<div class="submit"><input type="submit" name="addlogin" value="Login" ></div>
+					<div class="submit"><input style="font-size:15px;" type="submit" value="Invia Reimposta collegamento password" ></div>
 
 					<div class="clearfix"></div>
 
 					{!! csrf_field() !!}
-
-					<div class="new">
-
-						<p><label class=""><a href="{{ url('resetta-la-password') }}">hai dimenticato la password?</a></label></p>
-						<div class="clearfix"></div>
-
-					</div>
 
 				</form>
 

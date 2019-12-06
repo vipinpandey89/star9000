@@ -1,5 +1,6 @@
 
 <!DOCTYPE HTML>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<title>Star 9000</title>
@@ -7,6 +8,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="keywords" content="Augment Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient')
+	<script src="{{URL::asset('signature/js/wgssSigCaptX.js')}}"></script>
+		<script src="{{URL::asset('signature/js/base64.js')}}"></script>
+		<script src="{{URL::asset('signature/js/SigCaptX-Wizard-Main.js')}}"></script>
+		<script src="{{URL::asset('signature/js/SigCaptX-Wizard-PadDefs.js')}}"></script>
+		<script src="{{URL::asset('signature/js/SigCaptX-Utils.js')}}"></script>
+		<script src="{{URL::asset('signature/js/SigCaptX-SessionControl.js')}}"></script>
+		<script src="{{URL::asset('signature/js/SigCaptX-Globals.js')}}"></script>
+		
+	@endif
 	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<script src="{{URL::asset('administrator/js/jquery-1.10.2.min.js')}}"></script>
 	<link href="{{URL::asset('administrator/css/jquery-confirm.min.css')}}" rel='stylesheet' type='text/css' />
@@ -69,7 +80,7 @@
 		var base_url = '<?php echo url('/') ?>';
 	</script>
 </head> 
-<body>
+<body <?php echo (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient')?'onload="wizardEventController.body_onload()"':'' ?>>
 	<div id="header-menu-section">
 		<div class="top_header">
 		        <nav class="navbar" style="background-color:#021f4e;">
@@ -86,7 +97,7 @@
 		            </div>
 		            <!-- Collect the nav links, forms, and other content for toggling -->
 		            <?php $userData=Auth::user();
-					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico']
+					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico'];
 					 ?>
 		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		              <ul class="nav navbar-nav navbar-right">
@@ -112,15 +123,19 @@
 									</ul>
 								</li>
 								<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i> {{ __('menu.Eye Visit Tabs') }}</a></li>
-								<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i> {{ __('menu.Reminder') }}</a></li>
+								<li><a href="{{url('admin/livello-di-accesso')}}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ __('menu.Access Level') }}</a></li>
 
 
 						@elseif( Auth::user()->role_type=='2')
 								<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>
-						       <li><a href="{{url('admin/elenco-medico')}}"><i class="fa fa-user-md" aria-hidden="true"></i>{{ __('menu.AddDoctor') }}</a></li>
-
-						       <li><a href="{{url('admin/calendario')}}"><i class="fa fa-table"></i>{{ __('menu.appointment_label') }}</a></li>
-						       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.List By Doctor') }}</a></li>
+								@foreach($accessibleMenus as $menu)
+						       		<li><a href="{{url('admin/'.$menu->nav_link)}}">
+						       			@if(!empty($menu->icon))
+						       			<i class="{{$menu->icon}}" aria-hidden="true"></i>
+						       			@endif
+						       		{{$menu->tab_name}}</a></li>
+						       	@endforeach
+						       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.List By Doctor') }}</a></li> 
 						@else	
 								<li><a href="{{url('medico/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>	
 								<li><a href="{{url('medico/appuntamenti')}}"><i class="fa fa-table" aria-hidden="true"></i>{{ __('menu.Appointments') }}</a></li>
@@ -136,7 +151,11 @@
 								<p>{{$userData->surname.' '.$userData->name}}</p>
 								<p>{{$userData->email}}</p>
 								<p>Ruolo : {{$roleTypeArray[$userData->role_type]}}</p>
-								<button><a href="{{url('admin/admin-logout')}}">Logout</a></button>
+								@if( Auth::user()->role_type=='3')
+								<button><a href="{{url('medico/logout')}}">Logout</a></button>
+								@else
+								<button><a href="{{url('admin/logout')}}">Logout</a></button>
+								@endif
 							</div>
 						</ul>
 						</li>
@@ -176,7 +195,9 @@
 						@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 							<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
+							
 						@endif
+						
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 						@endif
@@ -207,6 +228,7 @@
 								$.datepicker.setDefaults( $.datepicker.regional["it" ]);
 							});
 						</script>
+						
 						<script type="text/javascript" src="{{ URL('administrator/js/reminder.js') }}"></script>
 					</body>
 					</html>

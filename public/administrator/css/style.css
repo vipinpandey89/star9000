@@ -1400,6 +1400,9 @@ text.highcharts-title {
 
 
 @media all and (max-width: 992px) {
+  .main_div {
+ position:inherit !important;
+  }
   .dev-table {
     display: block;
     float: left;
@@ -2618,9 +2621,10 @@ label {
 button.btn.btn-default {
     background: #00C6D7;
     color: #fff;
-    font-size: 1em;
+    font-size: 12px;
 	outline:none;
 	border:none;
+
 }
 .graph-2.general {
     width: 100%;
@@ -4109,7 +4113,7 @@ th {
 }
 .btn {
     cursor: pointer;
-    margin: 10px;
+    margin: 0px;
     border-radius: 0;
     text-decoration: none;
         padding: 8px 8px;
@@ -8482,7 +8486,9 @@ footer  p a:hover ,.footer p a:hover{
 .ui-datepicker table {
     font-size: 14px;
 }
-
+/*.ui-datepicker {
+    width: 100% !important;
+}*/
 
 .left_filter_section {
     padding-top: 22px;
@@ -8502,7 +8508,47 @@ footer  p a:hover ,.footer p a:hover{
 .body-section {
     overflow-x: scroll;
 }
-
+.left_filter_section {
+    padding-top: 22px;
+    width: 1089px;
+    margin: 0 auto;
+        margin-bottom: 0px;
+    background: 
+#c2f1f5;
+padding: 18px;
+box-sizing: border-box;
+border-radius: 8px;
+margin-bottom: 40px;
+max-width: 100%;
+border: 15px solid
+#fff;
+box-shadow: 0 0 10px 3px
+    rgba(0,0,0,0.1);
+}
+.main_div {
+  position: absolute;
+  z-index: 9;
+}
+.easy-autocomplete {
+    width: 100% !important;
+}
+#calendar-action-button {
+    background: #00c6d7;
+    border: none;
+    padding: 6px 28px;
+    color: #fff;
+}
+#main-filter-section {
+  display: none;
+}
+.doctor-filter-calendar .btn-group, .multiselect {
+    width: 100%;
+        text-align: left;
+}
+.top_header .navbar-nav > li > .dropdown-menu {
+  background: #021f4e;
+  height: auto;
+}
 @media only screen and (max-width: 767px) {
 .top_header #logo h1 {
     padding-top: 11px;
@@ -8516,6 +8562,9 @@ footer  p a:hover ,.footer p a:hover{
     left: 0;
 }
 }
-@media (min-width: 1150px){
-
+@media (max-width: 375px){
+.outter-wp #date-selecter-picker {
+    margin-bottom: 10px;
+    font-size: 13px;
+}
 }

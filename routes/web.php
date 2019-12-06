@@ -24,6 +24,7 @@ Auth::routes();
 Route::match(['get','post'],'/','AdminController@index');
 Route::match(['get','post'],'/admin','AdminController@index');
 Route::match(['get','post'],'/resetta-la-password','UserResetPasswordController@index');
+Route::match(['get','post'],'/cambia-la-password/{token}','UserResetPasswordController@changePassword');
 
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function(){
@@ -86,7 +87,7 @@ Route::get('doctor-leaves','AdminController@DoctorLeaves');
 
 Route::get('test-digital-pad','AdminController@TestDigital');
 
-Route::get('/admin-logout','AdminController@AdminLogout');
+Route::get('/logout','AdminController@AdminLogout');
 Route::get('paziente','PatientController@index');
 Route::match(['get','post'],'aggiungi-paziente','PatientController@AddPatient');
 Route::match(['get','post'],'modifica-paziente/{id}','PatientController@EditPatient');
@@ -118,6 +119,7 @@ Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
 Route::get('/elenco-per-medico','PatientController@listByDoctor');
 Route::get('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
 Route::post('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
+Route::get('/getMainPatientList','PatientController@getMainPatientList');
 Route::post('/importazione-paziente','PatientController@importPatient');
 Route::get('/promemoria','ReminderController@index');
 Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
@@ -125,6 +127,10 @@ Route::match(['get','post'],'modifica-promemoria/{id}','ReminderController@editR
 Route::get('/elimina-promemoria/{id}','ReminderController@deleteReminder');
 Route::get('/getreminder','ReminderController@getreminder');
 Route::get('/updatereminder','ReminderController@updatereminder');
+Route::get('/ottenere-la-firma-dellutente/{patid}','PatientController@getPatientSignature');
+Route::get('/livello-di-accesso','AccessLevelController@index');
+Route::match(['get','post'],'livello-di-accesso/{userid}','AccessLevelController@index');
+Route::get('/getUsersByType','AccessLevelController@getUsersByType');
 
 });
 
@@ -137,4 +143,5 @@ Route::group(['prefix'=>'medico','middleware'=>['auth','admin']],function(){
 	Route::get('/bacheca','AdminController@dasbhoard');
 	Route::match(['get','post'],'modifica-paziente/{id}','PatientController@EditPatient');
 	Route::match(['get','post'],'/eyevisit/{patid}/{id}','DoctorController@eyevisit');
+	Route::get('/logout','AdminController@AdminLogout');
 });

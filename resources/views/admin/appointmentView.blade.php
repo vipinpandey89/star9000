@@ -20,7 +20,8 @@
 	</div>
 	@endif
 	<div class="row">
-		<div class="col-md-12 text-center">
+	<button type="button" id="calendar-action-button">Azioni</button>
+		<div class="col-md-12 text-center main_div">
 		
 		<div id="main-filter-section" class="left_filter_section">
 		<form method="get" action="{{url('admin/calendario')}}">
@@ -76,7 +77,7 @@
 				</div>
 			</div>
 
-			<div class="">
+			<div class="doctor-filter-calendar">
 					<div>
 						<select multiple="mutiple" id="filter-doctor" name="filter_doctor[]">
 							<!-- <option value="">{{ __('menu.Select Doctor') }}</option> -->
@@ -156,7 +157,7 @@
 		</div>
 		</div>
 		<div class="col-md-12">
-		<button type="button" id="calendar-action-button">Azioni</button>
+		
 	<div><center><span id="doc-av-mssg" style="color: orange;"></span></center></div>
 	<br>
 	<div class="graph-visual tables-main">	
@@ -1123,13 +1124,14 @@ foreach($patientsData as $dat){
 							$('#date-selecter-picker').datepicker('destroy').datepicker({
 								dateFormat: 'yy-mm-dd',
 								beforeShowDay: function( date ) {
-									var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+									var m = ('0' + (date.getMonth()+1)).slice(-2), d = ('0' + date.getDate()).slice(-2), y = date.getFullYear();
 									var n = date.getDay()
 									if((n == 0) || n == 6) {
 										return [false];
 									} else{
 							            for (i = 0; i < availableDates.length; i++) {
-							            	var dateSelectedCus = y + '-' + (m+1) + '-' + d;
+											var dateSelectedCus = y + '-' + m + '-' + d;
+											
 							                if($.inArray(dateSelectedCus,availableDates) != -1) {
 							                    return [true, 'ui-available', docAvailabilty[dateSelectedCus]];
 							                }
