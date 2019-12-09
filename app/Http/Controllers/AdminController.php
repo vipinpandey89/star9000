@@ -79,9 +79,7 @@ class AdminController extends Controller
 
     public function ListSecretary()
     {
-
     	$user= User::where(['role_type'=>'2','is_delete'=>'0'])->get();
-
     	return view('admin.list-secteray',['userDetail'=>$user]);
     }
 

@@ -19,8 +19,14 @@
 	</div>
 
 	<div class="graph-visual tables-main">			
-
-		<a href="{{url('admin/aggiungi-visita')}}" class="btn blue">{{ __('menu.Add specialty') }} </a>
+		@if(Auth::user()->role_type=='1')			
+			<a href="{{url('admin/aggiungi-visita')}}" class="btn blue">{{ __('menu.Add specialty') }} </a>
+		@elseif(Auth::user()->role_type=='2')
+			@if(isset($menuData[2]['write']))
+			<a href="{{url('admin/aggiungi-visita')}}" class="btn blue">{{ __('menu.Add specialty') }} </a>
+			@endif
+		@endif
+		
 
 		<div class="graph">
 
@@ -49,8 +55,14 @@
 				 		  <th>{{ __('menu.specialty') }}</th>
 
 				 		  
-
-				 		      <th>{{ __('menu.Action') }}</th>
+				 		  	@if(Auth::user()->role_type=='1')			
+								<th>{{ __('menu.Action') }}</th>
+							@elseif(Auth::user()->role_type=='2')
+								@if(isset($menuData[2]['write']))
+								<th>{{ __('menu.Action') }}</th>
+								@endif
+							@endif
+				 		      
 
 				 		  </tr>
 
@@ -75,19 +87,19 @@
 				 		 <td>{{$iteam->title}}</td> 				 		
 
 				 		
-
-				 		  <td>				 		  		
-
-							    
-
-							  <a class="btn btn-info btn-sm" href="{{url('admin/modifica-visite/'.$iteam->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
-
-
-							  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-examination/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa specialità?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-
-						</td>
-
+				 		 	@if(Auth::user()->role_type=='1')			
+								<td>				 		  		
+								  <a class="btn btn-info btn-sm" href="{{url('admin/modifica-visite/'.$iteam->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+								  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-examination/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa specialità?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+								</td>
+							@elseif(Auth::user()->role_type=='2')
+								@if(isset($menuData[2]['write']))
+								<td>				 		  		
+								  <a class="btn btn-info btn-sm" href="{{url('admin/modifica-visite/'.$iteam->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+								  <a class="btn btn-danger btn-sm" href="{{url('admin/delete-examination/'.$iteam->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa specialità?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+								</td>
+								@endif
+							@endif
 				 	</tr>
 
 				 	<?php $i++;?>

@@ -20,7 +20,13 @@
 	</div>
 	@endif
 	<div class="row">
-	<button type="button" id="calendar-action-button">Azioni</button>
+		@if(Auth::user()->role_type=='1')			
+			<button type="button" id="calendar-action-button">Azioni</button>
+		@elseif(Auth::user()->role_type=='2')
+			@if(isset($menuData[3]['write']))
+			<button type="button" id="calendar-action-button">Azioni</button>
+			@endif
+		@endif
 		<div class="col-md-12 text-center main_div">
 		
 		<div id="main-filter-section" class="left_filter_section">
@@ -137,21 +143,6 @@
 		</div>
 			</div>
 			
-
-			
-				<!-- <div class="form-group">
-					<div class="col-sm-10">
-						<button type="button" id="filter-button" class="btn btn-default"> {{ __('menu.Filter') }}</button>
-					</div>									
-				</div> -->
-			
-			<!-- <div class="col-lg-12">
-				<div class="form-group">
-					<div class="col-sm-10">
-						<button type="button" id="clear-filter-button" class="btn btn-default"> {{ __('menu.Clear Filter') }}</button> 
-					</div>									
-				</div>
-			</div> -->
 		
 		</form>
 		</div>
@@ -347,7 +338,17 @@ $patientEmail=[];
 foreach($patientsData as $dat){
 	$patientEmail[]=$dat['email'];
 }
+$isVisible =0;
+if(Auth::user()->role_type=='1'){		
+	$isVisible = 1;
+}else if(Auth::user()->role_type=='2') {
+	if(isset($menuData[3]['write'])) {
+		$isVisible = 1;
+	}
+}
 ?>
+
+@if($isVisible == 1)
 <script>
 	$(document).ready(function() {
 		patientEmail='<?php echo json_encode($patientEmail)?>';
@@ -1340,4 +1341,87 @@ foreach($patientsData as $dat){
 	  return i;
 	}
 </script>
+@else
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#calendar').fullCalendar({
+			header:{
+				left:'prev,next today',
+				center:'title',
+				right:'month,agendaWeek,agendaDay'
+			},
+			editable: true,
+			droppable: true,
+			eventLimit:true,
+			eventLimitText:'Di Più',
+			views: {
+		        month: { 
+		            editable: false,
+		            eventLimit: 8
+		        },
+		        agendaDay: {
+		        	editable: false
+		        }
+		    },
+			hiddenDays: [ 0, 6 ],
+			defaultView:'agendaDay',
+			monthNames: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+			monthNamesShort: ['genn','febbr','mar','apr','magg','giugno','luglio','ag','sett','ott','nov','dic'],
+			dayNames: ['Domenica', 'Lunedi', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
+			dayNamesShort: ['dom','lun','mar','mer','gio','ven','sab'],
+			allDayText: 'Giornata',
+			firstDay: 1,
+			buttonText: {
+				today: 'oggi',
+				month: 'mese',
+				week: 'settimana',
+				day: 'giorno',
+
+			},
+			slotDuration: '00:10:00',
+			slotLabelInterval: 10,
+			slotLabelFormat: 'H:mm',
+			axisFormat: 'HH:mm',
+			timeFormat: 'HH:mm',
+			theme: true,    
+			themeSystem:'bootstrap3', 
+			close: 'fa-times',
+			prev: 'fa-chevron-left',
+			next: 'fa-chevron-right',
+			prevYear: 'fa-angle-double-left',
+			nextYear: 'fa-angle-double-right',
+			minTime:'07:00:00',
+			maxTime:'19:00:00',
+			nowIndicator:true,
+			events: function(start, end, timezone, callback) {
+		    	renderAppointment(callback);
+		    },
+		    eventRender: function(event, element) {
+		    	if(event.icon){          
+			        element.find(".fc-content").prepend(event.icon);
+			     }
+		    	element.find('.eventtooltip').tooltip({
+		    		title:event.description,
+		    		html:true,
+		    		container:'body'
+		    	});
+		    }
+		});
+	});
+	function renderAppointment(callback) {
+		var filterbydoctor = $('#filter-doctor').val();
+		var filterexamtype = $('#filter-examtype').val();
+		var filterroom = $('#filter-room').val();
+		$.ajax({
+			type:"GET",
+			dataType:"json",
+			data:{filterbydoctor:filterbydoctor,filterexamtype:filterexamtype,filterroom:filterroom},
+			url:"{{url('/admin/responsedata')}}",
+			success: function(response){
+				callback(response);
+			}
+		});
+	}
+</script>
+@endif
 @endsection							

@@ -22,6 +22,8 @@ use App\Surgery;
 use App\EyeVisitTabs;
 use App\InputTabs;
 use App\EyeVisitData;
+use App\UserAccessLevel;
+use App\WacomQuestions;
 use Excel;
 
 class PatientController extends Controller
@@ -36,6 +38,16 @@ class PatientController extends Controller
         $patients = Patient::all();
         $returnArray = [];
         $i=1;
+        $include =0;
+        if(auth()->user()->role_type=='1'){        
+            $include =1;
+        } else if(auth()->user()->role_type =='2'){
+            $accessData = UserAccessLevel::where(['user_id'=>auth()->user()->id])->first();
+            $menuData = json_decode($accessData->access_level,true);
+            if(isset($menuData[6]['write'])){
+                $include =1;
+            }
+        }
         foreach ($patients as $patient) {
             if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->dob)){
                 $checked='<i class="fa fa-check-square" aria-hidden="true"></i>';
@@ -43,16 +55,28 @@ class PatientController extends Controller
                 $checked='<i class="fa fa-exclamation-circle" aria-hidden="true"></i>';
             }
             $action ='<a class="btn btn-info btn-sm" href="'.url("admin/modifica-paziente/".$patient->id).'" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-            $returnArray['data'][]=[
-                $i,
-                (!empty($patient->surname)?$patient->surname:'NA'),
-                (!empty($patient->name)?$patient->name:'NA'),
-                (!empty($patient->email)?$patient->email:'NA'),
-                (!empty($patient->phone)?$patient->phone:'NA'),
-                (!empty($patient->dob)?$patient->dob:'NA'),
-                $checked,
-                $action
-            ];
+            if($include == 1){
+                $returnArray['data'][]=[
+                    $i,
+                    (!empty($patient->surname)?$patient->surname:'NA'),
+                    (!empty($patient->name)?$patient->name:'NA'),
+                    (!empty($patient->email)?$patient->email:'NA'),
+                    (!empty($patient->phone)?$patient->phone:'NA'),
+                    (!empty($patient->dob)?$patient->dob:'NA'),
+                    $checked,
+                    $action
+                ];
+            }else{
+               $returnArray['data'][]=[
+                    $i,
+                    (!empty($patient->surname)?$patient->surname:'NA'),
+                    (!empty($patient->name)?$patient->name:'NA'),
+                    (!empty($patient->email)?$patient->email:'NA'),
+                    (!empty($patient->phone)?$patient->phone:'NA'),
+                    (!empty($patient->dob)?$patient->dob:'NA'),
+                    $checked
+                ]; 
+            }
             $i++;
         }
         return json_encode($returnArray);
@@ -104,7 +128,7 @@ class PatientController extends Controller
     {
         $user = auth()->user();
         $patientData = Patient::where(['id'=>$id])->first();
-        
+        $wacomQuestions = WacomQuestions::all();
         $appoint  = DB::table('appointement_booking')
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
@@ -159,7 +183,7 @@ class PatientController extends Controller
             }
         }
         $privacy = Privacy::where(['id'=>1])->first();
-    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy,'user'=>$user]);
+    	return view('admin.editPatient', ['patientData' => $patientData, 'appointments' => $appointments, 'privacy'=>$privacy,'user'=>$user,'wacomQuestions'=>$wacomQuestions]);
     }
 
     public function SavePrivacy(Request $request) {
@@ -660,7 +684,13 @@ class PatientController extends Controller
         $data = [];
         $patData = Patient::where(['id'=>$patid])->select('patients.surname','patients.name','patients.id')->first();
         if($request->method() == 'POST') {
-            echo Input::get('patient_signature');echo Input::get('pat_id');die('herrere');
+            $sigData['patient_signature'] =Input::get('signature');
+            $sigData['sig_option'] =Input::get('optionVal');
+            $sigData['sig_date'] =date('Y-m-d',time());
+            if(Patient::where('id', $patid)->update($sigData)) {
+                echo 'success';
+            }
+            exit;
         }
         return view('admin.getPatientSignature', ['data'=>$data,'patData'=>$patData]);
 

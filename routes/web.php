@@ -128,6 +128,7 @@ Route::get('/elimina-promemoria/{id}','ReminderController@deleteReminder');
 Route::get('/getreminder','ReminderController@getreminder');
 Route::get('/updatereminder','ReminderController@updatereminder');
 Route::get('/ottenere-la-firma-dellutente/{patid}','PatientController@getPatientSignature');
+Route::post('/ottenere-la-firma-dellutente/{patid}','PatientController@getPatientSignature');
 Route::get('/livello-di-accesso','AccessLevelController@index');
 Route::match(['get','post'],'livello-di-accesso/{userid}','AccessLevelController@index');
 Route::get('/getUsersByType','AccessLevelController@getUsersByType');

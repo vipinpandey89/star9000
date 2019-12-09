@@ -245,8 +245,10 @@
            wizCtl.GetObjectState("Check", step1_onGetObjectState);
            break;
           case radioSelection.AGREE:
+            document.getElementById("patient-option1").value =1;
             break;
           case radioSelection.DISAGREE:
+              document.getElementById("patient-option1").value =2;
             break;
          case buttonEvent.CANCEL:
            wizardEventController.script_Cancelled();
@@ -545,8 +547,10 @@
            step1();
            break;
          case radioSelection.AGREE:
+            document.getElementById("patient-option2").value =1;
            break;
          case radioSelection.DISAGREE:
+            document.getElementById("patient-option2").value =2;
            break;
          default:
            print("Unexpected event: " + id);
@@ -841,8 +845,10 @@
            step2();
            break;
          case radioSelection.AGREE:
+            document.getElementById("patient-option3").value =1;
            break;
          case radioSelection.DISAGREE:
+            document.getElementById("patient-option3").value =2;
            break;
          default:
            print("Unexpected event: " + id);

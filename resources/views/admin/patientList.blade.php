@@ -9,8 +9,15 @@
 			<li class="active">Sezione paziente</li>
 		</ol>
 	</div>
-	<div class="graph-visual tables-main">			
-		<a href="{{url('admin/aggiungi-paziente')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
+	<div class="graph-visual tables-main">	
+		@if(Auth::user()->role_type=='1')			
+			<a href="{{url('admin/aggiungi-paziente')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
+		@elseif(Auth::user()->role_type=='2')
+			@if(isset($menuData[6]['write']))
+			<a href="{{url('admin/aggiungi-paziente')}}" class="btn blue">{{ __('patient.Add Patient') }} </a>
+			@endif
+		@endif		
+		
 		<div class="graph">
 			<div class="tables">
 				@if (Session::has('success'))
@@ -49,7 +56,14 @@
 				 		  	<th>{{ __('patient.Phone') }}</th>
 				 		  	<th>{{ __('patient.Date of Birth') }}</th>
 				 		  	<th>{{ __('patient.Completion Status') }}</th>
-				 		   	<th>{{ __('patient.Action') }}</th>
+				 		  	@if(Auth::user()->role_type=='1')			
+								<th>{{ __('patient.Action') }}</th>
+							@elseif(Auth::user()->role_type=='2')
+								@if(isset($menuData[6]['write']))
+								<th>{{ __('patient.Action') }}</th>
+								@endif
+							@endif
+				 		   	
 				 		</tr>
 				 	</thead> 
 				 	<tbody> 

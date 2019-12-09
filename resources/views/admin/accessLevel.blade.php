@@ -62,7 +62,7 @@
 								@foreach($navigationTabs as $tab)
 								<tr>
 									<td><input name="tabs[{{ $tab->id }}][id]" value="{{ $tab->id }}" type="checkbox" @php echo isset($existingAccessData[$tab->id]['id'])?'checked':''; @endphp/>&nbsp;{{ $tab->tab_name }}</td>
-									<td><input name="tabs[{{ $tab->id }}][write]" value="1" type="checkbox" @php echo isset($existingAccessData[$tab->id]['write'])?'checked':''; @endphp/></td>
+									<td><input  name="tabs[{{ $tab->id }}][write]" value="1" type="checkbox" @php echo isset($existingAccessData[$tab->id]['write'])?'checked':''; @endphp @php echo (in_array($tab->id,[8,9]))?'disabled':''; @endphp/></td>
 								</tr>
 								@endforeach
 							</tbody>

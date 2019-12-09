@@ -21,9 +21,9 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 				<strong>{{Session::get('error') }}</strong>
 			</div>
 		@endif
-		<div id="myModal" class="modal fade">
+		<div id="myModal" class="modal fade" >
 		    <div class="modal-dialog">
-		        <div class="modal-content">
+		        <div class="modal-content"  style="width:150%;margin-left:-18%;">
 		            <div class="modal-header">
 		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		                <h4 class="modal-title">Privacy</h4>
@@ -32,8 +32,36 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 		            
 		            <div class="modal-body">
 		            	<div id="to-print">
-		                <?php  echo $privacy->description; ?>
-		            	</div>
+						<?php  echo nl2br($privacy->description); ?>
+						@if(!empty($patientData->patient_signature))
+							<hr>
+							<div>
+								@php
+								$sigOtions = explode('|',$patientData->sig_option);
+								$op=0;
+								@endphp
+								@foreach($wacomQuestions as $wques)
+								<div>{{ ($op+1).') '.$wques->question}}</div>
+								<div>
+									<input disabled type="radio" {{ ($sigOtions[$op]==1)?'checked':'' }}> Do il consenso
+									<input disabled type="radio" {{ ($sigOtions[$op]==2)?'checked':'' }}> Nego il consenso
+								</div>
+								@php $op++; @endphp
+								@endforeach
+								<br>
+								<div class="pull-left">Data: {{$patientData->sig_date}}</div>
+								<div style="float:right;">
+									<span>Firma</span>
+									<p>
+										<img height="60" width="100" src="{{$patientData->patient_signature}}" alt="{{$patientData->surname.' '.$patientData->name}}"><br>
+										<span>{{$patientData->surname.' '.$patientData->name}}</span>
+										
+									</p>
+								</div>
+							</div>
+						@endif
+						</div>
+						<br><br><br><br><br><br>
 		                <div class=""> 
 		                	<button type="button" id="agree-button" class="btn btn-default">Accetta</button>
 							<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button>
@@ -345,6 +373,20 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 									</div>
 								</div>
 							</div>
+							@if(!empty($patientData->patient_signature))
+							<div class="row">
+								<div class="col-lg-10">
+									<div class="form-group">
+										<label class="col-sm-2 control-label">Firma del paziente</label>
+										<div class="col-sm-8" >
+											
+											<img  src="{{$patientData->patient_signature}}" height="60" width="250">
+											
+										</div>									
+									</div>
+								</div>
+							</div>
+							@endif
 							{!! csrf_field() !!}
 							@if($user->role_type != 3)
 							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Salva</button></div>

@@ -431,7 +431,7 @@ function actionWhenRestarted(callback)
 function stopScript()
 {
   scriptIsRunning = false;
-  document.getElementById("btnStartStopWizard").value = "Start Wizard";
+  document.getElementById("btnStartStopWizard").value = "Inizia il processo";
   if(null != wizCtl)
   {
     wizCtl.Reset(onReset);
