@@ -4,7 +4,8 @@ $(document).ready(function(){
 			"language": {
 	            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json"
 	        },
-	        "ajax": base_url+'/admin/getMainPatientList'
+			"ajax": base_url+'/admin/getMainPatientList',
+			"order": [[ 1, "asc" ]]
 		});
 	}
 	if($('#appointmentTable').length) {

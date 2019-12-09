@@ -1052,6 +1052,7 @@ if(Auth::user()->role_type=='1'){
 			if((filterbydoctorssecond != '') || (filterexamtypesecond != '') || (filterroomsecond != '')){
 				$('#calendar').fullCalendar('refetchEvents');
 			}
+			$('#main-filter-section').slideToggle('slow');
 		});
 		$('#next-availability').click(function(){
 			var filterByDoctor = $('#filter-doctor').val();

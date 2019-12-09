@@ -32,7 +32,23 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 		            
 		            <div class="modal-body">
 		            	<div id="to-print">
+						<div id="header-image-print" style="position:fixed;width:100%;">
+							<center><img src="{{url($sec.'/../administrator/images/star.jpg')}}" width="150" height="50"></center>
+						</div>
+						<table>
+						<thead>
+						<tr>
+							<td>
+							<div class="page-header-space" style="width:100%;height:80px;display: block;margin-left: auto;margin-right: auto;width: 50%;"></div>
+							</td>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>
+						<div style="margin:10mm;">
 						<?php  echo nl2br($privacy->description); ?>
+						
 						@if(!empty($patientData->patient_signature))
 							<hr>
 							<div>
@@ -60,6 +76,8 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 							</div>
 						@endif
+						</div>
+						</td></tr></tbody></table>
 						</div>
 						<br><br><br><br><br><br>
 		                <div class=""> 
@@ -435,4 +453,10 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 		</div>
 	</div>
 </div>
+<style>
+#header-image-print {
+	top: 100px;
+    width: 129% !important;
+}
+</style>
 @endsection
