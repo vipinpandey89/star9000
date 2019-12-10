@@ -123,6 +123,7 @@
 									</ul>
 								</li>
 								<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i> {{ __('menu.Eye Visit Tabs') }}</a></li>
+								<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i><span>{{ __('menu.Reminder') }}</span></a></li>
 								<li><a href="{{url('admin/livello-di-accesso')}}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ __('menu.Access Level') }}</a></li>
 
 

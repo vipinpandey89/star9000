@@ -251,7 +251,48 @@ $eyeArray =['right','left','oo'];
 							        break;
 							}
 							@endphp
+							
 						@endforeach
+						@if($tab->id == 8)
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">&nbsp;</label>
+									<div class="col-sm-8">
+									<table rules="all" style="width: 170px;margin: 0 auto;">
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">&nbsp;</label>
+									<div class="col-sm-8">
+									<table rules="all" style="width: 170px;margin: 0 auto;">
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+									</div>
+								</div>
+							</div>
+						@endif
 						@endif
 						</div>
 						@endif
@@ -287,4 +328,9 @@ $eyeArray =['right','left','oo'];
 		});
 	});
 </script>
+<style>
+table td {
+  padding: 1rem;
+}
+</style>
 @endsection

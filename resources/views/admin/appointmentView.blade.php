@@ -1081,6 +1081,7 @@ if(Auth::user()->role_type=='1'){
 							$('#calendar').fullCalendar('refetchEvents');
 							$("#calendar").fullCalendar('gotoDate', availableDate);
 							$('#calendar').fullCalendar('changeView', 'agendaDay');
+							$('#main-filter-section').slideToggle('slow');
 						}
 					});
 				}
@@ -1157,7 +1158,8 @@ if(Auth::user()->role_type=='1'){
 					                }
 					               
 							        $("#calendar").fullCalendar( 'gotoDate', datePik );
-							         $('#calendar').fullCalendar('changeView', 'agendaDay');
+									$('#calendar').fullCalendar('changeView', 'agendaDay');
+									$('#main-filter-section').slideToggle('slow');
 							    }
 							});
 						}
@@ -1218,7 +1220,7 @@ if(Auth::user()->role_type=='1'){
 		    // Get selected options.
 		    var selectedOptions = $('#filter-doctor option:selected');
 
-		    if (selectedOptions.length >= 2) {
+		    if (selectedOptions.length >= 3) {
 		        // Disable all other checkboxes.
 		        var nonSelectedOptions = $('#filter-doctor option').filter(function() {
 		            return !$(this).is(':selected');
@@ -1254,7 +1256,8 @@ if(Auth::user()->role_type=='1'){
 			onSelect: function(dateText, inst) {
 		        var datePik = $(this).val();
 		        $("#calendar").fullCalendar( 'gotoDate', datePik );
-		        $('#calendar').fullCalendar('changeView', 'agendaDay');
+				$('#calendar').fullCalendar('changeView', 'agendaDay');
+				$('#main-filter-section').slideToggle('slow');
 		    }
 		});
 		$('#up-search-bttn').easyAutocomplete({

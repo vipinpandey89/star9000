@@ -54,8 +54,8 @@
 						<table class="table table-bordered">
 							<thead>
 							<tr>
-								<th>Linguetta</th>
-								<th>Scrivi</th>
+								<th>Sezione</th>
+								<th>Accesso</th>
 							</tr>
 							</thead>
 							<tbody>
