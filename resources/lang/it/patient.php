@@ -20,7 +20,7 @@ return [
     'Room' => ' Tipologia visita',
     'Date' => 'Data',
     'Start Time' => 'Orario di inizio',
-    'End Time' => 'Fine del tempo',
+    'End Time' => 'Orario di fine',
     'Prescription' => 'Prescrizione',
     'Description' => 'Descrizione',
     'Privacy' => 'Privacy',

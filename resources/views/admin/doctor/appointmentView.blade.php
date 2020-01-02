@@ -9,7 +9,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('medico/bacheca')}}">Home</a></li>
 			<li class="active">Calendario</li>
 		</ol>
 	</div>

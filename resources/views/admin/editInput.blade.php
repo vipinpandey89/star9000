@@ -14,8 +14,6 @@ $inputValues = json_decode($inputData->input_values);
 	<div class="sub-heard-part">
 
 		<ol class="breadcrumb m-b-0">
-
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li><a href="{{url('admin/schede-eye-visit')}}">{{ __('patient.Eye Visit Tabs') }}</a></li>
 			<li><a href="{{url('admin/ingressi-scheda/'.$tabid)}}">{{ __('patient.Tab Inputs') }}</a></li>
 			<li class="active">{{ __('patient.Edit Input') }}</li>

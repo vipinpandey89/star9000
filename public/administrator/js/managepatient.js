@@ -124,14 +124,17 @@ $(function() {
     $('#waiting-jobs-list').find('.color-pick').show();
     
     $(".select-color").colorpicker({hideButton: true});
-    $('.color-pick').click(function(evt){
+    $('body').on('click','.color-pick',function(evt){
         evt.stopImmediatePropagation();
         $(this).find('.select-color').colorpicker("showPalette");
     });
-    $(".select-color").on("change.color", function(event, color){
+    $("body").on("change.color", '.select-color',function(event, color){
         $(this).parent().parent().parent().parent().parent().css('background-color',color);
         $(this).parent().parent().parent().parent().parent().parent().attr('color',color);
-        savepatient('waiting-jobs-list', 'third');
+        setTimeout(function(){
+            savepatient('waiting-jobs-list', 'third');
+        }, 3000);
+        
     });
 
     $('#newSurgeryForm').validate({
@@ -177,26 +180,28 @@ $(function() {
 });
 
 function savepatient(divid, sectiontype, appid=null) {
-    var patArray = [];
-    $('#'+divid).find('.indivisual_patient').each(function(){
-        patArray.push({
-            id: $(this).attr('patient-id'),
-            updated_by: $(this).attr('updated-by'),
-            update_date: $(this).attr('update-date'),
-            color: $(this).attr('color')
+    setTimeout(function(){   
+        var patArray = [];
+        $('#'+divid).find('.indivisual_patient').each(function(){
+            patArray.push({
+                id: $(this).attr('patient-id'),
+                updated_by: $(this).attr('updated-by'),
+                update_date: $(this).attr('update-date'),
+                color: $(this).attr('color')
+            });
         });
-    });
-    $.ajax({
-        type: "GET",
-        data: {
-            'section_type': sectiontype,
-            'patients':patArray,
-            'appid':appid
-        },
-        url: base_url + '/admin/dailypatientupdate',
-        success: function(response) {
-            if (response == 'success') {
+        $.ajax({
+            type: "GET",
+            data: {
+                'section_type': sectiontype,
+                'patients':patArray,
+                'appid':appid
+            },
+            url: base_url + '/admin/dailypatientupdate',
+            success: function(response) {
+                if (response == 'success') {
+                }
             }
-        }
-    });
+        });
+    }, 3000);
 }

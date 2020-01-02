@@ -35,10 +35,26 @@ class PatientController extends Controller
     }
 
     public function getMainPatientList() {
-        $patients = Patient::all();
+        
         $returnArray = [];
-        $i=1;
         $include =0;
+        $limit = 10;
+        $start = isset($_POST["start"])?$_POST["start"]:0;
+		$length = isset($_POST["length"])?$_POST["length"]:$limit;
+		$search = isset($_POST["search"])?$_POST["search"]:[];
+        $draw = isset($_POST["draw"])?$_POST["draw"]:1;
+        $i=$start+1;
+        $patientModel = DB::table('patients'); 
+        if(!empty($search['value'])) {
+            $searchString= strtolower($search['value']);
+            $patientModel->orWhere('name', 'like', '%' . $searchString . '%')
+                            ->orWhere('surname', 'like', '%' . $searchString . '%')
+                            ->orWhere('email', 'like', '%' . $searchString . '%')
+                            ->orWhere('dob', 'like', '%' . $searchString . '%')
+                            ->orWhere('phone', 'like', '%' . $searchString . '%');
+        }
+        $totalCount = $patientModel->count();
+        $patients = $patientModel->skip($start)->take($length)->orderBy('surname', 'ASC')->get();
         if(auth()->user()->role_type=='1'){        
             $include =1;
         } else if(auth()->user()->role_type =='2'){
@@ -48,8 +64,9 @@ class PatientController extends Controller
                 $include =1;
             }
         }
+        $returnArray['data'] = [];
         foreach ($patients as $patient) {
-            if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->dob)){
+            if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->phone) && !empty($patient->dob) && !empty($patient->place_of_birth) && !empty($patient->province_of_birth) && !empty($patient->fiscal_code) && !empty($patient->place_of_living) && !empty($patient->province_of_living) && !empty($patient->number_of_the_address) && !empty($patient->address) && !empty($patient->postal_code)){
                 $checked='<i class="fa fa-check-square" aria-hidden="true"></i>';
             } else {
                 $checked='<i class="fa fa-exclamation-circle" aria-hidden="true"></i>';
@@ -79,6 +96,9 @@ class PatientController extends Controller
             }
             $i++;
         }
+        $returnArray['draw'] = $draw;
+        $returnArray['recordsTotal'] = $totalCount;
+        $returnArray['recordsFiltered'] = $totalCount;
         return json_encode($returnArray);
     }
 
@@ -170,9 +190,10 @@ class PatientController extends Controller
             $patient->place_of_living  =  Input::get('place_of_living');
             $patient->province_of_living  =  Input::get('province_of_living');
             $patient->number_of_the_address  =  Input::get('number_of_the_address');
-            if(!empty(Input::get('minor_patient'))) {
-                $patient->minor_patient  =  Input::get('minor_patient');
-            }
+            $patient->privacy  =  json_encode(Input::get('privacy'));
+            
+            $patient->minor_patient  =  Input::get('minor_patient');
+            
             $patient->added_by               =     $user->id;
             $patient->updated_by             =     $user->id;
             if(!empty(Input::get('relative'))) {
@@ -188,7 +209,7 @@ class PatientController extends Controller
 
     public function SavePrivacy(Request $request) {
         $patient = Patient::find(Input::get('pat_id'));
-        $patient->privacy  =  json_encode(Input::get('privacy'));
+        
         if($patient->save()){
             echo 'success';
         }
@@ -249,12 +270,13 @@ class PatientController extends Controller
         }
         $newPat = [];
         foreach ($patientsOfTheDay as $pat) {
-            $patientFirst[] =[
+            $patientFirst[$pat->starteTime] =[
                 'id'=>$pat->id,
                 'updated_by'=>$user->id,
                 'update_date'=>date('Y-m-d H:i:s', time()),
                 'color'=>''
             ];
+            ksort($patientFirst);
             if(!in_array($pat->id, $patInDatabase)) {
                 $newPat[] = [
                     'id'=>$pat->id,
@@ -265,21 +287,24 @@ class PatientController extends Controller
             }
             $todaysDoc[]=$pat->docId;
         }
-        //print_r($patInDatabase);print_r($newPat);
         $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
-        if(!empty($existingPat)){
+        if(!empty($existingPat)) {
+            $uidData = explode(',',$existingPat->u_id);
+            if (($key = array_search($user->id, $uidData)) !== false) {
+                unset($uidData[$key]);
+            }
+            Managepatient::where('manage_date', date('Y-m-d',time()))->update(['u_id'=>implode(',',$uidData)]);
             $patientFirst = [];
             $patFirst = !empty($existingPat->first)?json_decode($existingPat->first, true):[];
             $newArray = array_merge($patFirst,$newPat);
-            //print_r($newArray);die;
             $existingPat->first = json_encode($newArray);
         }
-       // print_r($existingPat);die;
         return view('admin.patientManagement', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination,'doctorData'=>$doctorData]);
     }
 
     public function dailypatientupdate() {
         $user = auth()->user();
+        $uids  = User::select(DB::raw('group_concat(id) as uids'))->whereIn('role_type', [1,2])->whereNotIn('id', [$user->id])->first();
         if(!empty(Input::get('section_type'))) {
             if(!empty(Input::get('patients'))){
                 $patvalue=json_encode(Input::get('patients'));
@@ -287,7 +312,7 @@ class PatientController extends Controller
                 $patvalue=null;
             }
             $managePatientData[Input::get('section_type')]  =  $patvalue;
-            
+            $managePatientData['u_id'] = $uids['uids'];
             $managePatientData['manage_date'] = date('Y-m-d',time());
             $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
             if($mage->exists){
@@ -329,7 +354,7 @@ class PatientController extends Controller
                             ->join('users', 'appointement_booking.doctro_name', '=', 'users.id')
                             ->join('examination', 'appointement_booking.examination_id', '=', 'examination.id')
                             ->join('room', 'appointement_booking.room_id', '=', 'room.id')                  
-                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.surname','users.name as doctorname','users.id as doctorid','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime', 'patients.*','users.surname as doctorsurname','users.name as doctorname','users.id as doctorid','users.email as doctoremail','examination.title as examtitle','room.room_name')                     
                             ->where('appointement_booking.id', '=', $appid)->first();
         return view('admin.patientDetail', ['appointment' => $appointment,'comments'=>$comments,'patientshistory'=>$patientshistory,'medicines'=>$medicines]);
     }
@@ -556,9 +581,11 @@ class PatientController extends Controller
         $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
         $user = auth()->user();
         $currentStatus = $this->getCurrentStatus($existingPat, $patId);
+        $sectionArraySecond = ['first'=>'Pazienti del giorno','second'=>'Check In','third'=>'Chirurgia','fourth'=>'Esami','fifth'=>'Check Out'];
         if($request->method() == 'POST') {
+            $uids  = User::select(DB::raw('group_concat(id) as uids'))->whereIn('role_type', [1,2])->whereNotIn('id', [$user->id])->first();
             $sectionArray = ['Pazienti del giorno'=>'first','Check In'=>'second','Chirurgia'=>'third','Esami'=>'fourth','Check Out'=>'fifth'];
-            $sectionArraySecond = ['first'=>'Pazienti del giorno','second'=>'Check In','third'=>'Chirurgia','fourth'=>'Esami','fifth'=>'Check Out'];
+            
             $existsec= $sectionArray[$currentStatus];
             $existingPatientSection = '{}';
             if(isset($existingPat->$existsec)) {
@@ -581,6 +608,7 @@ class PatientController extends Controller
             $managePatientData[$existsec]  =  !empty($sectionRemoved)?json_encode($sectionRemoved):null;
             $managePatientData[$sectionToUpdate]  =  !empty($sectionAdded)?json_encode($sectionAdded):null;
             $managePatientData['manage_date'] = date('Y-m-d',time());
+            $managePatientData['u_id'] = $uids['uids'];
             $mage = Managepatient::firstOrNew(['manage_date'=>date('Y-m-d',time())], $managePatientData);
             if($mage->exists){
                 Managepatient::where('id', $mage->id)->update($managePatientData);
@@ -591,7 +619,7 @@ class PatientController extends Controller
             }
             exit;
         }
-        return view('admin.dailyPatChangeStatus', ['currentStatus'=>$currentStatus,'patId'=>$patId]);
+        return view('admin.dailyPatChangeStatus', ['currentStatus'=>$currentStatus,'patId'=>$patId,'sectionArraySecond'=>$sectionArraySecond]);
     }
 
     public function getCurrentStatus($existingPat, $patId) {
@@ -694,5 +722,116 @@ class PatientController extends Controller
         }
         return view('admin.getPatientSignature', ['data'=>$data,'patData'=>$patData]);
 
+    }
+
+    public function isDailyPatientUpdated(Request $request) {
+        $user = auth()->user();
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        if(isset($existingPat->u_id)) {
+            $userIdArray=explode(',',$existingPat->u_id);
+            if(in_array($user->id,$userIdArray)) {
+                if (($key = array_search($user->id, $userIdArray)) !== false) {
+                    unset($userIdArray[$key]);
+                }
+                $pdata['u_id'] = implode(',',$userIdArray);
+                Managepatient::where('manage_date', date('Y-m-d',time()))->update($pdata);
+                //echo 'other';
+                
+            }
+        }
+        exit;
+    }
+
+    public function updatedailypat()
+    {
+        $user = auth()->user();
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        if(isset($existingPat->u_id)) {
+            $userIdArray=explode(',',$existingPat->u_id);
+            if(in_array($user->id,$userIdArray)) {
+                if (($key = array_search($user->id, $userIdArray)) !== false) {
+                    unset($userIdArray[$key]);
+                }
+                $pdata['u_id'] = implode(',',$userIdArray);
+                Managepatient::where('manage_date', date('Y-m-d',time()))->update($pdata);
+                $examination = Examination::all();
+                $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+                $patientsOfTheDay = DB::table('appointement_booking')
+                                    ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
+                                    ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime','appointement_booking.doctro_name as docId', 'patients.*')                     
+                                    ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
+                $patientFirst = [];
+                $todaysDoc =[];
+                $patInDatabase = [];
+                if(!empty($existingPat)){
+                    $first = !empty($existingPat->first)?json_decode($existingPat->first, true):[];
+                    $second = !empty($existingPat->second)?json_decode($existingPat->second, true):[];
+                    $third = !empty($existingPat->third)?json_decode($existingPat->third, true):[];
+                    $fourth = !empty($existingPat->fourth)?json_decode($existingPat->fourth, true):[];
+                    $fifth = !empty($existingPat->fifth)?json_decode($existingPat->fifth, true):[];
+                    $extData = array_merge($first,$second, $third, $fourth, $fifth);
+                    foreach ($extData as  $patvalue) {
+                        $patInDatabase[] = $patvalue['id'];
+                    }
+                }
+                $newPat = [];
+                foreach ($patientsOfTheDay as $pat) {
+                    $patientFirst[$pat->starteTime] =[
+                        'id'=>$pat->id,
+                        'updated_by'=>$user->id,
+                        'update_date'=>date('Y-m-d H:i:s', time()),
+                        'color'=>''
+                    ];
+                    ksort($patientFirst);
+                    if(!in_array($pat->id, $patInDatabase)) {
+                        $newPat[] = [
+                            'id'=>$pat->id,
+                            'updated_by'=>$user->id,
+                            'update_date'=>date('Y-m-d H:i:s', time()),
+                            'color'=>''
+                        ];
+                    }
+                    $todaysDoc[]=$pat->docId;
+                }
+                $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
+                if(!empty($existingPat)) {
+                    $uidData = explode(',',$existingPat->u_id);
+                    if (($key = array_search($user->id, $uidData)) !== false) {
+                        unset($uidData[$key]);
+                    }
+                    Managepatient::where('manage_date', date('Y-m-d',time()))->update(['u_id'=>implode(',',$uidData)]);
+                    $patientFirst = [];
+                    $patFirst = !empty($existingPat->first)?json_decode($existingPat->first, true):[];
+                    $newArray = array_merge($patFirst,$newPat);
+                    $existingPat->first = json_encode($newArray);
+                }
+                return view('admin.dailyPat', ['patients' => $patientsOfTheDay,'existingPat'=>$existingPat,'user'=>$user,'patientFirst'=>$patientFirst,'examination'=>$examination,'doctorData'=>$doctorData]);
+            }
+        }
+        exit;
+    }
+
+    public function ajaxlistpatbydoc(){
+        $existingPat = Managepatient::where(['manage_date'=>date('Y-m-d',time())])->first();
+        $patientsOfTheDay = DB::table('appointement_booking')
+                            ->join('patients', 'appointement_booking.patient_id', '=', 'patients.id')                     
+                            ->select('appointement_booking.id as appointid','appointement_booking.starteTime','appointement_booking.endtime','appointement_booking.doctro_name as docId', 'patients.*','appointement_booking.examination_color')                     
+                            ->where(DB::raw("DATE_FORMAT(appointement_booking.start_date, '%Y-%m-%d')"), '=', date('Y-m-d',time()))->get()->keyBy('id');
+        $patientsTodayData = [];
+        $todaysDoc =[];
+        foreach ($patientsOfTheDay as $pat) {
+            $patientsTodayData[$pat->docId][] =[
+                'id'=>$pat->id,
+                'patname'=>$pat->surname.' '.$pat->name,
+                'dob'=>$pat->dob,
+                'color'=>$pat->examination_color,
+                'appointment_start' => $pat->starteTime,
+                'appointment_end' => $pat->endtime,
+                'curent_status' => $this->getCurrentStatus($existingPat, $pat->id)
+            ];
+            $todaysDoc[]=$pat->docId;
+        }
+        $doctorData = User::whereIn('id', $todaysDoc)->select('users.surname','users.name','users.id')->get();
+        return view('admin.ajaxlistByDoctor', ['doctorData'=>$doctorData,'patientsTodayData'=>$patientsTodayData]);
     }
 }

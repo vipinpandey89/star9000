@@ -13,7 +13,7 @@
 					{{ __('patient.Surname') }} : {{ (!empty($appointment->surname)?$appointment->surname:'NA') }}
 				</div>
 				<div class="col-lg-6">
-					{{ __('patient.Name') }} : {{ (!empty($appointment->surname)?$appointment->surname:'NA') }}
+					{{ __('patient.Name') }} : {{ (!empty($appointment->name)?$appointment->name:'NA') }}
 				</div>
 				
 			</div>
@@ -33,7 +33,7 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-10">
-					{{ __('patient.Doctor Name') }} : {{ (!empty($appointment->surname)?$appointment->surname:'') }} {{ (!empty($appointment->doctorname)?$appointment->doctorname:'NA') }}
+					{{ __('patient.Doctor Name') }} : {{ (!empty($appointment->doctorsurname)?$appointment->doctorsurname:'') }} {{ (!empty($appointment->doctorname)?$appointment->doctorname:'NA') }}
 				</div>
 			</div>
 			<div class="row">
@@ -68,7 +68,7 @@
 				<div class="actionBox">
 				    <ul id="comments" class="commentList">
 				      	@foreach($comments as  $comment)
-				      		<li><div class="commentText"><p class="">{{$comment->comment}}</p> <span class="date sub-text">{{ $comment->commentname }}  {{ strftime('%d %B %Y %I:%M', strtotime($comment->created_at)) }}</span></div></li>
+				      		<li><div class="commentText"><p class="">{{$comment->comment}}</p> <span class="date sub-text">{{ $comment->commentname }}  {{ strftime('%d %B %Y %H:%M', strtotime($comment->created_at)) }}</span></div></li>
 				      	@endforeach
 				    </ul>
 				</div>
@@ -87,7 +87,7 @@
 				      			echo $pathis->message;
 
 				      			@endphp
-				      			</p><span class="date sub-text"> {{ strftime('%d %B %Y %I:%M', strtotime($pathis->created_at)) }}</span></div></li>
+				      			</p><span class="date sub-text"> {{ strftime('%d %B %Y %H:%M', strtotime($pathis->created_at)) }}</span></div></li>
 				      	@endforeach
 				    </ul>
 				</div>

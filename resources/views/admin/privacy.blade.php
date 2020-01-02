@@ -5,7 +5,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">{{ __('privacy.Privacy') }}</li>
 		</ol>
 	</div>
@@ -59,4 +58,14 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var langURl= base_url+'/administrator/js/it_IT.js';
+	tinymce.init({
+		selector: 'textarea#description',
+		menubar:'format',
+		language: 'it_IT'
+	});
+});
+</script>
 @endsection

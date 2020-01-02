@@ -6,8 +6,8 @@
 	<title>Star 9000</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="keywords" content="Augment Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	<link rel="icon" type="image/png" sizes="96x96" href="{{URL('/favicon.png')}}">
+	<meta name="keywords" content="Start9000" />
 	@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient')
 	<script src="{{URL::asset('signature/js/wgssSigCaptX.js')}}"></script>
 		<script src="{{URL::asset('signature/js/base64.js')}}"></script>
@@ -55,6 +55,9 @@
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@index') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditPatient'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	@endif
+	@if (Route::currentRouteAction() == 'App\Http\Controllers\DoctorController@patients')
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+	@endif
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\PatientController@intervento') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@EditIntervento'))
 		<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 		<link rel="stylesheet" href="{{URL('administrator/css/jquery.durationpicker.min.css')}}" type='text/css' />
@@ -71,6 +74,7 @@
 	@endif
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
 		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/bootstrap-multiselect.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ URL('administrator/css/jquery.growl.css') }}">
 	@endif
 	
 	@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient'))
@@ -97,12 +101,11 @@
 		            </div>
 		            <!-- Collect the nav links, forms, and other content for toggling -->
 		            <?php $userData=Auth::user();
-					$roleTypeArray=['1'=>'Admin','2'=>'segretario','3'=>'Medico'];
+					$roleTypeArray=['1'=>'Superadmin','2'=>'Admin','3'=>'Medico'];
 					 ?>
 		            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		              <ul class="nav navbar-nav navbar-right">
-		                @if($userData->role_type=='1')
-								<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i> {{ __('menu.Dashboard') }}</a></li>			
+		                @if($userData->role_type=='1')		
 								<li><a href="{{url('admin/lista-segretaria')}}"><i class="lnr lnr-user"></i> {{ __('menu.Addsecretary') }}</a></li>
 
 								<li><a href="{{url('admin/visite')}}"><i class="fa fa-plus-square"></i> {{ __('menu.Add specialty') }}</a></li>
@@ -125,10 +128,9 @@
 								<li><a href="{{url('admin/schede-eye-visit')}}"><i class="fa fa-eye" aria-hidden="true"></i> {{ __('menu.Eye Visit Tabs') }}</a></li>
 								<li><a href="{{url('admin/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i><span>{{ __('menu.Reminder') }}</span></a></li>
 								<li><a href="{{url('admin/livello-di-accesso')}}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ __('menu.Access Level') }}</a></li>
-
+								<li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.List By Doctor') }}</a></li>
 
 						@elseif( Auth::user()->role_type=='2')
-								<li><a href="{{url('admin/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>
 								@foreach($accessibleMenus as $menu)
 						       		<li><a href="{{url('admin/'.$menu->nav_link)}}">
 						       			@if(!empty($menu->icon))
@@ -137,10 +139,10 @@
 						       		{{$menu->tab_name}}</a></li>
 						       	@endforeach
 						       <li><a href="{{url('admin/elenco-per-medico')}}"><i class="fa fa-user" aria-hidden="true"></i>{{ __('menu.List By Doctor') }}</a></li> 
-						@else	
-								<li><a href="{{url('medico/bacheca')}}"><i class="fa fa-tachometer"></i>{{ __('menu.Dashboard') }}</a></li>	
+						@else		
 								<li><a href="{{url('medico/appuntamenti')}}"><i class="fa fa-table" aria-hidden="true"></i>{{ __('menu.Appointments') }}</a></li>
-								<li><a href="{{url('medico/paziente')}}"><i class="lnr lnr-user" aria-hidden="true"></i>{{ __('menu.Patients') }}</a></li>
+								<li><a href="{{url('medico/paziente')}}"><i class="lnr lnr-user" aria-hidden="true"></i>{{ __('menu.Patient Section') }}</a></li>
+								<li><a href="{{url('medico/promemoria')}}"><i class="fa fa-bell" aria-hidden="true"></i>{{ __('menu.Reminder') }}</a></li>
 								<li><a href="{{url('medico/profilo-visite')}}"><i class="fa fa-user-md" aria-hidden="true"></i>{{ __('menu.UserProfile') }}</a></li>
 						@endif
 
@@ -153,8 +155,10 @@
 								<p>{{$userData->email}}</p>
 								<p>Ruolo : {{$roleTypeArray[$userData->role_type]}}</p>
 								@if( Auth::user()->role_type=='3')
+								<p><a style="color:orange;text-decoration:underline;" href="{{url('medico/modifica-password-utente')}}">Cambia la password</a></p>
 								<button><a href="{{url('medico/logout')}}">Logout</a></button>
 								@else
+								<p><a style="color:orange;text-decoration:underline;" href="{{url('admin/modifica-password-utente')}}">Cambia la password</a></p>
 								<button><a href="{{url('admin/logout')}}">Logout</a></button>
 								@endif
 							</div>
@@ -198,7 +202,9 @@
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 							
 						@endif
-						
+						@if (Route::currentRouteAction() == 'App\Http\Controllers\DoctorController@patients')
+						<script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+						@endif
 						@if (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@AddPatient')
 							<script type="text/javascript" src="{{URL::asset('administrator/js/patient.js')}}" ></script>
 						@endif
@@ -219,6 +225,10 @@
 						@endif
 						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AppointmentController@index'))
 							<script type="text/javascript" src="{{ URL('administrator/js/bootstrap-multiselect.js') }}"></script>
+							<script type="text/javascript" src="{{ URL('administrator/js/jquery.growl.js') }}"></script>
+						@endif
+						@if ((Route::currentRouteAction() == 'App\Http\Controllers\PrivacyController@index'))
+							<script type="text/javascript" src="{{ URL('administrator/js/tinymce/tinymce.min.js') }}"></script>
 						@endif
 						@if ((Route::currentRouteAction() == 'App\Http\Controllers\AdminController@EditRooms') || (Route::currentRouteAction() == 'App\Http\Controllers\AdminController@AddRoome') || (Route::currentRouteAction() == 'App\Http\Controllers\PatientController@managepatient'))
 							<script type="text/javascript" src="{{ URL('administrator/js/evol-colorpicker.min.js') }}"></script>

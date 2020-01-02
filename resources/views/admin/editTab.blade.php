@@ -11,8 +11,6 @@
 	<div class="sub-heard-part">
 
 		<ol class="breadcrumb m-b-0">
-
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li><a href="{{url('admin/schede-eye-visit')}}">{{ __('patient.Eye Visit Tabs') }}</a></li>
 			<li class="active">{{ __('patient.Edit Tab') }}</li>
 

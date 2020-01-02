@@ -4,7 +4,7 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
+			<li><a href="{{url('admin/lista-segretaria')}}">Elenco admin</a></li>
 			<li class="active">{{ __('menu.Editsecretary') }}</li>
 		</ol>
 	</div>	
@@ -83,9 +83,9 @@
 								</div>
 
 								<div class="form-group {{ $errors->has('dob') ? ' has-error' : '' }}">
-									<label for="dob" class="col-sm-2 control-label">Nata/o a</label>
+									<label for="dob" class="col-sm-2 control-label">Nata/o</label>
 									<div class="col-sm-8">
-										<input  type="text" class="form-control1 dateTime" id="dob" name="dob"  readonly="" value="{{!empty($userDetail)?date('d-m-Y',strtotime($userDetail->dob)):old('dob')}}"  placeholder="Nata/o a">
+										<input  type="text" class="form-control1 dateTime" id="dob" name="dob"  readonly="" value="{{!empty($userDetail)?date('d-m-Y',strtotime($userDetail->dob)):old('dob')}}"  placeholder="Nata/o">
 										 @if ($errors->has('dob'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('dob') }}</strong>

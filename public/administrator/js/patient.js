@@ -4,8 +4,14 @@ $(document).ready(function(){
 			"language": {
 	            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json"
 	        },
-			"ajax": base_url+'/admin/getMainPatientList',
-			"order": [[ 1, "asc" ]]
+			"ajax" : {
+				url : base_url+'/admin/getMainPatientList',
+				type: "post"
+			},
+			"order": [[ 1, "asc" ]],
+			serverSide: true,
+			"processing": true,
+			"paging": true
 		});
 	}
 	if($('#appointmentTable').length) {
@@ -38,18 +44,19 @@ $(document).ready(function(){
 			surname: "required",
 			phone: {
 				maxlength:10,
-				minlength:10
+				minlength:10,
+				required:true
 			},
 			email:{
 				email: true
-			},
-			dob: "required"
+			}
 		},
 		messages: {
 			surname: "Per favore, inserisci il cognome.",
 			phone: {
 				maxlength:"Si prega di inserire il numero di telefono valido.",
-				minlength:"Si prega di inserire il numero di telefono valido"
+				minlength:"Si prega di inserire il numero di telefono valido",
+				required:"Si prega di inserire il numero di telefono valido"
 			},
 			email:{
 				email: "Si prega di inserire un indirizzo email valido"
@@ -61,7 +68,7 @@ $(document).ready(function(){
 		var counter = $('.patinfo').length;
 		$('#add-relative').click(function(){
 			if($('.patinfo').length < 5) {
-				var relativeHtml = '<div class="patinfo row"><div class="col-lg-3 " ><input class="form-control1" type="text" name="relative['+counter+'][fullname]" placeholder="Nome e cognome"></div><div class="col-lg-3" ><input class="form-control1" type="text" name="relative['+counter+'][relation]" placeholder="Grado di parentela"></div><div class="col-lg-3" ><input class="form-control1" type="number" name="relative['+counter+'][contactno]" placeholder="Numero di contatto"></div> <div class="col-lg-3" ><i class="remove-relative fa fa-times" aria-hidden="true"></i></div></div>';
+				var relativeHtml = '<div class="patinfo row"><div class="col-lg-3 " ><input class="form-control1" type="text" name="relative['+counter+'][fullname]" placeholder="Nome e cognome"></div><div class="col-lg-3" ><input class="form-control1" type="text" name="relative['+counter+'][relation]" placeholder="Grado di parentela"></div><div class="col-lg-3" ><input class="form-control1" type="number" name="relative['+counter+'][contactno]" placeholder="Numero di contatto"></div><div class="col-lg-3" ><div class="col-lg-3" ><input type="radio" value="'+counter+'" name="relative[prefer]"/></div><div class="col-lg-3" ><i class="remove-relative fa fa-times" aria-hidden="true"></i></div></div></div>';
 				$('#relative-section').append(relativeHtml);
 				counter++;
 			}
@@ -72,24 +79,8 @@ $(document).ready(function(){
 	}
 
 	if($('#privacy-button').length) {
-		$('#privacy-form').validate({
-			rules: {
-				'privacy[convention]': "required",
-				'privacy[card_number]': "required"
-			},
-			messages: {
-				'privacy[convention]': "Per favore, inserisci la convenzione.",
-				'privacy[card_number]': "Inserisci il numero della carta."
-			}
-		});
 		$('#privacy-button').on('click', function(e){
-			if($('#privacy-form').valid()){
-				//if($('#alreadyagree').val() != 1) {
-		  		$('#myModal').modal('show');
-		  		//}
-		  	} else {
-		  		$('#privacy-form').submit();
-		  	}
+		  	$('#myModal').modal('show');
 		});
 		$('#disagree-button').on('click', function(e){
 		  $('#myModal').modal('hide');
@@ -117,7 +108,7 @@ $(document).ready(function(){
             }
 		});
 
-		$('#print-privacy').on('click', function(){
+		$('#print-privacy,#print-privacy-upper').on('click', function(){
 			var newWin=window.open('','Print-Window');
 
   			newWin.document.open();
@@ -128,7 +119,7 @@ $(document).ready(function(){
 		});
 	}
 	if($('#capture-patient-signature').length){
-		$('#capture-patient-signature').on('click',function(){
+		$('#capture-patient-signature,#privacy-get-signature-button').on('click',function(){
 			var patientSigId= $('#patientData-id-pat').val();
             var dataURL = base_url+'/admin/ottenere-la-firma-dellutente/'+patientSigId;
             $('#capture-signature-model').find('.modal-body').load(dataURL,function(){

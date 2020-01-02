@@ -5,11 +5,13 @@
 <div class="outter-wp container">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('medico/bacheca')}}">Home</a></li>
 			<li class="active">Sezione paziente</li>
 		</ol>
 	</div>
+	<input type="hidden" id="all-patient" value="{{$all}}"/>
 	<div class="graph-visual tables-main">
+		<a href="{{url('medico/paziente')}}" style="margin-right: 129px;" class="btn btn-info btn-sm {{ empty($all)?'active':'' }}">I miei pazienti</a>
+		<a href="{{url('medico/paziente/tutto')}}" class="btn btn-info btn-sm {{ !empty($all)?'active':'' }}">Tutti i pazienti</a>
 		<div class="graph">
 			<div class="tables">
 				@if (Session::has('success'))
@@ -52,34 +54,34 @@
 				 		</tr>
 				 	</thead> 
 				 	<tbody> 
-				 	<?php 
-				 		$i='1';
-				 	?>
-				 	@foreach($patients as $patient)
-				 	  	<tr>
-				 	  		<td>{{$i}}</td>
-				 		 	<td>{{ (!empty($patient->surname)?$patient->surname:'NA') }}</td> 
-				 		 	<td>{{ (!empty($patient->name)?$patient->name:'NA') }}</td>
-				 		 	<td>{{ (!empty($patient->email)?$patient->email:'NA') }}</td>
-				 		 	<td>{{ (!empty($patient->phone)?$patient->phone:'NA') }}</td>
-				 		 	<td>{{ (!empty($patient->dob)?$patient->dob:'NA') }}</td>
-				 		 	<td>
-				 		 		@if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->email) && !empty($patient->phone) && !empty($patient->dob))
-				 		 			<i class="fa fa-check-square" aria-hidden="true"></i>
-				 		 		@else
-				 		 			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-				 		 		@endif
-				 		 	</td>	
-				 		 	<td>
-							  <a class="btn btn-info btn-sm" href="{{url('medico/modifica-paziente/'.$patient->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-							</td>
-				 		</tr>
-				 		<?php $i++;?>
-				 	@endforeach
+				 	
 				   </tbody>
 				 </table> 
 			</div>
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var allPat = $('#all-patient').val();
+	if(allPat == '') {
+		var urlT=base_url+'/medico/patientsAjaxMy';
+	}else{
+		var urlT=base_url+'/medico/patientsAjax/'+allPat;
+	}
+	$('#myTable').DataTable({
+		"language": {
+			"url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Italian.json"
+		},
+		"ajax" : {
+			url : urlT,
+			type: "post"
+		},
+		"order": [[ 1, "asc" ]],
+		serverSide: true,
+		"processing": true,
+		"paging": true
+	});
+});
+</script>
 @endsection

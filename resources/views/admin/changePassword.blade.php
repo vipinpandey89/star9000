@@ -37,7 +37,7 @@
 
 
 	<script src="{{URL::asset('administrator/js/jquery-1.10.2.min.js')}}"></script>
-
+	<link rel="icon" type="image/png" sizes="96x96" href="{{URL('/favicon.png')}}">
 
 
 </head> 

@@ -28,9 +28,11 @@ class AdminController extends Controller
       $user = auth()->user();
       if(isset($user->id)) {
         if($user->role_type == 3) {
-          return redirect('medico/bacheca');
+          return redirect('medico/appuntamenti');
+        } else if($user->role_type == 1) {
+          return redirect('admin/calendario');
         } else {
-          return redirect('admin/bacheca');
+          return redirect('admin/elenco-per-medico');
         }
       }
     	if(isset($_POST['addlogin']))
@@ -55,9 +57,11 @@ class AdminController extends Controller
       		if(Auth::attempt(['email' => $email, 'password' => $password]))
       		{
       		  	if(auth()->user()->role_type == 3) {
-                return redirect('medico/bacheca');
-              } else {
-                return redirect('admin/bacheca');
+                return redirect('medico/appuntamenti');
+              } else if(auth()->user()->role_type == 1){
+                return redirect('admin/calendario');
+              }else{
+                return redirect('admin/elenco-per-medico');
               }
 
          	 }else{
@@ -79,7 +83,9 @@ class AdminController extends Controller
 
     public function ListSecretary()
     {
+
     	$user= User::where(['role_type'=>'2','is_delete'=>'0'])->get();
+
     	return view('admin.list-secteray',['userDetail'=>$user]);
     }
 

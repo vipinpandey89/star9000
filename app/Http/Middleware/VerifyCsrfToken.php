@@ -12,6 +12,9 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'admin/searchAppointment'
+        'admin/searchAppointment',
+        'medico/patientsAjax/tutto',
+        'medico/patientsAjaxMy',
+        'admin/getMainPatientList'
     ];
 }

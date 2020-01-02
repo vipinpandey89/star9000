@@ -10,8 +10,6 @@
 
 		<ol class="breadcrumb m-b-0">
 
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
-
 			<li class="active">{{ __('patient.Reminder') }}</li>
 
 		</ol>
@@ -25,6 +23,8 @@
 			@if(isset($menuData[11]['write']))
 			<a href="{{url('admin/aggiungi-promemoria')}}" class="btn blue">{{ __('patient.Add Reminder') }} </a>
 			@endif
+		@else
+			<a href="{{url('medico/aggiungi-promemoria')}}" class="btn blue">{{ __('patient.Add Reminder') }} </a>
 		@endif
 
 		<div class="graph">
@@ -54,12 +54,14 @@
 				 		  <th>Descrizione</th>
 
 				 		  <th>Tempo</th>
-						   @if(Auth::user()->role_type=='1')			
+						    @if(Auth::user()->role_type=='1')			
 						   	<th>{{ __('menu.Action') }} </th>
 							@elseif(Auth::user()->role_type=='2')
 								@if(isset($menuData[11]['write']))
 								<th>{{ __('menu.Action') }} </th>
 								@endif
+							@else
+							<th>{{ __('menu.Action') }} </th>
 							@endif
 				 		   
 
@@ -104,6 +106,11 @@
 									<a class="btn btn-danger btn-sm" href="{{url('admin/elimina-promemoria/'.$reminder->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa promemoria?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 								</td>
 								@endif
+							@else
+							<td>				 		  		
+								<a class="btn btn-info btn-sm" href="{{url('medico/modifica-promemoria/'.$reminder->id)}}" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+								<a class="btn btn-danger btn-sm" href="{{url('medico/elimina-promemoria/'.$reminder->id)}}" title="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa promemoria?')"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+							</td>
 							@endif
 				 	</tr>
 

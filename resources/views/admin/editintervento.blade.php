@@ -9,7 +9,6 @@ $eyeArray = [1=>'Sinistra',2=>'Destro',3=>'Entrambi'];
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">{{ __('patient.Update intervention') }}</li>
 		</ol>
 	</div>
@@ -172,8 +171,13 @@ $eyeArray = [1=>'Sinistra',2=>'Destro',3=>'Entrambi'];
 										</div>
 									</div>
 								</div>
-								<span class="float-right btn btn-primary" id="day-surgery-ambulatoriale">{{ __('patient.Day Surgery Print') }}</span>
-								<span class="float-right btn btn-primary" id="day-surgery-operatorio">{{ __('patient.Operative Register') }}</span>
+								<div class="row">
+									<div class="col-lg-6">&nbsp;</div>
+									<div class="col-lg-6">
+										<span class="float-left btn btn-primary" id="day-surgery-ambulatoriale">{{ __('patient.Day Surgery Print') }}</span>&nbsp;
+										<span class="float-right btn btn-primary" id="day-surgery-operatorio">{{ __('patient.Operative Register') }}</span>
+									</div>
+								</div>
 							</div>
 							
 							{!! csrf_field() !!}								
@@ -187,114 +191,224 @@ $eyeArray = [1=>'Sinistra',2=>'Destro',3=>'Entrambi'];
 	</div>
 </div>
 <div id="ambulatoriale-to-print" style="display: none;">
-	<center>Ambulatoriale</center>
-	<hr>
-	<div>
-		Numero medico : {{ !empty($surgeryData->medical_number)?$surgeryData->medical_number:'NA' }}, 
-		Data : {{ $surgeryData->surgery_date }}
+	<div id="header-image-print-sec" style="position:fixed;width:100%;top:0;">
+		<center><img src="{{url('/administrator/images/ambul.jpg')}}" width="350" height="60"></center>
+		<hr>
 	</div>
-	<div>
-		<h2>Paziente</h2>
-		<p>
-			<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
-			<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
-			<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
-			<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Diagnosi</h2>
-		<p>
-			<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Intervento</h2>
-		<p>
-			<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
-			<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Medico Accettante</h2>  Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}
-	</div>
-	<div>
-		<h2>Esame Obiettivo Locale</h2>
-		<p>
-			<div>@php echo !empty($surgeryData->local_examination)?nl2br($surgeryData->local_examination):'NA' @endphp</div>
-		</p>
-	</div>
-	<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+	<div class="page-footer" style="position:fixed;width:100%;bottom: 0;">
+    	<center>
+			<hr>
+			<div>STAR 9000 SRL</div>
+			<div>Sede Operativa: via Corfù 71, 25124 Brescia | Sede Legale: via Rodi 27, 25124 Brescia</div>
+			<div>Tel: 030 2420273 | Fax: 030 2428117 | Mail: info@star9000.it</div>
+			<div>P. IVA e Cod. Fiscale 03386790178</div>
+		</center>
+  	</div>
+	<table>
+		<thead>
+			<tr>
+				<td>
+				<div class="page-header-space" style="width:100%;height:80px;display: block;margin-left: auto;margin-right: auto;width: 50%;"></div>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+				<div style="margin:10mm;page-break-after: always;">
+				<div>
+					Numero medico : {{ !empty($surgeryData->medical_number)?$surgeryData->medical_number:'NA' }}, 
+					Data : {{ $surgeryData->surgery_date }}
+				</div>
+				<div>
+					<h2>Paziente</h2>
+					<p>
+						<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
+						<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
+						<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
+						<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
+					</p>
+				</div>
+				<div>
+					<h2>Diagnosi</h2>
+					<p>
+						<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
+					</p>
+				</div>
+				<div>
+					<h2>Intervento</h2>
+					<p>
+						<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
+						<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
+					</p>
+				</div>
+				<div>
+					<h2>Medico Accettante</h2>  Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}
+				</div>
+				<div>
+					<h2>Esame Obiettivo Locale</h2>
+					<p>
+						<div>@php echo !empty($surgeryData->local_examination)?nl2br($surgeryData->local_examination):'NA' @endphp</div>
+					</p>
+				</div>
+				<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+				</div>
+			</td>
+		</tr>
+		<tfoot>
+			<tr>
+				<td>
+				<div class="page-footer-space" style="width:100%;height:80px;"></div>
+				</td>
+			</tr>
+		</tfoot>
+		</tbody>
+	</table>
 </div>
 <div id="day-surgery-to-print" style="display: none;">
-	<center>Day Surgery</center>
-	<hr>
-	<div>
-		Numero medico : {{ !empty($surgeryData->medical_number)?$surgeryData->medical_number:'NA' }}, 
-		Data : {{ $surgeryData->surgery_date }}
+	<div id="header-image-print" style="position:fixed;width:100%;top:0;">
+		<center><img src="{{url('/administrator/images/day_surgery.jpg')}}" width="350" height="60"></center>
+		<hr>
 	</div>
-	<div>
-		<h2>Paziente</h2>
-		<p>
-			<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
-			<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
-			<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
-			<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Diagnosi</h2>
-		<p>
-			<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Intervento</h2>
-		<p>
-			<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
-			<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
-		</p>
-	</div>
-	<div>
-		<h2>Medico Accettante</h2>  Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}
-	</div>
-	<div>
-		<h2>Esame Obiettivo Locale</h2>
-		<p>
-			<div>@php echo !empty($surgeryData->local_examination)?nl2br($surgeryData->local_examination):'NA' @endphp</div>
-		</p>
-	</div>
-	<div>
-		<h2>Diario Clinico</h2>
-		<p>
-			<div>@php echo !empty($surgeryData->clinical_diary)?nl2br($surgeryData->clinical_diary):'NA' @endphp</div>
-		</p>
-	</div>
-	<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+	<div class="page-footer" style="position:fixed;width:100%;bottom: 0;">
+    	<center>
+			<hr>
+			<div>STAR 9000 SRL</div>
+			<div>Sede Operativa: via Corfù 71, 25124 Brescia | Sede Legale: via Rodi 27, 25124 Brescia</div>
+			<div>Tel: 030 2420273 | Fax: 030 2428117 | Mail: info@star9000.it</div>
+			<div>P. IVA e Cod. Fiscale 03386790178</div>
+		</center>
+  	</div>
+	<table>
+		<thead>
+			<tr>
+				<td>
+				<div class="page-header-space" style="width:100%;height:80px;display: block;margin-left: auto;margin-right: auto;width: 50%;"></div>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+				<div style="margin:10mm;page-break-after: always;">
+					<div>
+						Numero medico : {{ !empty($surgeryData->medical_number)?$surgeryData->medical_number:'NA' }}, 
+						Data : {{ $surgeryData->surgery_date }}
+					</div>
+					<div>
+						<h2>Paziente</h2>
+						<p>
+							<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
+							<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
+							<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
+							<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
+						</p>
+					</div>
+					<div>
+						<h2>Diagnosi</h2>
+						<p>
+							<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
+						</p>
+					</div>
+					<div>
+						<h2>Intervento</h2>
+						<p>
+							<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
+							<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
+						</p>
+					</div>
+					<div>
+						<h2>Medico Accettante</h2>  Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}
+					</div>
+					<div>
+						<h2>Esame Obiettivo Locale</h2>
+						<p>
+							<div>@php echo !empty($surgeryData->local_examination)?nl2br($surgeryData->local_examination):'NA' @endphp</div>
+						</p>
+					</div>
+					<div>
+						<h2>Diario Clinico</h2>
+						<p>
+							<div>@php echo !empty($surgeryData->clinical_diary)?nl2br($surgeryData->clinical_diary):'NA' @endphp</div>
+						</p>
+					</div>
+					<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+				</div>
+			</td>
+		</tr>
+		<tfoot>
+			<tr>
+				<td>
+				<div class="page-footer-space" style="width:100%;height:80px;"></div>
+				</td>
+			</tr>
+		</tfoot>
+		</tbody>
+	</table>
+	
 </div>
 <div id="day-surgery-operation" style="display: none;">
-	<center>Registro Operatorio {{ !empty($surgeryData->intervention_number)?$surgeryData->intervention_number:'NA' }}</center>
-	<hr>
-	<p>
-		<div>{{ __('patient.Intervention Number') }} : {{ !empty($surgeryData->intervention_number)?$surgeryData->intervention_number:'NA' }}</div>
-		<div>Data Intervento : {{ !empty($surgeryData->surgery_date)?$surgeryData->surgery_date:'NA' }}</div>
-		<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
-		<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
-		<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
-		<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
-		<div>Ricovero : Day Surgery</div>
-	</p>
-	<p>
-		<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
-		<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
-		<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
-	</p>
-	<p>
-		@php echo !empty($surgeryData->operating_record)?nl2br($surgeryData->operating_record):'NA' @endphp
-	</p>
-	<p>
-		@php echo !empty($surgeryData->description)?nl2br($surgeryData->description):'NA' @endphp
-	</p>
-	<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+<div id="header-image-print" style="position:fixed;width:100%;top:0;">
+		<center>
+			<div><img src="{{url('/administrator/images/day_surgery_sec.jpg')}}" width="350" height="60"></div>
+			<div>Registro Operatorio {{ !empty($surgeryData->intervention_number)?$surgeryData->intervention_number:'NA' }}</div>
+		</center>
+		<hr>
+	</div>
+	<div class="page-footer" style="position:fixed;width:100%;bottom: 0;">
+    	<center>
+			<hr>
+			<div>STAR 9000 SRL</div>
+			<div>Sede Operativa: via Corfù 71, 25124 Brescia | Sede Legale: via Rodi 27, 25124 Brescia</div>
+			<div>Tel: 030 2420273 | Fax: 030 2428117 | Mail: info@star9000.it</div>
+			<div>P. IVA e Cod. Fiscale 03386790178</div>
+		</center>
+  	</div>
+	<table>
+		<thead>
+			<tr>
+				<td>
+				<div class="page-header-space" style="width:100%;height:80px;display: block;margin-left: auto;margin-right: auto;width: 50%;"></div>
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+				<div style="margin:10mm;page-break-after: always;">
+				<p>
+					<div>{{ __('patient.Intervention Number') }} : {{ !empty($surgeryData->intervention_number)?$surgeryData->intervention_number:'NA' }}</div>
+					<div>Data Intervento : {{ !empty($surgeryData->surgery_date)?$surgeryData->surgery_date:'NA' }}</div>
+					<div>{{ __('patient.Surname') }} : {{ $patientData->surname }}, {{ __('patient.Name') }} : {{ $patientData->name }}</div>
+					<div>{{ __('patient.Date of Birth') }} : {{ $patientData->dob }}</div>
+					<div>{{ __('patient.Email') }} : {{ $patientData->email }}</div>
+					<div>{{ __('patient.Phone') }} : {{ $patientData->phone }}</div>
+					<div>Ricovero : Day Surgery</div>
+				</p>
+				<p>
+					<div>{{ !empty($surgeryData->diagnosis)?$diagnosisArray[$surgeryData->diagnosis]:'NA' }}</div>
+					<div>Femto : {{ !empty($surgeryData->surgery)?$surgeryArray[$surgeryData->surgery]:'NA' }}</div>
+					<div>In Occhio : {{ !empty($surgeryData->eye)?$eyeArray[$surgeryData->eye]:'NA' }}</div>
+				</p>
+				<p>
+					@php echo !empty($surgeryData->operating_record)?nl2br($surgeryData->operating_record):'NA' @endphp
+				</p>
+				<p>
+					@php echo !empty($surgeryData->description)?nl2br($surgeryData->description):'NA' @endphp
+				</p>
+				<div style="text-align: right;">Dott. {{ $doctorData->docsurname.' '.$doctorData->docname }}</div>
+				</div>
+			</td>
+		</tr>
+		<tfoot>
+			<tr>
+				<td>
+				<div class="page-footer-space" style="width:100%;height:80px;"></div>
+				</td>
+			</tr>
+		</tfoot>
+		</tbody>
+	</table>
+	
 </div>
 @endsection

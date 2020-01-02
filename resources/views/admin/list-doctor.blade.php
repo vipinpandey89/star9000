@@ -9,9 +9,6 @@
 	<div class="sub-heard-part">
 
 		<ol class="breadcrumb m-b-0">
-
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
-
 			<li class="active">{{ __('menu.AddDoctor') }}</li>
 
 		</ol>
@@ -60,7 +57,7 @@
 
 				 		  <th>Cap</th>
 
-				 		  <th>Nata/o a</th>
+				 		  <th>Nata/o</th>
 				 		  	@if(Auth::user()->role_type=='1')			
 								<th>{{ __('menu.Action') }}</th>
 							@elseif(Auth::user()->role_type=='2')

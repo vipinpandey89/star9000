@@ -12,7 +12,6 @@ $eyeArray =['right','left','oo'];
 <div class="outter-wp" style="margin-left: 12px;">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li><a href="{{url('admin/paziente')}}">Sezione paziente</a></li>
 			<li><a href="{{url('admin/modifica-paziente/'.$patid)}}">{{$patientData->surname.' '.$patientData->name}}</a></li>
 			<li class="active">{{ __("patient.Patient's Eye Visit") }}</li>
@@ -148,6 +147,100 @@ $eyeArray =['right','left','oo'];
 							</div>
 						</div>
 						@else
+						@if($tab->id == 7)
+							<!-- ricetta section start -->
+							<div class="container_wrapper" style="width:100%;position: relative;display:block;">
+								<div class="print_header_recetta"  style="width:100%;position: relative; font-size:0px;">
+									<div class="print_logo_left" style="width:50%;display:inline-block;vertical-align: middle; text-align: 
+								left;">
+										<img src="{{url('/administrator/images/recetta.jpg')}}" style="max-width:50%;">
+									</div>
+									<div class="right_content" style="width:50%;display:inline-block;font-size: 24px;vertical-align: middle;">
+										<p><i>Dott.</i>  Emanuele Scuri</p>
+										<p>Medico  {{$appointmentData->surname.' '.$appointmentData->name}}</p>
+										<div class="right_date" style="border-bottom: dotted 1px #004e8d;width:100%;">
+											<p>Date <span style="border-bottom:1px solid red;"></span></p>
+										</div>
+									</div>
+								</div>
+								<div class="signature" style="font-size:24px;border-bottom:dotted 1px #004e8d;width:100%;">
+									<p>Sig</p>
+								</div>
+								<div class="occiho" style="width:100%;position: relative;display:block;">
+									<div class="left_occiho" style="width:49%;display:inline-block;vertical-align: middle;">
+										<img src="{{url('/administrator/images/left.png')}}" style="max-width:100%;">
+									</div>
+									<div class="right_occiho" style="width:50%;display:inline-block;vertical-align: middle;">
+										<img src="{{url('/administrator/images/right.png')}}" style="max-width:100%;">
+									</div>
+								</div>
+								<div class="occiho">
+									<table border="1" style="width:100%;border-collapse: collapse;font-style: italic;">
+									<thead >
+										<th  style="padding: 5px;"> Sf</th>
+										<th style="padding: 5px;"> Cil</th>
+										<th style="padding: 5px;"> Asse</th>
+										<th style="padding: 5px;"> Sf</th>
+										<th style="padding: 5px;"> Cil</th>
+										<th style="padding: 5px;"> Asse</th>
+									</thead>
+									<tbody>
+										<tr>
+										<th colspan="6" >
+												<center style="padding: 5px;">PER DISTANZA</center>
+										</th>
+										</tr>
+										<tr>
+											<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										</tr>
+										<tr>
+										<th colspan="6" >
+												<center style="padding: 5px;">A PERMANENZA</center>
+										</th>
+										</tr>
+										<tr>
+											<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										</tr>
+										<tr>
+										<th colspan="6" >
+												<center style="padding: 5px;">PER LETTURA</center>
+										</th>
+										</tr>
+										<tr>
+											<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										<td style="padding: 5px;">&nbsp;</td>
+										</tr>
+									</tbody>
+									</table>
+								</div>
+								<div class="montatura" style="font-size:24px;border-bottom:dotted 1px #004e8d;;width:100%;">
+									<p style="font-size:24px;border-bottom:dotted 1px #004e8d;;width:100%;"><em> Montatura </em></p>
+									<p style="font-size:24px;"><em> Scartamento fra i centri m/m</em><span style="border-bottom:1px solid red;"></span></p>
+									<p style="font-size:24px;border-bottom:dotted 1px #004e8d;;width:100%;"></p>
+								</div>
+								<div class="address_ricetta" style="text-align:center;">
+									<p style="font-size:24px;"> Via Corfu, 71-251124 Brescia | Tel. 0302420180 - Fax 030 2428117</p>
+									<p style="font-size:24px;">Info@studio-oculistico.net | www.studio-coulistico.net</p>
+									
+								</div>
+
+							</div>
+							<!-- ricetta section end -->
+						@endif
 						<div class="row" style="margin-left:8px;">
 						@if(isset($eyeVisitInputTabs[$tab->id]))
 						@foreach($eyeVisitInputTabs[$tab->id] as $tabInput)
@@ -293,6 +386,7 @@ $eyeArray =['right','left','oo'];
 								</div>
 							</div>
 						@endif
+						
 						@endif
 						</div>
 						@endif
@@ -331,6 +425,9 @@ $eyeArray =['right','left','oo'];
 <style>
 table td {
   padding: 1rem;
+}
+.print_header_recetta,.address_ricetta {
+	display:none;
 }
 </style>
 @endsection

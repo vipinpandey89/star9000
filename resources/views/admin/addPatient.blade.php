@@ -5,7 +5,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li><a href="{{url('admin/paziente')}}">Sezione paziente</a></li>
 			<li class="active">{{ __('patient.Add Patient') }}</li>
 		</ol>
@@ -64,7 +63,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label">{{ __('patient.Date of Birth') }}</label>
 										<div class="col-sm-8">
-											<input id="dob" type="text" class="form-control1" name="dob" placeholder="{{ __('patient.Date of Birth') }}">
+											<input id="dob" autocomplete="off" type="text" class="form-control1" name="dob" placeholder="{{ __('patient.Date of Birth') }}">
 										</div>									
 									</div>
 								</div>

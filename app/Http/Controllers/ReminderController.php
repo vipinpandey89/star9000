@@ -13,7 +13,7 @@ class ReminderController extends Controller
 {
     public function index(Request $request)
     {
-        $reminders = Reminder::all();
+        $reminders = Reminder::where(['user_id'=>auth()->user()->id])->get();
         return view('admin.reminder',['reminders'=>$reminders]);
     }
 
@@ -25,7 +25,11 @@ class ReminderController extends Controller
             $reminder->reminder_time  =  date('Y-m-d H:i:s',strtotime(Input::get('reminder_time')));
             $reminder->user_id  =  $user->id;
             if($reminder->save()) {
-            	return redirect('/admin/promemoria')->with('success',"Il promemoria è stato creato correttamente."); 
+                if($user->role_type == '3') {
+                    return redirect('/medico/promemoria')->with('success',"Il promemoria è stato creato correttamente."); 
+                }else{
+                    return redirect('/admin/promemoria')->with('success',"Il promemoria è stato creato correttamente."); 
+                }
             }
     	}
     	return view('admin.addreminder');
@@ -40,17 +44,26 @@ class ReminderController extends Controller
             $reminder->reminder_time  =  date('Y-m-d H:i:s',strtotime(Input::get('reminder_time')));
             $reminder->user_id  =  $user->id;
             if($reminder->save()) {
-            	return redirect('/admin/promemoria')->with('success',"Il promemoria è stato aggiornato correttamente."); 
+                if($user->role_type == '3') {
+                    return redirect('/medico/promemoria')->with('success',"Il promemoria è stato aggiornato correttamente."); 
+                }else{
+                    return redirect('/admin/promemoria')->with('success',"Il promemoria è stato aggiornato correttamente."); 
+                }
             }
     	}
     	return view('admin.editreminder',['reminder'=>$reminder]);
     }
 
     public function deleteReminder(Request $request, $id) {
+        $user = auth()->user();
         if(!empty($id)) {
             $eyevisittab = Reminder::find($id);
             if($eyevisittab->delete()) {
-                return redirect('/admin/promemoria')->with('success',"Il promemoria è stato eliminato correttamente.");
+                if($user->role_type == '3') {
+                    return redirect('/medico/promemoria')->with('success',"Il promemoria è stato eliminato correttamente.");
+                }else{
+                    return redirect('/admin/promemoria')->with('success',"Il promemoria è stato eliminato correttamente.");
+                }
             }
         }
     }

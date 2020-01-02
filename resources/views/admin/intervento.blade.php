@@ -5,12 +5,11 @@
 <div class="outter-wp container">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">Intervento</li>
 		</ol>
 	</div>
 	<div class="graph-visual tables-main">
-		<a href="{{url('admin/intervento')}}" class="btn btn-info btn-sm {{ ($type == 1)?'active':'' }}">Ambulatoriale</a>
+		<a href="{{url('admin/intervento')}}" style="margin-right: 129px;" class="btn btn-info btn-sm {{ ($type == 1)?'active':'' }}">Ambulatoriale</a>
 		<a href="{{url('admin/intervento/2')}}" class="btn btn-info btn-sm {{ ($type == 2)?'active':'' }}">Day Surgery</a>
 		<div class="graph">
 			<div class="tables">

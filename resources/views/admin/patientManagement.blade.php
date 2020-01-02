@@ -5,7 +5,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">{{ __('patient.Manage Patient') }}</li>
 		</ol>
 	</div>
@@ -21,7 +20,7 @@
         </div>
     </div>
 	<div class="body-section">
-    <div class="jobs-list-wrapper">
+    <div class="jobs-list-wrapper" id="main-da-sec">
         <div class="jobs-list">
             <h2 class="jobs-list-heading">{{ __('patient.Patients of the day') }}</h2>
             <div class="jobs-list-body" id="new-jobs">
@@ -309,8 +308,25 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        setInterval(function(){ 
+            $.ajax({
+                method: 'GET',
+                url: "{{ url('/admin/updatedailypat') }}",
+                success: function(data){
+                    if(data != ''){
+                        var resData=data.split("||&&||");
+                        $('#new-jobs-list').html(resData[0]);
+                        $('#in-progress-list').html(resData[1]);
+                        $('#waiting-jobs-list').html(resData[2]);
+                        $('#complete-jobs-list').html(resData[3]);
+                        $('#rework-jobs-list').html(resData[4]);
+                        $(".select-color").colorpicker({hideButton: true});
+                    }
+                }
+            });
+        }, 3000);
         $('#surgery-duration').durationpicker({showDays: false,allowZeroTime: false});
-        $('.openPopup').on('click',function(){
+        $('body').on('click','.openPopup',function(){
             var dataURL = $(this).attr('data-href');
             $('#myModal').find('.modal-content').load(dataURL,function(){
                 $('#myModal').modal({show:true});

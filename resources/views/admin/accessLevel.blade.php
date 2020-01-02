@@ -5,7 +5,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">{{ __('accesslevel.Access Level') }}</li>
 		</ol>
 	</div>
@@ -54,8 +53,8 @@
 						<table class="table table-bordered">
 							<thead>
 							<tr>
-								<th>Sezione</th>
 								<th>Accesso</th>
+								<th>Modifica</th>
 							</tr>
 							</thead>
 							<tbody>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use Hash;
 
 class UserResetPasswordController extends Controller
 {
@@ -22,7 +23,7 @@ class UserResetPasswordController extends Controller
                     $userD->reset_token  = $token;
                     if($userD->save()){
                         $subject = "Resetta la password";
-                        $header = "From:star900@star900.komete.it \r\n";
+                        $header = "From:star9000@star9000.komete.it \r\n";
                         $header.= 'MIME-Version: 1.0' . "\r\n";
                         $header.= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
@@ -70,5 +71,30 @@ class UserResetPasswordController extends Controller
             return redirect('/resetta-la-password')->with('danger','Si è verificato un errore.'); 
         }
         
+    }
+
+    public function UserChangePassword(Request $request){
+        $user = auth()->user();
+        if(auth()->user()->role_type=='3') {
+            $userLoggedIn='medico';   
+        }else{
+            $userLoggedIn='admin';
+        }
+        if($request->method() == 'POST') {
+            
+            if(Hash::check(Input::get('existing_password'), $user->password)){
+                $userD = User::find($user->id);
+                $userD->password  = bcrypt(Input::get('new_password'));
+                if($userD->save()){
+                    return redirect('/'.$userLoggedIn.'/modifica-password-utente')->with('success','La password è stata inserita correttamente.');
+                }else{
+                    return redirect('/'.$userLoggedIn.'/modifica-password-utente')->with('danger','Si è verificato un errore. Per favore prova più tardi.');
+                }
+                
+            } else {
+                return redirect('/'.$userLoggedIn.'/modifica-password-utente')->with('danger','Hai inserito la password corrente errata.');
+            }
+        }
+        return view('admin.UserchangePassword');
     }
 }

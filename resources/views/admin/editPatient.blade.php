@@ -1,6 +1,25 @@
+@php
+$relativeData = [];
+if(!empty($patientData->relative_info)) {
+	$relativeData = json_decode($patientData->relative_info);
+	$relativeDataSec = json_decode($patientData->relative_info,true);
+}
+$relName = '';
+if(isset($relativeData->prefer) && ($patientData->minor_patient == 1))
+{
+	$sePrefer=$relativeData->prefer;
+	$relName = $relativeDataSec[$sePrefer]['fullname'];
+}
+@endphp
+@if($patientData->minor_patient == 1)
+<script type="text/javascript">
+patientNameForSignature = "{{$relName}}";
+</script>
+@else
 <script type="text/javascript">
 patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 </script>
+@endif
 @extends('admin.layout.layout')
 @section('title','dasbhoard')
 @section('content')
@@ -9,7 +28,6 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 	<div class="sub-heard-part">
 		@php $sec = ($user->role_type == 3)?'medico':'admin'; @endphp
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url($sec.'/bacheca')}}">Home</a></li>
 			<li><a href="{{url($sec.'/paziente')}}">Sezione paziente</a></li>
 			<li class="active">{{ __('patient.Edit Patient') }}</li>
 		</ol>
@@ -31,9 +49,19 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 		            </div>
 		            
 		            <div class="modal-body">
+						<button class="pull-right btn btn-default" id="print-privacy-upper">Stampa</button>
 		            	<div id="to-print">
 						<div id="header-image-print" style="position:fixed;width:100%;">
-							<center><img src="{{url($sec.'/../administrator/images/star.jpg')}}" width="150" height="50"></center>
+							<center><img src="{{url($sec.'/../administrator/images/star.jpg')}}" width="150" height="60"><hr id="hori"></center>
+						</div>
+						<div id="f-footer" class="page-footer" style="position:fixed;width:100%;bottom: 0;">
+							<center>
+								<hr>
+								<div>STAR 9000 SRL</div>
+								<div>Sede Operativa: via Corfù 71, 25124 Brescia | Sede Legale: via Rodi 27, 25124 Brescia</div>
+								<div>Tel: 030 2420273 | Fax: 030 2428117 | Mail: info@star9000.it</div>
+								<div>P. IVA e Cod. Fiscale 03386790178</div>
+							</center>
 						</div>
 						<table>
 						<thead>
@@ -46,8 +74,8 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 						<tbody>
 						<tr>
 							<td>
-						<div style="margin:10mm;">
-						<?php  echo nl2br($privacy->description); ?>
+						<div style="margin:10mm;page-break-after: always;">
+						<div><?php  echo nl2br($privacy->description); ?></div>
 						
 						@if(!empty($patientData->patient_signature))
 							<hr>
@@ -69,20 +97,35 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								<div style="float:right;">
 									<span>Firma</span>
 									<p>
-										<img height="60" width="100" src="{{$patientData->patient_signature}}" alt="{{$patientData->surname.' '.$patientData->name}}"><br>
-										<span>{{$patientData->surname.' '.$patientData->name}}</span>
+										@php
+										if(!empty($relName)){
+											$signatureName = $relName;
+										}else{
+											$signatureName = $patientData->surname.' '.$patientData->name;
+										}
+										@endphp
+										<img height="60" width="100" src="{{$patientData->patient_signature}}" alt="{{$signatureName}}"><br>
+										<span>{{$signatureName}}</span>
 										
 									</p>
 								</div>
 							</div>
 						@endif
 						</div>
-						</td></tr></tbody></table>
+						</td></tr>
+						<tfoot>
+							<tr>
+								<td>
+								<div class="page-footer-space" style="width:100%;height:80px;"></div>
+								</td>
+							</tr>
+						</tfoot>
+						</tbody></table>
 						</div>
 						<br><br><br><br><br><br>
 		                <div class=""> 
-		                	<button type="button" id="agree-button" class="btn btn-default">Accetta</button>
-							<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button>
+		                	<!-- <button type="button" id="agree-button" class="btn btn-default">Accetta</button>
+							<button type="button" id="disagree-button" class="btn btn-default">Rifiuta</button> -->
 							<button class="btn btn-default" id="capture-patient-signature">Cattura firma paziente</button>
 		                	 <button class="pull-right btn btn-default" id="print-privacy">Stampa</button>
 		                </div>
@@ -115,7 +158,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Surname') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->surname)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Surname') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->surname }}" type="text" class="form-control1" name="surname" placeholder="{{ __('patient.Surname') }}">
 										</div>									
@@ -123,7 +166,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Name') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->name)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Name') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->name }}" type="text" class="form-control1" name="name" placeholder="{{ __('patient.Name') }}">
 										</div>									
@@ -141,7 +184,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Phone') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->phone)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Phone') }}</label>
 										<div class="col-sm-8">
 											<input type="number" value="{{ $patientData->phone }}" class="form-control1" name="phone" placeholder="{{ __('patient.Phone') }}">
 										</div>									
@@ -151,9 +194,9 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label  class="col-sm-2 control-label">{{ __('patient.Date of Birth') }}</label>
+										<label  class="col-sm-2 control-label">@php echo empty($patientData->dob)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Date of Birth') }}</label>
 										<div class="col-sm-8">
-											<input value="{{ $patientData->dob }}" id="dob" type="text" class="form-control1" name="dob" placeholder="{{ __('patient.Date of Birth') }}">
+											<input value="{{ $patientData->dob }}" id="dob" type="text" class="form-control1" autocomplete="off" name="dob" placeholder="{{ __('patient.Date of Birth') }}">
 										</div>									
 									</div>
 								</div>
@@ -191,7 +234,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Place of birth') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->place_of_birth)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Place of birth') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->place_of_birth }}" id="place_of_birth	" type="text" class="form-control1" name="place_of_birth" placeholder="{{ __('patient.Place of birth') }}">
 										</div>									
@@ -199,7 +242,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Province of birth') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->province_of_birth)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Province of birth') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->province_of_birth }}" id="province_of_birth" type="text" class="form-control1" name="province_of_birth" placeholder="{{ __('patient.Province of birth') }}">
 										</div>							
@@ -209,7 +252,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Fiscal code') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->fiscal_code)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Fiscal code') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->fiscal_code }}" id="fiscal_code" type="text" class="form-control1" name="fiscal_code" placeholder="{{ __('patient.Fiscal code') }}">
 										</div>									
@@ -217,7 +260,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Place of living') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->place_of_living)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Place of living') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->place_of_living }}" id="place_of_living" type="text" class="form-control1" name="place_of_living" placeholder="{{ __('patient.Place of living') }}">
 										</div>							
@@ -227,7 +270,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Province of living') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->province_of_living)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Province of living') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->province_of_living }}" id="province_of_living" type="text" class="form-control1" name="province_of_living" placeholder="{{ __('patient.Province of living') }}">
 										</div>									
@@ -235,7 +278,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Number of the address') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->number_of_the_address)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Number of the address') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->number_of_the_address }}" id="number_of_the_address" type="text" class="form-control1" name="number_of_the_address" placeholder="{{ __('patient.Number of the address') }}">
 										</div>							
@@ -245,7 +288,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Address') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->address)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Address') }}</label>
 										<div class="col-sm-8">
 											<textarea class="form-control" id="address" name="address">{{ $patientData->address }}</textarea>
 										</div>									
@@ -253,7 +296,7 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 								<div class="col-lg-6">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">{{ __('patient.Postal Code') }}</label>
+										<label class="col-sm-2 control-label">@php echo empty($patientData->postal_code)?'<i class="fa fa-exclamation-circle exclamation-mark" aria-hidden="true"></i>':'' @endphp {{ __('patient.Postal Code') }}</label>
 										<div class="col-sm-8">
 											<input value="{{ $patientData->postal_code }}" id="postal-code" type="number" class="form-control1" name="postal_code" placeholder="{{ __('patient.Postal Code') }}">
 										</div>							
@@ -324,11 +367,9 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								</div>
 							</div>
 							<div id="relative-section" class="minor_patient" style="{{ $patientData->minor_patient == 1?'':'display: none;' }}">
-								<?php 
-								$relativeData = [];
-								if(!empty($patientData->relative_info)) {
-									$relativeData = json_decode($patientData->relative_info);
-								}
+								<?php
+								$prefer = isset($relativeData->prefer)?$relativeData->prefer:'';
+								unset($relativeData->prefer);
 								$count=0; ?>
 								@foreach($relativeData as $relative)
 									<div class="patinfo row">
@@ -342,21 +383,19 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 											<input value="{{$relative->contactno}}" class="form-control1" type="number" name="relative[{{$count}}][contactno]" placeholder="Numero di contatto">
 										</div>
 										<div class="col-lg-3" >
-											<i class="remove-relative fa fa-times" aria-hidden="true"></i>
+											<div class="col-lg-3" >
+												<input type="radio" value="{{$count}}"  name="relative[prefer]" @php echo ($count == $prefer)?'checked':''; @endphp/>
+											</div>
+											<div class="col-lg-3" >
+												<i class="remove-relative fa fa-times" aria-hidden="true"></i>
+											</div>
 										</div>
+										
 									</div>
 									<?php $count++; ?>
 								@endforeach
 							</div>
-
-
-							{!! csrf_field() !!}								
-							
-							@if($user->role_type != 3)
-							<div class=""> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
-							@endif
-						</form>
-						<form id="privacy-form">
+							<br/>
 							<?php
 							$privacyData = [];
 							$pri=0;
@@ -365,14 +404,6 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 								$pri =1; 
 							}
 							?>
-							<input type="hidden" id="alreadyagree" value="{{ $pri }}"/>
-							<input type="hidden" name="pat_id" value="{{ $patientData->id }}">
-							<div class="row">
-								<div class="col-lg-10">
-									<span>{{ __('patient.Privacy') }}</span>
-								</div>
-								<span id="succ-mssg"></span>
-							</div>
 							<div class="row">
 								<div class="col-lg-6">
 									<div class="form-group">
@@ -390,24 +421,43 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 										</div>									
 									</div>
 								</div>
-							</div>
-							@if(!empty($patientData->patient_signature))
+							</div>	
+							{!! csrf_field() !!}								
+							
+							@if($user->role_type != 3)
+							<div class=""> <button type="submit" name="add" class="btn btn-default">Salva</button> </div>
+							@endif
+						</form>
+						<form id="privacy-form">
+							<input type="hidden" id="alreadyagree" value="{{ $pri }}"/>
+							<input type="hidden" name="pat_id" value="{{ $patientData->id }}">
 							<div class="row">
-								<div class="col-lg-10">
+								<div class="col-lg-12">
+									<span class="text-center"><h3>{{ __('patient.Privacy') }}</span></h3>
+								</div>
+								<span id="succ-mssg"></span>
+							</div>
+							<br>
+							@if(!empty($patientData->patient_signature))
+							<div class="row text-center">
+								<div class="col-lg-12">
 									<div class="form-group">
-										<label class="col-sm-2 control-label">Firma del paziente</label>
-										<div class="col-sm-8" >
+										<label class="col-sm-6 control-label text-right"> Firma &nbsp;&nbsp;: </label>
+										<div class="col-sm-6 text-left" >
 											
-											<img  src="{{$patientData->patient_signature}}" height="60" width="250">
-											
+											<span class="glyphicon glyphicon-ok"></span></p> 
 										</div>									
 									</div>
 								</div>
 							</div>
+							@else
+							<center><h3>Nessuna firma</h3></center>
 							@endif
+							<br>
 							{!! csrf_field() !!}
 							@if($user->role_type != 3)
-							<div class=""> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Salva</button></div>
+							<div class="text-center"> <button id="privacy-button" type="button" name="privacy-button" class="btn btn-default">Stampa la privacy</button>&nbsp;<button id="privacy-get-signature-button" type="button" name="privacy-button" class="btn btn-default">Ottieni la firma</button></div>
+							
 							@endif
 						</form>
 						<div class="row">
@@ -457,6 +507,14 @@ patientNameForSignature = "{{$patientData->surname.' '.$patientData->name}}";
 #header-image-print {
 	top: 100px;
     width: 129% !important;
+}
+.exclamation-mark{
+	float: left;
+	margin: 4 0 0 -28;
+	position: absolute;
+}
+#f-footer,#hori {
+	display:none;
 }
 </style>
 @endsection

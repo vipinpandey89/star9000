@@ -10,8 +10,6 @@
 
 		<ol class="breadcrumb m-b-0">
 
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
-
 			<li class="active">{{ __('menu.Add specialty') }}</li>
 
 		</ol>

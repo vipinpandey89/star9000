@@ -10,15 +10,16 @@
 				<div class="col-lg-6">
 					Stato attuale : <span id="paz-{{$patId}}" style="border: none;" class="form-control">{{ $currentStatus }}</span>
 				</div>
+				@php unset($sectionArraySecond['first']); @endphp
 				<div class="col-lg-6">
 					Cambia stato in : 
 					<select class="form-control1" id="new-status">
-						<option value="">Selezionare</option>
-						<option value="first">Pazienti del giorno</option>
-						<option value="second">Check In</option>
-						<option value="third">Chirurgia</option>
-						<option value="fourth">Esami</option>
-						<option value="fifth">Check Out</option>
+					<option value="">Selezionare</option>
+					@foreach($sectionArraySecond as $key=>$value)
+						@if($value != $currentStatus)
+						<option value="{{$key}}">{{$value}}</option>
+						@endif
+					@endforeach
 					</select>
 				</div>
 				

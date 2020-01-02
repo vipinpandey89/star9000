@@ -82,6 +82,7 @@ Route::get('getdoctoravailability','AppointmentController@getdoctoravailability'
 Route::get('getdoctoravailabilityDates','AppointmentController@getdoctoravailabilityDates');
 Route::post('searchAppointment','AppointmentController@searchAppointment');
 Route::get('compareDoctor','AppointmentController@compareDoctor');
+Route::get('getPatientDataOnCalendar','AppointmentController@getPatientDataOnCalendar');
 
 Route::get('doctor-leaves','AdminController@DoctorLeaves');
 
@@ -96,6 +97,7 @@ Route::post('/saveprivacy','PatientController@SavePrivacy');
 Route::match(['get','post'],'privacy','PrivacyController@index');
 Route::match(['get','post'],'/eyevisit/{patid}/{id}','PatientController@eyevisit');
 Route::get('/gestire-il-paziente','PatientController@managepatient');
+Route::get('/updatedailypat','PatientController@updatedailypat');
 Route::get('/dailypatientupdate','PatientController@dailypatientupdate');
 Route::get('/getpatient/{id}','PatientController@getpatient');
 Route::get('/savecomment', 'PatientController@savecomment');
@@ -105,6 +107,7 @@ Route::get('/intervento','PatientController@intervento');
 Route::match(['get','post'],'aggiungi-intervento','PatientController@AddIntervento');
 Route::match(['get','post'],'modifica-intervento/{id}','PatientController@EditIntervento');
 Route::get('/saveintervento','PatientController@saveintervento');
+Route::get('/ajaxlistpatbydoc','PatientController@ajaxlistpatbydoc');
 //eye visit tabs
 Route::get('/schede-eye-visit','PatientController@eyevisittabs');
 Route::get('/ingressi-scheda/{id}','PatientController@tabsInput');
@@ -119,7 +122,7 @@ Route::get('/elimina-ingressi/{tabid}/{id}','PatientController@deleteinput');
 Route::get('/elenco-per-medico','PatientController@listByDoctor');
 Route::get('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
 Route::post('/dailyPatChangeStatus/{patid}','PatientController@dailyPatChangeStatus');
-Route::get('/getMainPatientList','PatientController@getMainPatientList');
+Route::post('/getMainPatientList','PatientController@getMainPatientList');
 Route::post('/importazione-paziente','PatientController@importPatient');
 Route::get('/promemoria','ReminderController@index');
 Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
@@ -132,6 +135,8 @@ Route::post('/ottenere-la-firma-dellutente/{patid}','PatientController@getPatien
 Route::get('/livello-di-accesso','AccessLevelController@index');
 Route::match(['get','post'],'livello-di-accesso/{userid}','AccessLevelController@index');
 Route::get('/getUsersByType','AccessLevelController@getUsersByType');
+Route::match(['get','post'],'modifica-password-utente','UserResetPasswordController@UserChangePassword');
+Route::get('/isDailyPatientUpdated','PatientController@isDailyPatientUpdated');
 
 });
 
@@ -139,10 +144,19 @@ Route::get('/getUsersByType','AccessLevelController@getUsersByType');
 Route::group(['prefix'=>'medico','middleware'=>['auth','admin']],function(){
 	Route::get('/appuntamenti','DoctorController@appointments');
 	Route::get('/paziente','DoctorController@patients');
+	Route::get('/paziente/{all}','DoctorController@patients');
+	Route::post('/patientsAjaxMy','DoctorController@patientsAjax');
+	Route::post('/patientsAjax/{all}','DoctorController@patientsAjax');
+
 	Route::get('/responsedata','DoctorController@responsedata');
 	Route::match(['get','post'],'profilo-visite','AdminController@SetExamination');
 	Route::get('/bacheca','AdminController@dasbhoard');
 	Route::match(['get','post'],'modifica-paziente/{id}','PatientController@EditPatient');
 	Route::match(['get','post'],'/eyevisit/{patid}/{id}','DoctorController@eyevisit');
 	Route::get('/logout','AdminController@AdminLogout');
+	Route::get('/promemoria','ReminderController@index');
+	Route::match(['get','post'],'aggiungi-promemoria','ReminderController@addReminder');
+	Route::match(['get','post'],'modifica-promemoria/{id}','ReminderController@editReminder');
+	Route::get('/elimina-promemoria/{id}','ReminderController@deleteReminder');
+	Route::match(['get','post'],'modifica-password-utente','UserResetPasswordController@UserChangePassword');
 });

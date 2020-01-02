@@ -12,7 +12,6 @@ $eyeArray =['right','left','oo'];
 <div class="outter-wp" style="margin-left: 12px;">
 	<div class="sub-heard-part">
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('medico/bacheca')}}">Home</a></li>
 			<li><a href="{{url('medico/paziente')}}">Sezione paziente</a></li>
 			<li><a href="{{url('medico/modifica-paziente/'.$patid)}}">{{$patientData->surname.' '.$patientData->name}}</a></li>
 			<li class="active">{{ __("patient.Patient's Eye Visit") }}</li>
@@ -252,6 +251,46 @@ $eyeArray =['right','left','oo'];
 							}
 							@endphp
 						@endforeach
+						@if($tab->id == 8)
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">&nbsp;</label>
+									<div class="col-sm-8">
+									<table rules="all" style="width: 170px;margin: 0 auto;">
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label class="col-sm-2 control-label">&nbsp;</label>
+									<div class="col-sm-8">
+									<table rules="all" style="width: 170px;margin: 0 auto;">
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+										<tr>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+									</div>
+								</div>
+							</div>
+						@endif
 						@endif
 						</div>
 						@endif
@@ -287,4 +326,9 @@ $eyeArray =['right','left','oo'];
 		});
 	});
 </script>
+<style>
+table td {
+  padding: 1rem;
+}
+</style>
 @endsection

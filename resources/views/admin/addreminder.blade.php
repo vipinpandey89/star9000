@@ -5,7 +5,6 @@
     <!--/sub-heard-part-->
     <div class="sub-heard-part">
         <ol class="breadcrumb m-b-0">
-            <li><a href="{{url('admin/dashboard')}}">Home</a></li>
             <li><a href="{{url('admin/promemoria')}}">{{ __('patient.Reminder') }}</a></li>
             <li class="active">{{ __('patient.Add Reminder') }}</li>
         </ol>

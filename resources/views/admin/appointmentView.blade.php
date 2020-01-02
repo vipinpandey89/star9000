@@ -9,7 +9,6 @@
 <div class="outter-wp">
 	<div class="sub-heard-part">	
 		<ol class="breadcrumb m-b-0">
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
 			<li class="active">Calendario</li>
 		</ol>
 	</div>
@@ -19,12 +18,13 @@
 		<strong>{{Session::get('success') }}</strong>
 	</div>
 	@endif
+	<div id="app-succs-mssg"></div>
 	<div class="row">
 		@if(Auth::user()->role_type=='1')			
-			<button type="button" id="calendar-action-button">Azioni</button>
+			<button type="button" id="calendar-action-button">Azione</button>
 		@elseif(Auth::user()->role_type=='2')
 			@if(isset($menuData[3]['write']))
-			<button type="button" id="calendar-action-button">Azioni</button>
+			<button type="button" id="calendar-action-button">Azione</button>
 			@endif
 		@endif
 		<div class="col-md-12 text-center main_div">
@@ -49,12 +49,12 @@
 			  <div class="col-md-4">
 			  	<div class="form-group">
 			  		<div>
-			  			<input type="text" id="filter-from-date" class="form-control1" name="fromdate" placeholder="{{ __('menu.From Date') }}">
+			  			<input type="text" id="filter-from-date" autocomplete="off" class="form-control1" name="fromdate" placeholder="{{ __('menu.From Date') }}">
 			  		</div>									
 			  	</div>
 			  	<div class="form-group">
 					<div>
-						<input type="text" id="filter-to-date" class="form-control1" name="todate" placeholder="{{ __('menu.To Date') }}">
+						<input type="text" id="filter-to-date" autocomplete="off"  class="form-control1" name="todate" placeholder="{{ __('menu.To Date') }}">
 					</div>									
 				</div>
 				
@@ -152,7 +152,7 @@
 	<div><center><span id="doc-av-mssg" style="color: orange;"></span></center></div>
 	<br>
 	<div class="graph-visual tables-main">	
-
+		<input type="hidden" id="selected-doctor-for-appointment"/>
 		<div id='calendar'></div>
 		<div style='clear:both'></div>
 		<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -193,12 +193,12 @@
 							<input id="pat-email" type="text" name="pat_email" class="form-control" style="margin-bottom: 0px;">
 						</div>
 						<div class="form-group">
-							<label for="">{{ __('menu.Patient Phone Number') }} </label>
+							<label for="">{{ __('menu.Patient Phone Number') }}  <span style="color: red">*</span></label>
 							<input id="pat-phone-number" type="number" name="pat_phone_num" class="form-control" style="margin-bottom: 0px;">
 						</div>
 						<div class="form-group">
-							<label for="">{{ __('menu.Date of Birth') }}  <span style="color: red">*</span></label>
-							<input id="pat-dob" type="text" name="pat_dob" class="form-control" style="margin-bottom: 0px;">
+							<label for="">{{ __('menu.Date of Birth') }} </label>
+							<input id="pat-dob" type="text" autocomplete="off" name="pat_dob" class="form-control" style="margin-bottom: 0px;">
 						</div>
 						<div class="form-group">
 							<label for="">{{ __('menu.Patient Description') }}</label>
@@ -334,10 +334,6 @@
     </div>
 </div>
 <?php
-$patientEmail=[];
-foreach($patientsData as $dat){
-	$patientEmail[]=$dat['email'];
-}
 $isVisible =0;
 if(Auth::user()->role_type=='1'){		
 	$isVisible = 1;
@@ -351,12 +347,21 @@ if(Auth::user()->role_type=='1'){
 @if($isVisible == 1)
 <script>
 	$(document).ready(function() {
-		patientEmail='<?php echo json_encode($patientEmail)?>';
+		// get patient data
+		$.ajax({
+			type:"GET",
+			dataType:"json",
+			url:"{{url('/admin/getPatientDataOnCalendar')}}",
+			success: function(response){
+				patientEmail= response.patientEmail;
+				availableTags = response.patientsData;
+			}
+		});
+		//end patient data
 		$('.timecall').timepicker({
-			showMeridian: false  ,
+			showMeridian: false,
 			minuteStep: 10
 		});
-		availableTags = JSON.parse('<?php echo json_encode($patientsData) ?>');
 		$('#calendar').fullCalendar({
 			header:{
 				left:'prev,next today',
@@ -374,7 +379,7 @@ if(Auth::user()->role_type=='1'){
 		        },
 		        agendaDay: {
 		        	editable: false
-		        }
+				}
 		    },
 			hiddenDays: [ 0, 6 ],
 			defaultView:'agendaDay',
@@ -685,6 +690,8 @@ if(Auth::user()->role_type=='1'){
 				},
 				placeholder: "Scegli paziente"
 			});
+			$("#examination_id option:eq(1)").prop("selected", true).trigger('change');
+			
 		}
 
 		function showPatientPopup() {
@@ -757,14 +764,23 @@ if(Auth::user()->role_type=='1'){
 
 		           //start doctor detail here//
 
-		           $('#doctors').empty();
+				   $('#doctors').empty();
+				   var sel222 = $('#selected-doctor-for-appointment').val();
 		           $.each(decodeData['DoctorInformation'], function( key1, value1 ) {
-
-			           	$('#doctors').append($('<option>',
-			           	{
-			           		value: value1.user_id,
-			           		text : value1.surname+' '+value1.name,
-			           	}));
+					if(sel222 == value1.user_id ) {
+						$('#doctors').append($('<option>',
+						{
+							value: value1.user_id,
+							text : value1.surname+' '+value1.name,
+							selected:'selected'
+						}));
+					}else{
+						$('#doctors').append($('<option>',
+						{
+							value: value1.user_id,
+							text : value1.surname+' '+value1.name,
+						}));
+					}
 		           });
 		           	// end here doctor detail//
 		           	if(roomSelected != '') {
@@ -772,6 +788,9 @@ if(Auth::user()->role_type=='1'){
 		           	}
 		           }
       	 	});
+			}
+			if($('#selected-doctor-for-appointment').val() != '') {
+				$('#doctors option[value="'+$('#selected-doctor-for-appointment').val()+'"]').prop("selected", true);
 			}
 		});
 		$('#examination_id').change(function(){
@@ -821,19 +840,30 @@ if(Auth::user()->role_type=='1'){
            		$('#error').html('<div class="alert alert-danger">Nessun medico disponibile.</div>');
            }else{
            	$('#error').html('');
-           }
+		   }
+		   var sel111 = $('#selected-doctor-for-appointment').val();
            $.each(decodeData['DoctorInformation'], function( key1, value1 ) {
-
-	           	$('#doctors').append($('<option>',
-	           	{
-	           		value: value1.user_id,
-	           		text : value1.surname+' '+value1.name,
-	           	}));
+				if(sel111 == value1.user_id ) {
+					$('#doctors').append($('<option>',
+					{
+						value: value1.user_id,
+						text : value1.surname+' '+value1.name,
+						selected:'selected'
+					}));
+				}else{
+					$('#doctors').append($('<option>',
+					{
+						value: value1.user_id,
+						text : value1.surname+' '+value1.name,
+					}));
+				}
+	           	
            });
            	// end here doctor detail//
            }
       	 });
 		}
+		
 	});
 		
 	});
@@ -871,7 +901,9 @@ if(Auth::user()->role_type=='1'){
 									console.log(response);
 									if(response=='success')
 									{
-										location.reload();
+										$('#calendar').fullCalendar('refetchEvents');
+										$('#myModal').hide();
+										$.growl.notice({ message: "L'appuntamento è stato cancellato con successo." });
 									}
 								}
 							});
@@ -899,7 +931,9 @@ if(Auth::user()->role_type=='1'){
 									console.log(response);
 									if(response=='success')
 									{
-										location.reload();
+										$('#calendar').fullCalendar('refetchEvents');
+										$('#myModal').hide();
+										$.growl.notice({ message: "L'appuntamento è stato cancellato con successo." });
 									}
 								}
 							});
@@ -938,9 +972,9 @@ if(Auth::user()->role_type=='1'){
 				},
 				pat_phone_num: {
 					maxlength: 10,
-					minlength: 10
-				},
-				pat_dob:"required"
+					minlength: 10,
+					required:true
+				}
 			},
 			messages: {
 				surname: "Inserisci il cognome del paziente.",
@@ -949,9 +983,9 @@ if(Auth::user()->role_type=='1'){
 				},
 				pat_phone_num: {
 					maxlength: "Inserire un numero di telefono paziente valido.",
-					minlength: "Inserire un numero di telefono paziente valido."
-				},
-				pat_dob:"Inserisci la data di nascita del paziente."
+					minlength: "Inserire un numero di telefono paziente valido.",
+					required: "Inserire un numero di telefono paziente valido."
+				}
 			}
 		});
 
@@ -1011,9 +1045,12 @@ if(Auth::user()->role_type=='1'){
 							success: function(response){
 								if(response=='success')
 								{
-									location.reload();
+									$('#calendar').fullCalendar('refetchEvents');
+									$('#myModal').hide();
+									$.growl.notice({ message: "L'appuntamento è stato aggiornato con successo." });
+									
 								}else{
-									$('#error').html('<div class="alert alert-danger"><strong>Errore!</strong>Questo appuntamento per data e ora è già prenotato.</div>');
+									$.growl.error({ message: "Questo appuntamento per data e ora è già prenotato." });
 								}
 							}
 						});
@@ -1021,10 +1058,10 @@ if(Auth::user()->role_type=='1'){
 						$("#myForm").submit();
 					}
 				} else {
-					$('#error').html("<div class='alert alert-danger'><strong>Errore!</strong>Paziente non valido.</div>");
+					$.growl.error({ message: "Paziente non valido." });
 				}
 			} else {
-				$('#error').html("<div class='alert alert-danger'><strong>Errore!</strong>L'ora di fine dovrebbe essere successiva all'ora di inizio..</div>");
+				$.growl.error({ message: "L'ora di fine dovrebbe essere successiva all'ora di inizio." });
 			}
 		});
 		
@@ -1036,15 +1073,39 @@ if(Auth::user()->role_type=='1'){
 				$('#recurrence-section').hide();
 			}
 		});
+		$('body').on('mouseover','.fc-day-header',function(){
+			var attrSe = $(this).attr('data-date');
+			if (typeof attrSe !== typeof undefined && attrSe !== false) {
+				$(this).tooltip({
+					title:$(this).attr('data-date'),
+					container:'body',
+					placement:'bottom',
+					trigger:'hover'
+				}).tooltip('show');
+			}
+		});
+				
+				
 		$('#filter-button').click(function(){
 			var filterfromDate = $('#filter-from-date').val();
 			var filtertoDate = $('#filter-to-date').val();
+			var date1 = new Date(filterfromDate); 
+			var date2 = new Date(filtertoDate); 
+			var Difference_In_Time = date2.getTime() - date1.getTime(); 
+			// To calculate the no. of days between two dates 
+			var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+			console.log(Difference_In_Days);
 			if(filterfromDate != '' && filtertoDate != '') {
 				$('#calendar').fullCalendar('changeView', 'agenda');
 				$('#calendar').fullCalendar('option', 'visibleRange', {
 				  start: new Date( Date.parse(filterfromDate)),
 				  end: new Date( Date.parse(filtertoDate))
 				});
+			}
+			if(Difference_In_Days >40){
+				$('.fc-day-header').css('transform','rotate(-90deg)');
+			} else {
+				$('.fc-day-header').css('transform','');
 			}
 			var filterbydoctorssecond = $('#filter-doctor').val();
 			var filterexamtypesecond = $('#filter-examtype').val();
@@ -1152,9 +1213,12 @@ if(Auth::user()->role_type=='1'){
 					                    return $(this).find('a').text().trim() == day;
 					                });
 					                if ( inst.hasClass('ui-available')){
-					                    $('#doc-av-mssg').html(inst.attr('title'));
+										var docAvailabilityTitle = inst.attr('title').split('|');
+										$('#doc-av-mssg').html(docAvailabilityTitle[0]);
+										$('#selected-doctor-for-appointment').val(docAvailabilityTitle[1]);
 					                } else {
-					                    $('#doc-av-mssg').html('');
+										$('#doc-av-mssg').html('');
+										$('#selected-doctor-for-appointment').val('');
 					                }
 					               
 							        $("#calendar").fullCalendar( 'gotoDate', datePik );
@@ -1216,11 +1280,12 @@ if(Auth::user()->role_type=='1'){
 		$('#filter-doctor').multiselect({
 			nonSelectedText: 'Seleziona medico',
 			allSelectedText: 'Tutti selezionati',
+			nSelectedText: 'selezionato',
 			onChange: function(option, checked) {
 		    // Get selected options.
 		    var selectedOptions = $('#filter-doctor option:selected');
 
-		    if (selectedOptions.length >= 3) {
+		    if (selectedOptions.length >= 4) {
 		        // Disable all other checkboxes.
 		        var nonSelectedOptions = $('#filter-doctor option').filter(function() {
 		            return !$(this).is(':selected');
@@ -1428,4 +1493,12 @@ if(Auth::user()->role_type=='1'){
 	}
 </script>
 @endif
+<script type="text/javascript">
+$(document).ready(function(){
+	setInterval(function(){ 
+		$('#calendar').fullCalendar('refetchEvents');
+		$('.eventtooltip').tooltip('destroy')
+	}, 5000);
+});
+</script>
 @endsection							

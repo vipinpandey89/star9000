@@ -14,6 +14,7 @@ use App\Doctor;
 use App\EyeVisitTabs;
 use App\InputTabs;
 use App\EyeVisitData;
+use App\UserAccessLevel;
 
 class DoctorController extends Controller
 {
@@ -22,18 +23,102 @@ class DoctorController extends Controller
         return view('admin.doctor.appointmentView');
     }
 
-    public function patients(Request $request)
+    public function patients(Request $request,$all=null)
     {
         $user = auth()->user();
-        $appointments = DB::table('appointement_booking')
-                     ->select('appointement_booking.patient_id')
-                     ->where('doctro_name', '=', $user->id)->get();
-        $patientsId = [];
-        array_map(function($item) use (&$patientsId) {
-            $patientsId[] = $item->patient_id; // object to array
-        }, $appointments->toArray());
-        $patients = Patient::whereIn('id', $patientsId)->get();
-        return view('admin.doctor.patientList',['patients'=>$patients,'user'=>$user]);
+        return view('admin.doctor.patientList',['user'=>$user,'all'=>$all]);
+    }
+
+    public function patientsAjax(Request $request,$all=null)
+    {
+        $user = auth()->user();
+        $limit = 10;
+        $start = isset($_POST["start"])?$_POST["start"]:0;
+		$length = isset($_POST["length"])?$_POST["length"]:$limit;
+		$search = isset($_POST["search"])?$_POST["search"]:[];
+        $draw = isset($_POST["draw"])?$_POST["draw"]:1;
+        if(!empty($all)) {
+            $patientModel = DB::table('patients'); 
+            if(!empty($search['value'])) {
+                $searchString= strtolower($search['value']);
+                $patientModel->orWhere('name', 'like', '%' . $searchString . '%')
+                             ->orWhere('surname', 'like', '%' . $searchString . '%')
+                             ->orWhere('email', 'like', '%' . $searchString . '%')
+                             ->orWhere('dob', 'like', '%' . $searchString . '%')
+                             ->orWhere('phone', 'like', '%' . $searchString . '%');
+            }
+        } else {
+            $appointments = DB::table('appointement_booking')
+                        ->select('appointement_booking.patient_id')
+                        ->where('doctro_name', '=', $user->id)->get();
+            $patientsId = [];
+            array_map(function($item) use (&$patientsId) {
+                $patientsId[] = $item->patient_id; // object to array
+            }, $appointments->toArray());
+            $patientModel = Patient::whereIn('id', $patientsId);
+            if(!empty($search['value'])) {
+                $searchString = strtolower($search['value']);
+                $patientModel->
+                        where(function($q) use ($searchString){
+                            $q->where('name', 'like', '%' . $searchString . '%')
+                            ->orWhere('surname', 'like', '%' . $searchString . '%')
+                            ->orWhere('email', 'like', '%' . $searchString . '%')
+                            ->orWhere('dob', 'like', '%' . $searchString . '%')
+                            ->orWhere('phone', 'like', '%' . $searchString . '%');
+                        });
+            }
+        }
+        
+        $totalCount = $patientModel->count();
+        $patients = $patientModel->skip($start)->take($length)->orderBy('surname', 'ASC')->get();
+        $i=$start+1;
+        $include =0;
+        if((auth()->user()->role_type=='1') || (auth()->user()->role_type=='3')){        
+            $include =1;
+        } else if(auth()->user()->role_type =='2'){
+            $accessData = UserAccessLevel::where(['user_id'=>auth()->user()->id])->first();
+            $menuData = json_decode($accessData->access_level,true);
+            if(isset($menuData[6]['write'])){
+                $include =1;
+            }
+        }
+        $returnArray['data'] = [];
+        foreach ($patients as $patient) {
+            if (!empty($patient->surname) && !empty($patient->name) && !empty($patient->phone) && !empty($patient->dob) && !empty($patient->place_of_birth) && !empty($patient->province_of_birth) && !empty($patient->fiscal_code) && !empty($patient->place_of_living) && !empty($patient->province_of_living) && !empty($patient->number_of_the_address) && !empty($patient->address) && !empty($patient->postal_code)){
+                $checked='<i class="fa fa-check-square" aria-hidden="true"></i>';
+            } else {
+                $checked='<i class="fa fa-exclamation-circle" aria-hidden="true"></i>';
+            }
+            $action ='<a class="btn btn-info btn-sm" href="'.url("medico/modifica-paziente/".$patient->id).'" title="modificare"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            if($include == 1){
+                $returnArray['data'][]=[
+                    $i,
+                    (!empty($patient->surname)?$patient->surname:'NA'),
+                    (!empty($patient->name)?$patient->name:'NA'),
+                    (!empty($patient->email)?$patient->email:'NA'),
+                    (!empty($patient->phone)?$patient->phone:'NA'),
+                    (!empty($patient->dob)?$patient->dob:'NA'),
+                    $checked,
+                    $action
+                ];
+            }else{
+               $returnArray['data'][]=[
+                    $i,
+                    (!empty($patient->surname)?$patient->surname:'NA'),
+                    (!empty($patient->name)?$patient->name:'NA'),
+                    (!empty($patient->email)?$patient->email:'NA'),
+                    (!empty($patient->phone)?$patient->phone:'NA'),
+                    (!empty($patient->dob)?$patient->dob:'NA'),
+                    $checked
+                ]; 
+            }
+            $i++;
+        }
+        
+        $returnArray['draw'] = $draw;
+        $returnArray['recordsTotal'] = $totalCount;
+        $returnArray['recordsFiltered'] = $totalCount;
+        return json_encode($returnArray);
     }
 
     public function ResponseData()

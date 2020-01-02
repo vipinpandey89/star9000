@@ -13,9 +13,7 @@
 	<div class="sub-heard-part">
 
 		<ol class="breadcrumb m-b-0">
-
-			<li><a href="{{url('admin/dashboard')}}">Home</a></li>
-
+		    <li><a href="{{url('admin/assegna-stanza')}}">Elenco stanza</a></li>
 			<li class="active">{{ __('menu.Rooms') }}</li>
 
 		</ol>
